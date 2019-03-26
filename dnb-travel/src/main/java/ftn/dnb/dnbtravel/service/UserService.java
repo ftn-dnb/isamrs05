@@ -3,36 +3,30 @@ package ftn.dnb.dnbtravel.service;
 import ftn.dnb.dnbtravel.model.User;
 import ftn.dnb.dnbtravel.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
 
 @Service
 public class UserService {
 
+    @Autowired
     private UserRepository userRepository;
 
-    @Autowired
-    public UserService(@Qualifier("FakeUserRepository") UserRepository userRepository) {
-        this.userRepository = userRepository;
+    public User addUser(User user) {
+        return userRepository.save(user);
     }
 
-    public User addUser(User userToInsert) {
-        return userRepository.addUser(UUID.randomUUID(), userToInsert);
+    public User updateUser(User user) {
+        return userRepository.save(user);
     }
 
     public List<User> getAllUsers() {
-        return userRepository.getAllUsers();
+        return userRepository.findAll();
     }
 
-    public Optional<User> getUserById(UUID id) {
-        return userRepository.getUserById(id);
+    public User getUserById(Long id) {
+        return userRepository.findOneById(id);
     }
 
-    public int updateUserById(UUID id, User userToEdit) {
-        return userRepository.updateUserById(id, userToEdit);
-    }
 }

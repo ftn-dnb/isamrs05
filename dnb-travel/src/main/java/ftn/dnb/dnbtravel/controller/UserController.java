@@ -9,10 +9,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.UUID;
 
 @RestController
-@RequestMapping("/api/users")
+@RequestMapping(value = "/api/users", produces = MediaType.APPLICATION_JSON_VALUE)
 public class UserController {
 
     private UserService userService;
@@ -22,11 +21,7 @@ public class UserController {
         this.userService = userService;
     }
 
-    @RequestMapping(
-            value = "",
-            method = RequestMethod.POST,
-            consumes = MediaType.APPLICATION_JSON_VALUE,
-            produces = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(path = "", consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<User> addUser(@RequestBody User userToInsert) {
         User savedUser = userService.addUser(userToInsert);
         return new ResponseEntity<User>(savedUser, HttpStatus.CREATED);
@@ -38,12 +33,13 @@ public class UserController {
     }
 
     @GetMapping(path = "/{id}")
-    public User getUserById(@PathVariable("id") UUID id) {
-        return userService.getUserById(id).orElse(null);
+    public User getUserById(@PathVariable("id") Long id) {
+        return userService.getUserById(id);
     }
 
     @PutMapping(path = "/{id}")
-    public int updateUserById(@PathVariable("id") UUID id, @RequestBody User userToEdit) {
-        return userService.updateUserById(id, userToEdit);
+    public User updateUserById(@PathVariable("id") Long id, @RequestBody User userToEdit) {
+        userToEdit.setId(id);
+        return userService.updateUser(userToEdit);
     }
 }
