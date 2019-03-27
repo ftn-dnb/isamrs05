@@ -26,7 +26,7 @@ Vue.component('airline-settings', {
             </tr>
             <tr>
                 <td>Promotivni opis</td>
-                <td><input type="textarea" v-model="airline.description" /></td>
+                <td><textarea v-model="airline.description"></textarea></td>
             </tr>
             <tr>
                 <th colspan="2"><input type="button" value="Izmeni profil" v-on:click="editProfile()" /></th>
