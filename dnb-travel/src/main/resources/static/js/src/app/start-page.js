@@ -8,7 +8,11 @@ Vue.component('start-page', {
 
     template:
     `
+    <div>
         <h1>Hello from Vue.js</h1>
+
+        <user-settings></user-settings>
+    </div>
     `,
 
     methods: {
