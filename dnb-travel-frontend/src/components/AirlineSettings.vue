@@ -43,7 +43,7 @@ export default {
     methods: {
         editProfile: function() {
 
-            axios.put('http://localhost:8080/api/airlines/' + this.airline.id, this.airline)
+            axios.put('http://localhost:8080/api/airlines', this.airline)
             .then(response => {
                 if (response.data === '') {
                     alert('Doslo je do greske prilikom izmene profila aviokompanije');

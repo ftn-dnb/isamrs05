@@ -1,5 +1,7 @@
 package ftn.dnb.dnbtravel.model;
 
+import ftn.dnb.dnbtravel.dto.AirlineDTO;
+
 import javax.persistence.*;
 import java.util.Objects;
 
@@ -37,6 +39,13 @@ public class Airline {
         this.name = name;
         this.address = address;
         this.description = description;
+    }
+
+    public Airline(AirlineDTO airlineDTO) {
+        this.id = airlineDTO.getId();
+        this.name = airlineDTO.getName();
+        this.address = airlineDTO.getAddress();
+        this.description = airlineDTO.getDescription();
     }
 
     public Long getId() {

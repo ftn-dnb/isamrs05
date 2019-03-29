@@ -1,5 +1,6 @@
 package ftn.dnb.dnbtravel.controller;
 
+import ftn.dnb.dnbtravel.dto.AirlineDTO;
 import ftn.dnb.dnbtravel.model.Airline;
 import ftn.dnb.dnbtravel.service.AirlineService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,24 +25,23 @@ public class AirlineController {
     }
 
     @PostMapping(path = "", consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Airline> addAirline(@RequestBody Airline airlineToInsert) {
-        Airline savedAirline = airlineService.addAirline(airlineToInsert);
-        return new ResponseEntity<Airline>(savedAirline, HttpStatus.CREATED);
+    public ResponseEntity<AirlineDTO> addAirline(@RequestBody AirlineDTO airlineToInsert) {
+        AirlineDTO savedAirline = airlineService.addAirline(airlineToInsert);
+        return new ResponseEntity<AirlineDTO>(savedAirline, HttpStatus.CREATED);
     }
 
     @GetMapping(path = "")
-    public List<Airline> getAllAirlines() {
+    public List<AirlineDTO> getAllAirlines() {
         return airlineService.getAllAirlines();
     }
 
     @GetMapping(path = "/{id}")
-    public Airline getAirlineById(@PathVariable("id") Long id) {
+    public AirlineDTO getAirlineById(@PathVariable("id") Long id) {
         return airlineService.getAirlineById(id);
     }
 
-    @PutMapping(path = "/{id}")
-    public Airline updateAirlineById(@PathVariable("id") Long id, @RequestBody Airline airlineToEdit) {
-        airlineToEdit.setId(id);
+    @PutMapping(path = "")
+    public AirlineDTO updateAirlineById(@RequestBody AirlineDTO airlineToEdit) {
         return airlineService.updateAirline(airlineToEdit);
     }
 }
