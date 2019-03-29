@@ -23,17 +23,30 @@ public class AirlineService {
     }
 
     public AirlineDTO getAirlineById(Long id) {
-        AirlineDTO airline = new AirlineDTO(airlineRepository.findOneById(id));
-        return airline;
+        Airline airline = airlineRepository.findOneById(id);
+
+        if (airline == null)
+            return null;
+
+        AirlineDTO airlineDto = new AirlineDTO(airline);
+        return airlineDto;
     }
 
     public AirlineDTO addAirline(AirlineDTO airline) {
         Airline savedAirline = airlineRepository.save(new Airline(airline));
+
+        if (savedAirline == null)
+            return null;
+
         return new AirlineDTO(savedAirline);
     }
 
     public AirlineDTO updateAirline(AirlineDTO airline) {
         Airline savedAirline = airlineRepository.save(new Airline(airline));
+
+        if (savedAirline == null)
+            return null;
+
         return new AirlineDTO(savedAirline);
     }
 }
