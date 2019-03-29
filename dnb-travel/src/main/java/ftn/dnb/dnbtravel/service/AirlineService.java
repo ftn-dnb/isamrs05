@@ -2,6 +2,7 @@ package ftn.dnb.dnbtravel.service;
 
 import ftn.dnb.dnbtravel.dto.AirlineDTO;
 import ftn.dnb.dnbtravel.model.Airline;
+import ftn.dnb.dnbtravel.repository.AddressRepository;
 import ftn.dnb.dnbtravel.repository.AirlineRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -14,6 +15,9 @@ public class AirlineService {
 
     @Autowired
     private AirlineRepository airlineRepository;
+
+    @Autowired
+    private AddressRepository addressRepository;
 
     public List<AirlineDTO> getAllAirlines() {
         List<Airline> airlines = airlineRepository.findAll();
@@ -33,6 +37,7 @@ public class AirlineService {
     }
 
     public AirlineDTO addAirline(AirlineDTO airline) {
+        addressRepository.save(airline.getAddress());
         Airline savedAirline = airlineRepository.save(new Airline(airline));
 
         if (savedAirline == null)
@@ -42,6 +47,7 @@ public class AirlineService {
     }
 
     public AirlineDTO updateAirline(AirlineDTO airline) {
+        addressRepository.save(airline.getAddress());
         Airline savedAirline = airlineRepository.save(new Airline(airline));
 
         if (savedAirline == null)

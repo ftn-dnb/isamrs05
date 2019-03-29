@@ -15,8 +15,8 @@ public class Airline {
     @Column(name = "name", nullable = false)
     private String name;
 
-    @Column(name = "address", nullable = false)
-    private String address; // @TODO: change this to Address object
+    @OneToOne
+    private Address address;
 
     @Column(name = "description", nullable = false)
     private String description;
@@ -34,7 +34,7 @@ public class Airline {
         super();
     }
 
-    public Airline(Long id, String name, String address, String description) {
+    public Airline(Long id, String name, Address address, String description) {
         this.id = id;
         this.name = name;
         this.address = address;
@@ -64,11 +64,11 @@ public class Airline {
         this.name = name;
     }
 
-    public String getAddress() {
+    public Address getAddress() {
         return address;
     }
 
-    public void setAddress(String address) {
+    public void setAddress(Address address) {
         this.address = address;
     }
 

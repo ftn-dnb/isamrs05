@@ -1,5 +1,6 @@
 package ftn.dnb.dnbtravel.dto;
 
+import ftn.dnb.dnbtravel.model.Address;
 import ftn.dnb.dnbtravel.model.Airline;
 
 import java.util.Objects;
@@ -8,13 +9,13 @@ public class AirlineDTO {
 
     private long id;
     private String name;
-    private String address; // @TODO: promeniti u Address objekat
+    private Address address;
     private String description;
 
     public AirlineDTO() {
     }
 
-    public AirlineDTO(long id, String name, String address, String description) {
+    public AirlineDTO(long id, String name, Address address, String description) {
         this.id = id;
         this.name = name;
         this.address = address;
@@ -44,11 +45,11 @@ public class AirlineDTO {
         this.name = name;
     }
 
-    public String getAddress() {
+    public Address getAddress() {
         return address;
     }
 
-    public void setAddress(String address) {
+    public void setAddress(Address address) {
         this.address = address;
     }
 
