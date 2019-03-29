@@ -1,6 +1,6 @@
 package ftn.dnb.dnbtravel.controller;
 
-import ftn.dnb.dnbtravel.model.Airline;
+import ftn.dnb.dnbtravel.dto.AirlineDTO;
 import ftn.dnb.dnbtravel.service.AirlineService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -9,7 +9,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-
 
 @RestController
 @RequestMapping(value = "/api/airlines", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -24,24 +23,25 @@ public class AirlineController {
     }
 
     @PostMapping(path = "", consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Airline> addAirline(@RequestBody Airline airlineToInsert) {
-        Airline savedAirline = airlineService.addAirline(airlineToInsert);
-        return new ResponseEntity<Airline>(savedAirline, HttpStatus.CREATED);
+    public ResponseEntity<AirlineDTO> addAirline(@RequestBody AirlineDTO airlineToInsert) {
+        AirlineDTO savedAirline = airlineService.addAirline(airlineToInsert);
+        return new ResponseEntity<AirlineDTO>(savedAirline, HttpStatus.CREATED); // @TODO: mozda dodati proveru za null ? koji http kod onda vratiti ?
     }
 
     @GetMapping(path = "")
-    public List<Airline> getAllAirlines() {
-        return airlineService.getAllAirlines();
+    public ResponseEntity<List<AirlineDTO>> getAllAirlines() {
+        return new ResponseEntity<>(airlineService.getAllAirlines(), HttpStatus.OK);
     }
 
     @GetMapping(path = "/{id}")
-    public Airline getAirlineById(@PathVariable("id") Long id) {
-        return airlineService.getAirlineById(id);
+    public ResponseEntity<AirlineDTO> getAirlineById(@PathVariable("id") Long id) {
+        AirlineDTO airline = airlineService.getAirlineById(id);
+        return new ResponseEntity<>(airline, (airline == null) ? HttpStatus.NOT_FOUND : HttpStatus.OK);
     }
 
-    @PutMapping(path = "/{id}")
-    public Airline updateAirlineById(@PathVariable("id") Long id, @RequestBody Airline airlineToEdit) {
-        airlineToEdit.setId(id);
-        return airlineService.updateAirline(airlineToEdit);
+    @PutMapping(path = "")
+    public ResponseEntity<AirlineDTO> updateAirlineById(@RequestBody AirlineDTO airlineToEdit) {
+        AirlineDTO airline = airlineService.updateAirline(airlineToEdit);
+        return new ResponseEntity<>(airline, (airline == null) ? HttpStatus.NOT_FOUND : HttpStatus.CREATED);
     }
 }
