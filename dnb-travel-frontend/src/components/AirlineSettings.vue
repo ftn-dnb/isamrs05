@@ -1,6 +1,7 @@
 <template>
     <div>
         <h3>Podešavanja profila aviokompanije {{ airline.name }}</h3>
+
         <table>
             <tr>
                 <td>Naziv:</td>
@@ -31,7 +32,7 @@
                 <td><textarea v-model="airline.description"></textarea></td>
             </tr>
             <tr>
-                <th colspan="2"><input type="button" value="Izmeni profil" v-on:click="editProfile()" /></th>
+                <th colspan="2"><input type="submit" value="Izmeni profil" @click="editInfo" /></th>
             </tr>
         </table>
     </div>
@@ -64,7 +65,10 @@ export default {
     },
 
     methods: {
-        editProfile: function() {
+        editInfo() {
+            if (!this.checkForm()) {
+                return;
+            }
 
             axios.put('http://localhost:8080/api/airlines', this.airline)
             .then(response => {
@@ -75,6 +79,33 @@ export default {
 
                 alert('Profil aviokompanije je uspesno izmenjen');
             });
+        },
+
+        checkForm() {
+            if (!this.airline.name) {
+                alert('Morate uneti ime aviokompanije.');
+                return false;
+            } else if (!this.airline.description) {
+                alert('Morate uneti promotivni opis kompanije.');
+                return false;
+            } else if (!this.airline.address.streetName) {
+                alert('Morate uneti naziv ulice.');
+                return false;
+            } else if (!this.airline.address.streetNumber) {
+                alert('Morate uneti ulicni broj.');
+                return false;
+            } else if (!this.airline.address.city) {
+                alert('Morate uneti naziv grada.');
+                return false;
+            } else if (!this.airline.address.country) {
+                alert('Morate uneti naziv drzave.');
+                return false;
+            } else if (!this.airline.address.postalCode) {
+                alert('Morate uneti postanski broj grada.');
+                return false;
+            }
+
+            return true;
         },
     },
 
