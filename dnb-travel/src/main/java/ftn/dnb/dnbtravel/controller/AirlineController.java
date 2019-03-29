@@ -36,7 +36,7 @@ public class AirlineController {
     @GetMapping(path = "/{id}")
     public ResponseEntity<AirlineDTO> getAirlineById(@PathVariable("id") Long id) {
         AirlineDTO airline = airlineService.getAirlineById(id);
-        return new ResponseEntity<>(airline, (airline == null) ? HttpStatus.NOT_FOUND : HttpStatus.FOUND);
+        return new ResponseEntity<>(airline, (airline == null) ? HttpStatus.NOT_FOUND : HttpStatus.OK);
     }
 
     @PutMapping(path = "")

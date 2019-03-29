@@ -7,8 +7,24 @@
                 <td><input type="text" v-model="airline.name" /></td>
             </tr>
             <tr>
-                <td>Adresa:</td>
-                <td><input type="text" v-model="airline.address" /></td>
+                <td>Ulica:</td>
+                <td><input type="text" v-model="airline.address.streetName" /></td>
+            </tr>
+            <tr>
+                <td>Broj:</td>
+                <td><input type="number" v-model="airline.address.streetNumber" /></td>
+            </tr>
+            <tr>
+                <td>Grad:</td>
+                <td><input type="text" v-model="airline.address.city" /></td>
+            </tr>
+            <tr>
+                <td>Drzava:</td>
+                <td><input type="text" v-model="airline.address.country" /></td>
+            </tr>
+            <tr>
+                <td>Postanski broj:</td>
+                <td><input type="text" v-model="airline.address.postalCode" /></td>
             </tr>
             <tr>
                 <td>Promotivni opis</td>
@@ -34,7 +50,14 @@ export default {
             airline: {
                 id: null,
                 name: null,
-                address: null,
+                address: {
+                    id: null,
+                    streetName: null,
+                    streetNumber: null,
+                    city: null,
+                    country: null,
+                    postalCode: null
+                },
                 description: null,
             },
         };
@@ -59,7 +82,7 @@ export default {
         // @TODO: pokupiti podatke odgovarajuce aviokompanije na osnovu podataka
         // njenog administratora
         // Zasad se uzima predefinisana vrednost iz baze
-        axios.get("http://localhost:8080/api/airlines/3").then(response => this.airline = response.data);
+        axios.get("http://localhost:8080/api/airlines/5").then(response => this.airline = response.data);
     }
 }
 </script>
