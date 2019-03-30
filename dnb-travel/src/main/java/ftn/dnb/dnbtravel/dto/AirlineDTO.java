@@ -1,58 +1,39 @@
-package ftn.dnb.dnbtravel.model;
+package ftn.dnb.dnbtravel.dto;
 
-import ftn.dnb.dnbtravel.dto.AirlineDTO;
+import ftn.dnb.dnbtravel.model.Address;
+import ftn.dnb.dnbtravel.model.Airline;
 
-import javax.persistence.*;
 import java.util.Objects;
 
-@Entity
-public class Airline {
+public class AirlineDTO {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long id;
-
-    @Column(name = "name", nullable = false)
+    private long id;
     private String name;
-
-    @OneToOne
     private Address address;
-
-    @Column(name = "description", nullable = false)
     private String description;
 
-    // private Set<Destination> destinations; // @TODO: add destinations
-
-    // private Set<Flight> flights; // @TODO: add flights
-
-    // @TODO: dodati
-    // Spisak karata sa popustima za brzu rezervaciju
-    // Konfiguraciju segmenata i mesta u avionima
-    // Cenovnik i informacije o prtljagu
-
-    public Airline() {
-        super();
+    public AirlineDTO() {
     }
 
-    public Airline(Long id, String name, Address address, String description) {
+    public AirlineDTO(long id, String name, Address address, String description) {
         this.id = id;
         this.name = name;
         this.address = address;
         this.description = description;
     }
 
-    public Airline(AirlineDTO airlineDTO) {
-        this.id = airlineDTO.getId();
-        this.name = airlineDTO.getName();
-        this.address = airlineDTO.getAddress();
-        this.description = airlineDTO.getDescription();
+    public AirlineDTO(Airline airline) {
+        this.id = airline.getId();
+        this.name = airline.getName();
+        this.address = airline.getAddress();
+        this.description = airline.getDescription();
     }
 
-    public Long getId() {
+    public long getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(long id) {
         this.id = id;
     }
 
@@ -84,8 +65,8 @@ public class Airline {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        Airline airline = (Airline) o;
-        return id.equals(airline.id);
+        AirlineDTO that = (AirlineDTO) o;
+        return id == that.id;
     }
 
     @Override
@@ -95,7 +76,7 @@ public class Airline {
 
     @Override
     public String toString() {
-        return "Airline{" +
+        return "AirlineDTO{" +
                 "id=" + id +
                 ", name='" + name + '\'' +
                 ", address='" + address + '\'' +

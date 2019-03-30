@@ -4,20 +4,16 @@
 
 		<!-- Ove 2 komponente ovde samo stoje zbog testiranja, obrisati kad se zavrsi sa njihovim radom -->
         <user-settings></user-settings>
-		<airline-settings></airline-settings>
     </div>
 </template>
 
 <script>
 import UserSettings from './UserSettings.vue';
-import AirlineSettings from './AirlineSettings.vue';
 
 export default {
-    name: 'StartPage',
     props: {},
     components: {
 		UserSettings,
-		AirlineSettings,
     },
 
     data() {
