@@ -1,5 +1,6 @@
 package ftn.dnb.dnbtravel.controller;
 
+import ftn.dnb.dnbtravel.dto.UserDTO;
 import ftn.dnb.dnbtravel.model.User;
 import ftn.dnb.dnbtravel.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,25 +23,27 @@ public class UserController {
         this.userService = userService;
     }
 
-    @PostMapping(path = "", consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<User> addUser(@RequestBody User userToInsert) {
-        User savedUser = userService.addUser(userToInsert);
-        return new ResponseEntity<User>(savedUser, HttpStatus.CREATED);
-    }
 
     @GetMapping(path = "")
-    public List<User> getAllUsers() {
-        return userService.getAllUsers();
+    public ResponseEntity<List<UserDTO>> getAllUsers() {
+        return new ResponseEntity<>(userService.getAllUsers(), HttpStatus.OK);
     }
 
     @GetMapping(path = "/{id}")
-    public User getUserById(@PathVariable("id") Long id) {
-        return userService.getUserById(id);
+    public ResponseEntity<UserDTO> getUserById(@PathVariable("id") Long id) {
+        UserDTO user = userService.getUserById(id);
+        return new ResponseEntity<>(user, (user == null) ? HttpStatus.NOT_FOUND : HttpStatus.OK);
     }
 
-    @PutMapping(path = "/{id}")
-    public User updateUserById(@PathVariable("id") Long id, @RequestBody User userToEdit) {
-        userToEdit.setId(id);
-        return userService.updateUser(userToEdit);
+    @PostMapping(path = "", consumes = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<UserDTO> addUser(@RequestBody UserDTO userToInsert) {
+        UserDTO savedUser = userService.addUser(userToInsert);
+        return new ResponseEntity<>(savedUser, HttpStatus.CREATED);
+    }
+
+    @PutMapping(path = "", consumes = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<UserDTO> updateUserById(@RequestBody UserDTO userToEdit) {
+        UserDTO savedUser = userService.updateUser(userToEdit);
+        return new ResponseEntity<>(savedUser, (savedUser == null) ? HttpStatus.NOT_FOUND : HttpStatus.CREATED);
     }
 }
