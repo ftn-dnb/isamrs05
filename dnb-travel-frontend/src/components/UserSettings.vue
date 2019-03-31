@@ -5,11 +5,23 @@
         <table>
             <tr>
                 <td>Ime:</td>
-                <td><input type="text" v-model="user.firstName" /></td>
+                <td><input type="text" v-model="user.firstName" requeired /></td>
             </tr>
             <tr>
                 <td>Prezime:</td>
                 <td><input type="text" v-model="user.lastName" /></td>
+            </tr>
+            <tr>
+                <td>E-mail</td>
+                <td><input type="email" v-model="user.email" /></td>
+            </tr>
+            <tr>
+                <td>Sifra</td>
+                <td><input type="password" v-model="user.password" /></td>
+            </tr>
+            <tr>
+                <td>Ponovite sifru</td>
+                <td><input type="password" v-model="user.repeatPassword" /></td>
             </tr>
             <tr>
                 <th colspan="2"><input type="button" value="Izmeni profil" v-on:click="editProfile()" /></th>
@@ -31,13 +43,20 @@ export default {
                 id: null,
                 firstName: null,
                 lastName: null,
+                email: null,
+                password: null,
+                repeatPassword: null,
             },
         };
     },
 
     methods: {
         editProfile() {
-            axios.put('http://localhost:8080/api/users/' + this.user.id, this.user)
+            if (!this.checkForm()) {
+                return;
+            }
+
+            axios.put('http://localhost:8080/api/users', this.user)
             .then(response => {
                 if (response.data === '') {
                     alert('Doslo je do greske prilikom izmene profila');
@@ -47,6 +66,30 @@ export default {
                 alert('Profil je uspesno izmenjen');
             });
         },
+
+        checkForm() {
+            if (!this.user.firstName) {
+                alert('Niste uneli ime.');
+                return false;
+            } else if (!this.user.lastName) {
+                alert('Niste uneli prezime.');
+                return false;
+            } else if (!this.user.email) {
+                alert('Niste uneli e-mail.');
+                return false;
+            } else if (!this.user.password) {
+                alert('Niste uneli sifru.');
+                return false;
+            } else if (!this.user.repeatPassword) {
+                alert('Niste uneli proveru sifre.');
+                return false;
+            } else if (this.user.password !== this.user.repeatPassword) {
+                alert('Sifre koje ste uneli se ne podudaraju.');
+                return false;
+            }
+
+            return true;
+        }
     },
 
     mounted() {

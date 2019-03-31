@@ -44,6 +44,6 @@ public class UserController {
     @PutMapping(path = "", consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<UserDTO> updateUserById(@RequestBody UserDTO userToEdit) {
         UserDTO savedUser = userService.updateUser(userToEdit);
-        return new ResponseEntity<>(savedUser, (savedUser == null) ? HttpStatus.NOT_FOUND : HttpStatus.CREATED);
+        return new ResponseEntity<>(savedUser, HttpStatus.CREATED);
     }
 }

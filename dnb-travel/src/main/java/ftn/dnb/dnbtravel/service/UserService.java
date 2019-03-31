@@ -41,12 +41,21 @@ public class UserService {
     }
 
     public UserDTO updateUser(UserDTO user) {
-        long numOfMatches = this.getAllUsers().stream()
+        List<UserDTO> users = this.getAllUsers();
+        boolean userExists = users.stream().anyMatch(userDTO -> userDTO.getId().equals(user.getId()));
+
+        if (!userExists)
+            return null;
+
+        long numOfMatches = users.stream()
                             .filter(userDTO -> userDTO.getEmail().equals(user.getEmail()) && !userDTO.equals(user))
                             .count();
 
         // Email already exists in database
         if (numOfMatches > 0)
+            return null;
+
+        if (!user.getPassword().equals(user.getRepeatPassword()))
             return null;
 
         User savedUser = userRepository.save(new User(user));
