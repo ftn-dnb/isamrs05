@@ -1,47 +1,36 @@
-package ftn.dnb.dnbtravel.model;
+package ftn.dnb.dnbtravel.dto;
 
-import ftn.dnb.dnbtravel.dto.UserDTO;
+import ftn.dnb.dnbtravel.model.User;
 
-import javax.persistence.*;
 import java.util.Objects;
 
-@Entity
-public class User {
+public class UserDTO {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
-
-    @Column(name = "firstName", nullable = false)
     private String firstName;
-
-    @Column(name = "lastName", nullable = false)
     private String lastName;
-
-    @Column(name = "email", nullable = false, unique = true)
     private String email;
-
-    @Column(name = "password", nullable = false)
     private String password;
+    private String repeatPassword;
 
-    public User() {
-        super();
+    public UserDTO() {
     }
 
-    public User(Long id, String firstName, String lastName, String email, String password) {
+    public UserDTO(Long id, String firstName, String lastName, String email, String password, String repeatPassword) {
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
         this.password = password;
+        this.repeatPassword = repeatPassword;
     }
 
-    public User(UserDTO dto) {
-        this.id = dto.getId();
-        this.firstName = dto.getFirstName();
-        this.lastName = dto.getLastName();
-        this.email = dto.getEmail();
-        this.password = dto.getPassword();
+    public UserDTO(User user) {
+        this.id = user.getId();
+        this.firstName = user.getFirstName();
+        this.lastName = user.getLastName();
+        this.email = user.getEmail();
+        this.password = user.getPassword();
     }
 
     public Long getId() {
@@ -84,12 +73,20 @@ public class User {
         this.password = password;
     }
 
+    public String getRepeatPassword() {
+        return repeatPassword;
+    }
+
+    public void setRepeatPassword(String repeatPassword) {
+        this.repeatPassword = repeatPassword;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        User user = (User) o;
-        return id.equals(user.id);
+        UserDTO userDTO = (UserDTO) o;
+        return Objects.equals(id, userDTO.id);
     }
 
     @Override
@@ -99,7 +96,7 @@ public class User {
 
     @Override
     public String toString() {
-        return "User{" +
+        return "UserDTO{" +
                 "id=" + id +
                 ", firstName='" + firstName + '\'' +
                 ", lastName='" + lastName + '\'' +
