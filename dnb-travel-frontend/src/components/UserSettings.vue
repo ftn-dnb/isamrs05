@@ -59,11 +59,11 @@ export default {
             axios.put('http://localhost:8080/api/users', this.user)
             .then(response => {
                 if (response.data === '') {
-                    alert('Doslo je do greske prilikom izmene profila');
+                    alert('Error while trying to change user.');
                     return;
                 }
 
-                alert('Profil je uspesno izmenjen');
+                alert('Hotel profile successfully changed.');
             });
         },
 
@@ -95,7 +95,8 @@ export default {
     mounted() {
         // @TODO: pokupiti podatke korisnika preko cookie-a za ulogovanog korisnika
         // Zasad uzima predefinisanog korisnika 1 iz baze
-        axios.get('http://localhost:8080/api/users/1').then(response => this.user = response.data);
+        axios.get('http://localhost:8080/api/users/1')
+        .then(response => this.user = response.data);
     }
 }
 </script>
