@@ -7,8 +7,10 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+
 @RestController
 @RequestMapping(value = "api/hotels")
+@CrossOrigin(origins = "http://localhost:8000")
 public class HotelController {
 
     @Autowired
