@@ -3,6 +3,8 @@ package ftn.dnb.dnbtravel.model;
 import ftn.dnb.dnbtravel.dto.RentACarCompanyDTO;
 
 import javax.persistence.*;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 public class RentACarCompany {
@@ -15,6 +17,12 @@ public class RentACarCompany {
 
     @Column(name = "description", nullable = false)
     private String description;
+
+    //?
+    private Set<Car>Cars;
+    private Set<RACPriceList> priceList;
+    private Set<BranchOffice> offices;
+    private BranchOffice mainOffice;
 
     public RentACarCompany() {
         super();
