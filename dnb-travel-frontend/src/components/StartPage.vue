@@ -4,16 +4,19 @@
 
 		<!-- Ove 2 komponente ovde samo stoje zbog testiranja, obrisati kad se zavrsi sa njihovim radom -->
         <user-settings></user-settings>
+        <rent-a-car-company-settings></rent-a-car-company-settings>
     </div>
 </template>
 
 <script>
 import UserSettings from './UserSettings.vue';
+import RentACarCompanySettings from './RentACarCompanySettings.vue'
 
 export default {
     props: {},
     components: {
 		UserSettings,
+        RentACarCompanySettings,
     },
 
     data() {
