@@ -66,4 +66,13 @@ public class UserService {
         return new UserDTO(savedUser);
     }
 
+    public  UserDTO getUserByUsername (UserDTO user){
+        User userR = userRepository.findByUsername(user.getUsername());
+
+        if (userR == null)
+            return null;
+
+        return new UserDTO(userR);
+    }
+
 }
