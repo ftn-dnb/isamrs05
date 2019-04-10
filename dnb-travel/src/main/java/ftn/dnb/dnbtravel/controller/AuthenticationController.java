@@ -44,9 +44,7 @@ public class AuthenticationController {
 
     @RequestMapping(value = "/login", method = RequestMethod.POST)
     public ResponseEntity<?> createAuthenticationToken(@RequestBody JwtAuthenticationRequest authenticationRequest,
-                                                       HttpServletResponse response, Device device) throws AuthenticationException, IOException {
-
-        System.out.println("asdasda");
+                                                       HttpServletResponse response) throws AuthenticationException, IOException {
 
         final Authentication authentication = authenticationManager
                 .authenticate(new UsernamePasswordAuthenticationToken(
@@ -58,8 +56,8 @@ public class AuthenticationController {
 
         // Kreiraj token
         User user = (User) authentication.getPrincipal();
-        String jwt = tokenUtils.generateToken(user.getUsername(), device);
-        int expiresIn = tokenUtils.getExpiredIn(device);
+        String jwt = tokenUtils.generateToken(user.getUsername());
+        int expiresIn = tokenUtils.getExpiredIn();
 
         // Vrati token kao odgovor na uspesno autentifikaciju
         return ResponseEntity.ok(new UserTokenState(jwt, expiresIn));
@@ -75,8 +73,8 @@ public class AuthenticationController {
         Device device = deviceProvider.getCurrentDevice(request);
 
         if (this.tokenUtils.canTokenBeRefreshed(token, user.getLastPasswordResetDate())) {
-            String refreshedToken = tokenUtils.refreshToken(token, device);
-            int expiresIn = tokenUtils.getExpiredIn(device);
+            String refreshedToken = tokenUtils.refreshToken(token);
+            int expiresIn = tokenUtils.getExpiredIn();
 
             return ResponseEntity.ok(new UserTokenState(refreshedToken, expiresIn));
         } else {

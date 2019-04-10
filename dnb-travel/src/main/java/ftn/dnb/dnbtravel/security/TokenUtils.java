@@ -18,10 +18,10 @@ import java.util.Date;
 
 @Component
 public class TokenUtils {
-    @Value("spring-security-demo")
+    @Value("dnb-travel")
     private String APP_NAME;
 
-    @Value("somesecret")
+    @Value("thisisoursupersecretcode")
     public String SECRET;
 
     @Value("300")
@@ -45,13 +45,14 @@ public class TokenUtils {
 
     // Functions for generating new JWT token
 
-    public String generateToken(String username, Device device) {
+    public String generateToken(String username) {
         return Jwts.builder()
                 .setIssuer(APP_NAME)
                 .setSubject(username)
-                .setAudience(generateAudience(device))
+                //.setAudience(generateAudience(device))
+                .setAudience(AUDIENCE_WEB)
                 .setIssuedAt(timeProvider.now())
-                .setExpiration(generateExpirationDate(device))
+                .setExpiration(generateExpirationDate())
                 .signWith(SIGNATURE_ALGORITHM, SECRET).compact();
     }
 
@@ -67,21 +68,23 @@ public class TokenUtils {
         return audience;
     }
 
-    private Date generateExpirationDate(Device device) {
-        long expiresIn = device.isTablet() || device.isMobile() ? MOBILE_EXPIRES_IN : EXPIRES_IN;
+    //private Date generateExpirationDate(Device device) {
+    private Date generateExpirationDate() {
+        //long expiresIn = device.isTablet() || device.isMobile() ? MOBILE_EXPIRES_IN : EXPIRES_IN;
+        long expiresIn = EXPIRES_IN;
         return new Date(timeProvider.now().getTime() + expiresIn * 1000);
     }
 
     // Functions for refreshing JWT token
 
-    public String refreshToken(String token, Device device) {
+    public String refreshToken(String token) { // ovde je bio i device parametar
         String refreshedToken;
         try {
             final Claims claims = this.getAllClaimsFromToken(token);
             claims.setIssuedAt(timeProvider.now());
             refreshedToken = Jwts.builder()
                     .setClaims(claims)
-                    .setExpiration(generateExpirationDate(device))
+                    .setExpiration(generateExpirationDate()) // ovde je bio device
                     .signWith(SIGNATURE_ALGORITHM, SECRET).compact();
         } catch (Exception e) {
             refreshedToken = null;
@@ -179,8 +182,9 @@ public class TokenUtils {
         return expiration;
     }
 
-    public int getExpiredIn(Device device) {
-        return device.isMobile() || device.isTablet() ? MOBILE_EXPIRES_IN : EXPIRES_IN;
+    public int getExpiredIn() { // ovde je bio parametar device
+        //return device.isMobile() || device.isTablet() ? MOBILE_EXPIRES_IN : EXPIRES_IN;
+        return EXPIRES_IN;
     }
 
     // Functions for getting JWT token out of HTTP request
