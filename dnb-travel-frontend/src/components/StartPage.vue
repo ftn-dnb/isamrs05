@@ -2,6 +2,8 @@
     <div>
         <h1>Hello from Vue.js</h1>
 
+        <add-flight></add-flight>
+
 		<!-- Ove 2 komponente ovde samo stoje zbog testiranja, obrisati kad se zavrsi sa njihovim radom -->
         <user-settings></user-settings>
         <hotel-settings></hotel-settings>
@@ -16,6 +18,8 @@ import HotelSettings from './HotelSettings.vue';
 import HotelRegistration from './HotelRegistration.vue';
 import RentACarCompanySettings from './RentACarCompanySettings.vue';
 
+import AddFlight from './AddFlight.vue';
+
 export default {
     props: {},
     components: {
@@ -23,6 +27,8 @@ export default {
         HotelSettings,
         HotelRegistration,
         RentACarCompanySettings,
+
+        AddFlight
     },
 
     data() {

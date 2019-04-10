@@ -100,7 +100,7 @@ export default {
     },
 
     mounted() {
-        // napraviti posebnu komponentu koja ce sluziti za dodavanje novih destinacija za poslovanje
+        // napraviti posebnu komponentu koja ce sluziti za dodavanje novih destinacija za poslovanj
 
         // Dobaviti aviokompaniju za ulogovanog admina - pa se preko toga dobave i destinacije
 
