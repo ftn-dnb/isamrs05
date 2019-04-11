@@ -1,5 +1,6 @@
 <template>
     <div>
+        <h3>Your company is: {{airline.name}}</h3>
         <h3>Fill out this form to add new flight</h3>
 
         <table>
@@ -45,7 +46,7 @@
                 <td>Airplane:</td>
                 <td>
                     <select>
-                        <option v-for="ap in airplanes">{{ap.name}}</option>
+                        <option v-for="ap in airplanes">{{ap.name}}, {{ap.numOfRows * ap.numOfColumns}} seats</option>
                     </select>
                 </td>
             </tr>
@@ -89,22 +90,38 @@ export default {
                 startDateTime: null,
                 endDateTime: null,
                 travelTime: null,
-            }
+            },
         };
     },
 
     methods: {
         addFlight() {
-            console.log("Adding flight");
+            // dodati proveru forme
+            // ne moze biti ista pocetna i kranja destinacija
+            // u transit ne smeju biti pocetna i krajnja destinacija
+            // odabrano vreme
+            // transit destinations moze a i ne mora biti odabrano
+            // odabran avion
+
+            axios.post('http://localhost:8080/api/airlines/' + this.airline.id + '/flights', this.flightToAdd).then(response => {
+                console.log(reponse.data);
+            });
+
         },
     },
 
     mounted() {
+        // Dobaviti aviokompaniju za ulogovanog admina - pa se preko toga dobave i destinacije
+        // @TODO: popraviti ovo da se ne dovaljva prva aviokompanija vec ona za koju je korisnik admin
+        axios.get('http://localhost:8080/api/airlines/22').then(response => this.airline = response.data);
+
+        // Get list of destinations that can be used for list of transits for flight
+        axios.get('http://localhost:8080/api/destinations').then(response => this.destinations = response.data);
+
         // napraviti posebnu komponentu koja ce sluziti za dodavanje novih destinacija za poslovanj
 
-        // Dobaviti aviokompaniju za ulogovanog admina - pa se preko toga dobave i destinacije
-
-        // Dobaviti listu aviona
+        // Get list of airplanes
+        axios.get('http://localhost:8080/api/airplanes').then(response => this.airplanes = response.data);
     }
 }
 </script>

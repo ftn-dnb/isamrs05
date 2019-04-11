@@ -1,6 +1,7 @@
 package ftn.dnb.dnbtravel.controller;
 
 import ftn.dnb.dnbtravel.dto.AirlineDTO;
+import ftn.dnb.dnbtravel.dto.FlightDTO;
 import ftn.dnb.dnbtravel.service.AirlineService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -43,5 +44,11 @@ public class AirlineController {
     public ResponseEntity<AirlineDTO> updateAirlineById(@RequestBody AirlineDTO airlineToEdit) {
         AirlineDTO airline = airlineService.updateAirline(airlineToEdit);
         return new ResponseEntity<>(airline, (airline == null) ? HttpStatus.NOT_FOUND : HttpStatus.CREATED);
+    }
+
+    @PostMapping(path = "/{id}/flights")
+    public ResponseEntity<FlightDTO> addFlight(@PathVariable Long id, @RequestBody FlightDTO flightToAdd) {
+        FlightDTO savedFlight = airlineService.addFlight(id, flightToAdd);
+        return new ResponseEntity<>(savedFlight, HttpStatus.CREATED);
     }
 }
