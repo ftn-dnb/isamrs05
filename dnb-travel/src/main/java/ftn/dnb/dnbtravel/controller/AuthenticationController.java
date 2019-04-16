@@ -7,6 +7,7 @@ import ftn.dnb.dnbtravel.security.TokenUtils;
 import ftn.dnb.dnbtravel.security.auth.JwtAuthenticationRequest;
 import ftn.dnb.dnbtravel.service.CustomUserDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.mobile.device.Device;
@@ -16,10 +17,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -29,6 +27,7 @@ import java.util.Map;
 
 @RestController
 @RequestMapping(value = "/auth", produces = MediaType.APPLICATION_JSON_VALUE)
+@CrossOrigin(origins = "http://localhost:8000")
 public class AuthenticationController {
     @Autowired
     TokenUtils tokenUtils;
@@ -46,10 +45,17 @@ public class AuthenticationController {
     public ResponseEntity<?> createAuthenticationToken(@RequestBody JwtAuthenticationRequest authenticationRequest,
                                                        HttpServletResponse response) throws AuthenticationException, IOException {
 
-        final Authentication authentication = authenticationManager
-                .authenticate(new UsernamePasswordAuthenticationToken(
-                        authenticationRequest.getUsername(),
-                        authenticationRequest.getPassword()));
+
+        Authentication authentication = null;
+        try {
+                    authentication = authenticationManager
+                    .authenticate(new UsernamePasswordAuthenticationToken(
+                            authenticationRequest.getUsername(),
+                            authenticationRequest.getPassword()));
+        }
+        catch (AuthenticationException a) {
+            return new ResponseEntity<>(HttpStatus.OK);
+        }
 
         // Ubaci username + password u kontext
         SecurityContextHolder.getContext().setAuthentication(authentication);
@@ -58,9 +64,10 @@ public class AuthenticationController {
         User user = (User) authentication.getPrincipal();
         String jwt = tokenUtils.generateToken(user.getUsername());
         int expiresIn = tokenUtils.getExpiredIn();
+        String role = user.getAuthorityList().get(0).getAuthority();
 
         // Vrati token kao odgovor na uspesno autentifikaciju
-        return ResponseEntity.ok(new UserTokenState(jwt, expiresIn));
+        return ResponseEntity.ok(new UserTokenState(jwt, expiresIn,role));
     }
 
     @RequestMapping(value = "/refresh", method = RequestMethod.POST)
@@ -75,8 +82,8 @@ public class AuthenticationController {
         if (this.tokenUtils.canTokenBeRefreshed(token, user.getLastPasswordResetDate())) {
             String refreshedToken = tokenUtils.refreshToken(token);
             int expiresIn = tokenUtils.getExpiredIn();
-
-            return ResponseEntity.ok(new UserTokenState(refreshedToken, expiresIn));
+            String role = user.getAuthorities().toString();
+            return ResponseEntity.ok(new UserTokenState(refreshedToken, expiresIn,role));
         } else {
             UserTokenState userTokenState = new UserTokenState();
             return ResponseEntity.badRequest().body(userTokenState);

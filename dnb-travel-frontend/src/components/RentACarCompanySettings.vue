@@ -17,7 +17,7 @@
             </tr>
         </table>
     </div>
-</template>>
+</template>
 
 <script>
 import axios from 'axios';
@@ -43,7 +43,7 @@ export default{
                 return;
             }
 
-            axios.put('http://localhost:8080/api/rentACarCompanies', this.rentACarCompany)
+            axios.put('http://localhost:8080/api/rentACarCompanies/1', this.rentACarCompany)
             .then(response => {
                 if(response.data === ''){
                     alert('Error: Message');
@@ -59,7 +59,7 @@ export default{
                 alert('Please enter company name');
                 return false;
             } else if(!this.rentACarCompany.description){
-                alert('Prease enter company description');
+                alert('Please enter company description');
                 return false;
             }
 
@@ -68,8 +68,19 @@ export default{
     },
 
     mounted(){
-        axios.get("http://localhost:8080/api/rentACarCompanies/1").then(response => this.rentACarCompany = response.data);
+        axios.get("http://localhost:8080/api/rentACarCompanies/1",{ headers: {"Authorization" : `Bearer ${localStorage.getItem('user-token')}`} }).then(response => this.rentACarCompany = response.data);
+        console.log(localStorage.getItem('user-token'));
+        //axios({
+        //   method:'get',
+        //    url:'http://localhost:8080/api/rentACarCompanies/1',
+         //   responseType:'application/json',
+         //   headers:{"authorization" : `Bearer ${localStorage.getItem('user-token')}`}
+          //  })
+          //  .then(response => this.rentACarCompany = response.data);
+
     }
+
+
 
 }
 

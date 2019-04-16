@@ -1,15 +1,44 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 import App from './App.vue'
+import AdminRentACar from './components/AdminRentACar.vue'
+import StartPage from './components/StartPage.vue'
+import AdminHotel from './components/AdminHotel.vue'
+import AdminAirline from './components/AdminAirline.vue'
+import AdminSystem from './components/AdminSystem.vue'
 
 Vue.use(Router)
+
+
+
 
 export default new Router({
   routes: [
     {
       path: '/',
-      name: 'App',
-      component: App
+      name: 'StartPage',
+      component: StartPage
     },
+    {
+    	path:'/adminRentACar',
+    	name: 'AdminRentACar',
+    	component: AdminRentACar
+    },
+    {
+    	path:'/adminHotel',
+    	name: 'AdminHotel',
+    	component: AdminHotel
+    },
+    {
+    	path:'/adminAirline',
+    	name: 'AdminAirline',
+    	component: AdminAirline
+    },
+    {
+    	path:'/adminSystem',
+    	name: 'AdminSystem',
+    	component: AdminSystem
+    },
+
   ]
 })
