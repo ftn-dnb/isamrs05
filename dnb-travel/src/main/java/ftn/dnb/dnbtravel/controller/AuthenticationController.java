@@ -7,6 +7,7 @@ import ftn.dnb.dnbtravel.security.TokenUtils;
 import ftn.dnb.dnbtravel.security.auth.JwtAuthenticationRequest;
 import ftn.dnb.dnbtravel.service.CustomUserDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.mobile.device.Device;
@@ -45,10 +46,16 @@ public class AuthenticationController {
                                                        HttpServletResponse response) throws AuthenticationException, IOException {
 
 
-        final Authentication authentication = authenticationManager
-                .authenticate(new UsernamePasswordAuthenticationToken(
-                        authenticationRequest.getUsername(),
-                        authenticationRequest.getPassword()));
+        Authentication authentication = null;
+        try {
+                    authentication = authenticationManager
+                    .authenticate(new UsernamePasswordAuthenticationToken(
+                            authenticationRequest.getUsername(),
+                            authenticationRequest.getPassword()));
+        }
+        catch (AuthenticationException a) {
+            return new ResponseEntity<>(HttpStatus.OK);
+        }
 
         // Ubaci username + password u kontext
         SecurityContextHolder.getContext().setAuthentication(authentication);
@@ -57,9 +64,10 @@ public class AuthenticationController {
         User user = (User) authentication.getPrincipal();
         String jwt = tokenUtils.generateToken(user.getUsername());
         int expiresIn = tokenUtils.getExpiredIn();
+        String role = user.getAuthorityList().get(0).getAuthority();
 
         // Vrati token kao odgovor na uspesno autentifikaciju
-        return ResponseEntity.ok(new UserTokenState(jwt, expiresIn));
+        return ResponseEntity.ok(new UserTokenState(jwt, expiresIn,role));
     }
 
     @RequestMapping(value = "/refresh", method = RequestMethod.POST)
@@ -74,8 +82,8 @@ public class AuthenticationController {
         if (this.tokenUtils.canTokenBeRefreshed(token, user.getLastPasswordResetDate())) {
             String refreshedToken = tokenUtils.refreshToken(token);
             int expiresIn = tokenUtils.getExpiredIn();
-
-            return ResponseEntity.ok(new UserTokenState(refreshedToken, expiresIn));
+            String role = user.getAuthorities().toString();
+            return ResponseEntity.ok(new UserTokenState(refreshedToken, expiresIn,role));
         } else {
             UserTokenState userTokenState = new UserTokenState();
             return ResponseEntity.badRequest().body(userTokenState);

@@ -51,13 +51,21 @@ export default{
 
             axios.post('http://localhost:8080/auth/login', this.user).then(response =>{
                 if(response.data === ''){
-                    localStorage.removeItem('user-token');
-                    alert('Error: Message');
+                    alert('User does not exist');
                     return;
                 }
 
                 alert('Successful login');
                 localStorage.setItem('user-token',response.data.accessToken);
+                switch(response.data.role){
+                	case 'ROLE_USER': this.$router.push({path : '/'}); break;
+                	case 'ROLE_SYSTEM_ADMIN': this.$router.push({path : '/adminSystem'}); break;
+                	case 'ROLE_AIRLINE_ADMIN': this.$router.push({path : '/adminAirline'}); break;
+                	case 'ROLE_HOTEL_ADMIN':  this.$router.push({path : '/adminHotel'}); break;
+                	case 'ROLE_RAC_ADMIN': this.$router.push({path : '/adminRentACar'}); break;
+                	default: alert('User not recognized');
+                }
+                
                 
             });
         }
