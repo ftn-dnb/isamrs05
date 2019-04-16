@@ -4,9 +4,12 @@
 
 		<!-- Ove 2 komponente ovde samo stoje zbog testiranja, obrisati kad se zavrsi sa njihovim radom -->
         <user-settings></user-settings>
+        <login></login>
+        
         <hotel-settings></hotel-settings>
         <hotel-registration></hotel-registration>
         <rent-a-car-company-settings></rent-a-car-company-settings>
+
     </div>
 </template>
 
@@ -15,6 +18,7 @@ import UserSettings from './UserSettings.vue';
 import HotelSettings from './HotelSettings.vue';
 import HotelRegistration from './HotelRegistration.vue';
 import RentACarCompanySettings from './RentACarCompanySettings.vue';
+import Login from './Login.vue';
 
 export default {
     props: {},
@@ -23,6 +27,7 @@ export default {
         HotelSettings,
         HotelRegistration,
         RentACarCompanySettings,
+        Login,
     },
 
     data() {

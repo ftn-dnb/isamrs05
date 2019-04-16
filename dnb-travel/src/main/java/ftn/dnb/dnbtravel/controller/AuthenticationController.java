@@ -16,10 +16,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -29,6 +26,7 @@ import java.util.Map;
 
 @RestController
 @RequestMapping(value = "/auth", produces = MediaType.APPLICATION_JSON_VALUE)
+@CrossOrigin(origins = "http://localhost:8000")
 public class AuthenticationController {
     @Autowired
     TokenUtils tokenUtils;
@@ -45,6 +43,7 @@ public class AuthenticationController {
     @RequestMapping(value = "/login", method = RequestMethod.POST)
     public ResponseEntity<?> createAuthenticationToken(@RequestBody JwtAuthenticationRequest authenticationRequest,
                                                        HttpServletResponse response) throws AuthenticationException, IOException {
+
 
         final Authentication authentication = authenticationManager
                 .authenticate(new UsernamePasswordAuthenticationToken(

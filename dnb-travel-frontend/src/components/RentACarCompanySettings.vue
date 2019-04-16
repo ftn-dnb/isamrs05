@@ -59,7 +59,7 @@ export default{
                 alert('Please enter company name');
                 return false;
             } else if(!this.rentACarCompany.description){
-                alert('Prease enter company description');
+                alert('Please enter company description');
                 return false;
             }
 
