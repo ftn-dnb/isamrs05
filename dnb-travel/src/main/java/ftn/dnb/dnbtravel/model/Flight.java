@@ -40,7 +40,7 @@ public class Flight {
     @ManyToOne
     private Airline airline;
 
-    @OneToOne(cascade = CascadeType.ALL)
+    @ManyToOne(cascade = CascadeType.ALL)
     private Airplane airplane;
 
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)

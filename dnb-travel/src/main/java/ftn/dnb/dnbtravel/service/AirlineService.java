@@ -89,4 +89,11 @@ public class AirlineService {
 
         return new FlightDTO(savedFlight);
     }
+
+    public List<FlightDTO> getFlights(Long id) {
+        List<Flight> flights = flightRepository.findAllByAirlineId(id);
+        List<FlightDTO> dtoFlights = new ArrayList<FlightDTO>();
+        flights.stream().forEach(flight -> dtoFlights.add(new FlightDTO(flight)));
+        return dtoFlights;
+    }
 }

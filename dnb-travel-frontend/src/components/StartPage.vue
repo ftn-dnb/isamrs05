@@ -1,25 +1,19 @@
 <template>
     <div>
+        <login></login>
 
-        <airline-list></airline-list>
-
-        <add-flight></add-flight>
-
+        <router-link :to="{ name: 'FlightList' }">Flights list</router-link>
     </div>
 </template>
 
 <script>
 
-import AirlineList from './AirlineList.vue';
-
-import AddFlight from './AddFlight.vue';
+import Login from './Login.vue';
 
 export default {
     props: {},
     components: {
-        AirlineList,
-
-        AddFlight
+        Login,
     },
 
     data() {
@@ -38,7 +32,6 @@ export default {
 }
 </script>
 
-<!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
 
 </style>

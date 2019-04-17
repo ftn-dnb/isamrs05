@@ -46,9 +46,16 @@ public class AirlineController {
         return new ResponseEntity<>(airline, (airline == null) ? HttpStatus.NOT_FOUND : HttpStatus.CREATED);
     }
 
+    @GetMapping(path = "/{id}/flights")
+    public ResponseEntity<List<FlightDTO>> getFlights(@PathVariable Long id) {
+        List<FlightDTO> flights = airlineService.getFlights(id);
+        return new ResponseEntity<>(flights, HttpStatus.OK);
+    }
+
     @PostMapping(path = "/{id}/flights")
     public ResponseEntity<FlightDTO> addFlight(@PathVariable Long id, @RequestBody FlightDTO flightToAdd) {
         FlightDTO savedFlight = airlineService.addFlight(id, flightToAdd);
         return new ResponseEntity<>(savedFlight, HttpStatus.CREATED);
     }
+
 }
