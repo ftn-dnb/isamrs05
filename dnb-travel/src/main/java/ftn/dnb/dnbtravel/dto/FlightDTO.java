@@ -21,7 +21,7 @@ public class FlightDTO {
     private List<DestinationDTO> transits;
     private Long airlineId;
     private AirplaneDTO airplane;
-    private List<AirlinePriceListItem> prices;
+    private List<AirlinePriceListItemDTO> prices;
 
     public FlightDTO() {
         super();
@@ -39,9 +39,10 @@ public class FlightDTO {
         this.transits = new ArrayList<DestinationDTO>();
         this.airlineId = flight.getAirline().getId();
         this.airplane = new AirplaneDTO(flight.getAirplane());
-        this.prices = new ArrayList<>(); // @TODO namestiti da se dodaju prodate karte ovde
+        this.prices = new ArrayList<AirlinePriceListItemDTO>();
 
         flight.getTransits().stream().forEach(destination -> this.transits.add(new DestinationDTO(destination)));
+        flight.getPrices().stream().forEach(price -> this.prices.add(new AirlinePriceListItemDTO(price)));
     }
 
     public Long getId() {
@@ -132,11 +133,11 @@ public class FlightDTO {
         this.airplane = airplane;
     }
 
-    public List<AirlinePriceListItem> getPrices() {
+    public List<AirlinePriceListItemDTO> getPrices() {
         return prices;
     }
 
-    public void setPrices(List<AirlinePriceListItem> prices) {
+    public void setPrices(List<AirlinePriceListItemDTO> prices) {
         this.prices = prices;
     }
 

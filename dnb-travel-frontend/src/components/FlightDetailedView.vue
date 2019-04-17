@@ -55,6 +55,24 @@
             </tr>
         </table>
 
+        <br />
+        <table border="1">
+            <caption>Price list</caption>
+
+            <tr>
+                <td>From</td>
+                <td>To</td>
+                <td>Price</td>
+                <td>Discount</td>
+            </tr>
+            <tr v-for="price in flight.prices">
+                <td>{{price.startDate}}</td>
+                <td>{{price.endDate}}</td>
+                <td>{{price.price}}</td>
+                <td>{{price.activeDiscount}}%</td>
+            </tr>
+        </table>   
+
         <br /> 
         <table border="1">
             <caption>Airplane informations</caption>
@@ -71,20 +89,24 @@
                 <td>Available seats:</td>
                 <td></td>
             </tr>
-        </table>     
+        </table>  
 
         <br />
-        <table border="1">
-            <caption>Price list</caption>
+        <div>
+            <v-stage ref="stage" :config="configKonva">
+                <v-layer ref="layer">
+                    <v-rect v-for="item in seats" :config="item"></v-rect>
+                </v-layer>
+            </v-stage>
+        </div>
 
-            <tr v-for="price in flight.prices">
-            </tr>
-        </table>   
     </div>
 </template>
 
 <script>
 import axios from 'axios';
+
+let vm = {};
 
 export default{
     name:'FlightDetailedView',
@@ -104,12 +126,32 @@ export default{
                 travelTime: null,
                 travelLength: null,
                 rating: null,
-                startDestination: null,
-                endDestination: null,            
-                transits: null,
+                startDestination: {
+                    city: null,
+                    country: null,
+                    airportName: null,
+                    airportCode: null,
+                },
+                endDestination: {
+                    city: null,
+                    country: null,
+                    airportName: null,
+                    airportCode: null,
+                },    
+                transits: [],
                 airlineId: null,
-                airplane: null,
+                airplane: {
+                    name: null
+                },
                 prices: null,            
+            },
+
+            seats: [],
+
+            configKonva: {
+                width: 700,
+                height: 700,
+                fill: 'red'
             },
         };
     },
@@ -120,11 +162,33 @@ export default{
             let endDateTime = Date.parse(this.flight.endDateTime);
             return Math.abs(endDateTime - startDateTime) / (60 * 60 * 1000);
         },
+
+        createSeatsView() {
+            const rectSize = 30;
+            const margin = 5;
+
+            for (let i = 0; i < this.flight.airplane.numOfColumns; ++i) {
+                for (let j = 0; j < this.flight.airplane.numOfRows; ++j) {
+                    this.seats.push({
+                        x: i * rectSize + i * margin,
+                        y: j * rectSize + j * margin,
+                        width: rectSize,
+                        height: rectSize,
+                        fill: 'green',
+                        stroke: 'black'
+                    });
+                }
+            }
+        },
     },
 
     mounted() {
         axios.get(`http://localhost:8080/api/flights/${this.flightId}`)
-        .then(response => {this.flight = response.data; console.log(this.flight)});
+        .then(response => {
+            this.flight = response.data;
+            console.log(this.flight);
+            this.createSeatsView();
+        });
     }
 }
 
