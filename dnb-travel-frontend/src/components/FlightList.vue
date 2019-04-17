@@ -11,6 +11,7 @@
                 <th>Num. of transits</td>
                 <th>Airline</th>
                 <th>Rating</th>
+                <th>&nbsp;</th>
             </tr>
             <tr v-for="flight in flights">
                 <td>{{flight.startDestination.city}}, {{flight.startDestination.country}}</td>
@@ -22,6 +23,9 @@
                 <td>{{flight.transits.length}}</td>
                 <td>{{flight.airlineName}}</td>
                 <td>{{flight.rating}}</td>
+                <td>
+                    <router-link :to="{ name: 'FlightDetailedView', params: { flightId: flight.id } }">See details</router-link>
+                </td>
             </tr>
         </table>
     </div>

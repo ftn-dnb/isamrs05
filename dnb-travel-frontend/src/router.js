@@ -7,6 +7,7 @@ import AdminHotel from './components/AdminHotel.vue'
 import AdminAirline from './components/AdminAirline.vue'
 import AdminSystem from './components/AdminSystem.vue'
 import FlightList from './components/FlightList.vue'
+import FlightDetailedView from './components/FlightDetailedView.vue';
 
 Vue.use(Router)
 
@@ -41,6 +42,12 @@ export default new Router({
         path: '/flights',
         name: 'FlightList',
         component: FlightList
+    },
+    {
+        path: '/flights/:flightId',
+        props: true,
+        name: 'FlightDetailedView',
+        component: FlightDetailedView
     },
   ]
 })
