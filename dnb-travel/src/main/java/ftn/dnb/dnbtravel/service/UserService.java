@@ -1,9 +1,12 @@
 package ftn.dnb.dnbtravel.service;
 
 import ftn.dnb.dnbtravel.dto.UserDTO;
+import ftn.dnb.dnbtravel.model.Authority;
 import ftn.dnb.dnbtravel.model.User;
+import ftn.dnb.dnbtravel.repository.AuthorityRepository;
 import ftn.dnb.dnbtravel.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -14,6 +17,9 @@ public class UserService {
 
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private AuthorityRepository authorityRepository;
 
     public List<UserDTO> getAllUsers() {
         List<User> users = userRepository.findAll();
@@ -32,7 +38,15 @@ public class UserService {
     }
 
     public UserDTO addUser(UserDTO user) {
-        User savedUser = userRepository.save(new User(user));
+
+
+        User userProba = new User(user);
+        userProba.setAuthorityList(new ArrayList<Authority>());
+        userProba.getAuthorityList().add(authorityRepository.findOneById(user.getRole()));
+        User savedUser = userRepository.save(userProba);
+
+
+        //List<Authority> lista = authorityRepository.findAll();
 
         if (savedUser == null)
             return null;

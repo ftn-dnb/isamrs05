@@ -4,19 +4,18 @@ import ftn.dnb.dnbtravel.dto.UserDTO;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.joda.time.DateTime;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import javax.persistence.*;
 import java.sql.Timestamp;
-import java.util.Collection;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
 @Entity
 @Table(name = "USERS")
 public class User implements UserDetails {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column(name = "firstName", nullable = false)
@@ -39,8 +38,6 @@ public class User implements UserDetails {
 
     @Column(name = "last_password_reset_date")
     private Timestamp lastPasswordResetDate;
-
-
 
     @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinTable(name = "user_authority",
@@ -66,8 +63,13 @@ public class User implements UserDetails {
         this.firstName = dto.getFirstName();
         this.lastName = dto.getLastName();
         this.email = dto.getEmail();
-        this.password = dto.getPassword();
+
+        BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+
+        this.password = encoder.encode(dto.getPassword());
         this.username = dto.getUsername();
+        this.enabled = true;
+        this.lastPasswordResetDate = new Timestamp(new Date().getTime());
     }
 
     public Long getId() {
