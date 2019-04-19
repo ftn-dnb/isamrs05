@@ -8,6 +8,8 @@ import AdminAirline from './components/AdminAirline.vue'
 import AdminSystem from './components/AdminSystem.vue'
 import FlightList from './components/FlightList.vue'
 import FlightDetailedView from './components/FlightDetailedView.vue';
+import AirlineList from './components/AirlineList.vue';
+import AirlineDetailedView from './components/AirlineDetailedView.vue';
 
 Vue.use(Router)
 
@@ -49,5 +51,16 @@ export default new Router({
         name: 'FlightDetailedView',
         component: FlightDetailedView
     },
+    {
+        path: '/airlines',
+        name: 'AirlineList',
+        component: AirlineList
+    },
+    {
+        path: '/airlines/:airlineId',
+        props: true,
+        name: 'AirlineDetailedView',
+        component: AirlineDetailedView
+    }
   ]
 })

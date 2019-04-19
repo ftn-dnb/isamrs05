@@ -7,15 +7,17 @@
                 <th>Company name</th>
                 <th>HQ Address</th>
                 <th>Description</th>
+                <th>&nbsp;</th>
             </tr>
-            <tr v-for="airline in airlines" @click="showDetailedView(airline.id)">
+            <tr v-for="airline in airlines">
                 <td>{{airline.name}}</td>
                 <td>{{airline.address.streetName}} {{airline.address.streetNumber}} {{airline.address.city}}, {{airline.address.country}}</td>
                 <td>{{airline.description}}</td>
+                <td>
+                    <router-link :to="{ name: 'AirlineDetailedView', params: { airlineId: airline.id } }">See details</router-link>
+                </td>
             </tr>
         </table>
-
-        <component :is="currentComponent" v-bind:airlineId="airlineIdToShow"></component>
     </div>
 </template>
 
@@ -27,23 +29,15 @@ import AirlineDetailedView from './AirlineDetailedView.vue';
 export default {
     name: 'AirlineList',
     props: {},
-    components: {
-        AirlineDetailedView
-    },
+    components: {},
 
     data() {
         return {
-            currentComponent: '',
-            airlineIdToShow: null,
             airlines: [],
         };
     },
 
     methods: {
-        showDetailedView(airlineId) {
-            this.airlineIdToShow = airlineId;
-            this.currentComponent = 'AirlineDetailedView';
-        }
     },
 
     mounted() {

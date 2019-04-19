@@ -9,7 +9,7 @@
                 <th>Length (km)</th>
                 <th>Travel time (h)</th>
                 <th>Num. of transits</td>
-                <th>Airline</th>
+                <th v-if="airlineId == null">Airline</th>
                 <th>Rating</th>
                 <th>&nbsp;</th>
             </tr>
@@ -21,7 +21,7 @@
                 <td>{{flight.travelLength}}</td>
                 <td>{{flight.travelTime}}</td>
                 <td>{{flight.transits.length}}</td>
-                <td>{{flight.airlineName}}</td>
+                <td v-if="airlineId == null">{{flight.airlineName}}</td>
                 <td>{{flight.rating}}</td>
                 <td>
                     <router-link :to="{ name: 'FlightDetailedView', params: { flightId: flight.id } }">See details</router-link>
@@ -36,7 +36,9 @@ import axios from 'axios';
 
 export default {
     name: 'FlightList',
-    props: {},
+    props: {
+        airlineId: null
+    },
     components: {},
     
     data() {
@@ -50,17 +52,22 @@ export default {
     },
 
     mounted() {
-        axios.get('http://localhost:8080/api/airlines').then(response => {
-            this.airlines = response.data;
+        if (this.airlineId == null) {
+            axios.get('http://localhost:8080/api/airlines').then(response => {
+                this.airlines = response.data;
 
-            // Copy flight info into new array
-            for (let airline of this.airlines) {
-                for (let flight of airline.flights) {
-                    flight.airlineName = airline.name;
-                    this.flights.push(flight);
+                // Copy flight info into new array
+                for (let airline of this.airlines) {
+                    for (let flight of airline.flights) {
+                        flight.airlineName = airline.name;
+                        this.flights.push(flight);
+                    }
                 }
-            }
-        });
+            });
+        } else {
+            axios.get(`http://localhost:8080/api/airlines/${this.airlineId}/flights`)
+            .then(response => this.flights = response.data)
+        }
     }
 }
 </script>

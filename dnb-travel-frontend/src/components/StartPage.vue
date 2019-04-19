@@ -2,7 +2,10 @@
     <div>
         <login></login>
 
-        <router-link :to="{ name: 'FlightList' }">Flights list</router-link>
+        <ul>
+            <li><router-link :to="{ name: 'FlightList' }">Flights list</router-link></li>
+            <li><router-link :to="{ name: 'AirlineList' }">Airlines list</router-link></li>
+        </ul>
     </div>
 </template>
 
