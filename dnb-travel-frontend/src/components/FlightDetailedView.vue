@@ -95,7 +95,8 @@
         <div>
             <v-stage ref="stage" :config="configKonva">
                 <v-layer ref="layer">
-                    <v-rect v-for="item in seats" :config="item" :ket="item.id"></v-rect>
+                    <v-rect v-for="item in seats" :config="item" :key="item.id"></v-rect>
+                    <v-text v-for="item in seatsText" :config="item" :key="item.id"></v-text>
                 </v-layer>
             </v-stage>
         </div>
@@ -105,8 +106,6 @@
 
 <script>
 import axios from 'axios';
-
-let vm = {};
 
 export default{
     name:'FlightDetailedView',
@@ -148,11 +147,11 @@ export default{
             },
 
             seats: [],
+            seatsText: [],
 
             configKonva: {
                 width: 700,
                 height: 700,
-                fill: 'red'
             },
         };
     },
@@ -164,9 +163,16 @@ export default{
             return Math.abs(endDateTime - startDateTime) / (60 * 60 * 1000);
         },
 
+        configureKonva(rectWidth, marginSize) {
+            this.configKonva.width = this.flight.airplane.numOfColumns * (rectWidth + marginSize);
+            this.configKonva.height = this.flight.airplane.numOfRows * (rectWidth + marginSize);
+        },
+
         createSeatsView() {
-            const rectSize = 30;
+            const rectSize = 35;
             const margin = 5;
+
+            this.configureKonva(rectSize, margin);
 
             for (let i = 0; i < this.flight.airplane.numOfColumns; ++i) {
                 for (let j = 0; j < this.flight.airplane.numOfRows; ++j) {
@@ -176,8 +182,16 @@ export default{
                         width: rectSize,
                         height: rectSize,
                         fill: 'green',
-                        stroke: 'black'
+                        stroke: 'black',
                     });
+
+                    this.seatsText.push({
+                        x: i * (rectSize + margin) + 3,
+                        y: j * (rectSize + margin) + 12,
+                        text: `${j + 1}/${i + 1}`,
+                        fontSize: 12,
+                        fill: 'white'
+                    })
                 }
             }
 
@@ -200,7 +214,7 @@ export default{
             this.flight = response.data;
             this.createSeatsView();
         }).catch(error => {
-            alert('Error while loading data from server.');
+            alert('Error while loading data.');
         });
     }
 }
