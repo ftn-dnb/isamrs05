@@ -1,5 +1,8 @@
 <template>
-    <div>
+    <div v-if="!flightExists">
+        <h2>Sorry, this flight does not exist in our database.</h2>
+    </div>
+    <div v-else-if="flightExists">
         
         <table border="1">
             <caption>Flight informations</caption>
@@ -118,6 +121,7 @@ export default{
 
     data() {
         return{
+            flightExists: true,
             flight: {
                 id: null,
                 startDateTime: null,
@@ -212,9 +216,10 @@ export default{
         axios.get(`http://localhost:8080/api/flights/${this.flightId}`)
         .then(response => {
             this.flight = response.data;
+            this.flightExists = true;
             this.createSeatsView();
         }).catch(error => {
-            alert('Error while loading data.');
+            this.flightExists = false;
         });
     }
 }
