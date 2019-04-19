@@ -22,6 +22,7 @@ public class FlightDTO {
     private Long airlineId;
     private AirplaneDTO airplane;
     private List<AirlinePriceListItemDTO> prices;
+    private List<FlightReservationDTO> reservations;
 
     public FlightDTO() {
         super();
@@ -40,9 +41,11 @@ public class FlightDTO {
         this.airlineId = flight.getAirline().getId();
         this.airplane = new AirplaneDTO(flight.getAirplane());
         this.prices = new ArrayList<AirlinePriceListItemDTO>();
+        this.reservations = new ArrayList<FlightReservationDTO>();
 
         flight.getTransits().stream().forEach(destination -> this.transits.add(new DestinationDTO(destination)));
         flight.getPrices().stream().forEach(price -> this.prices.add(new AirlinePriceListItemDTO(price)));
+        flight.getReservations().stream().forEach(reservation -> this.reservations.add(new FlightReservationDTO(reservation)));
     }
 
     public Long getId() {
@@ -139,6 +142,14 @@ public class FlightDTO {
 
     public void setPrices(List<AirlinePriceListItemDTO> prices) {
         this.prices = prices;
+    }
+
+    public List<FlightReservationDTO> getReservations() {
+        return reservations;
+    }
+
+    public void setReservations(List<FlightReservationDTO> reservations) {
+        this.reservations = reservations;
     }
 
     @Override

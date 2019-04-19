@@ -81,7 +81,7 @@ public class AirlineService {
 
         Flight flight = new Flight(0L, flightToAdd.getStartDateTime(), flightToAdd.getEndDateTime(),
                 flightToAdd.getTravelTime(), flightToAdd.getTravelLength(), 0, startDestination, endDestination,
-                airline, transits, airplane, new HashSet<>());
+                airline, transits, airplane, new HashSet<>(), new HashSet<>());
 
         airline.getFlights().add(flight);
         airlineRepository.save(airline);

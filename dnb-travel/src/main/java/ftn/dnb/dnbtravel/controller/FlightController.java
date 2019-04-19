@@ -27,7 +27,6 @@ public class FlightController {
     @GetMapping(path = "/{id}")
     public ResponseEntity<FlightDTO> getFlightById(@PathVariable Long id) {
         FlightDTO flight = flightService.getFlightById(id);
-        System.out.println(flight);
         return new ResponseEntity<FlightDTO>(flight, (flight == null) ? HttpStatus.OK : HttpStatus.OK);
     }
 

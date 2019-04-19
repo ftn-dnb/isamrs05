@@ -87,7 +87,7 @@
             </tr>
             <tr>
                 <td>Available seats:</td>
-                <td></td>
+                <td>{{flight.airplane.numOfRows * flight.airplane.numOfColumns - flight.reservations.length}}</td>
             </tr>
         </table>  
 
@@ -95,7 +95,7 @@
         <div>
             <v-stage ref="stage" :config="configKonva">
                 <v-layer ref="layer">
-                    <v-rect v-for="item in seats" :config="item"></v-rect>
+                    <v-rect v-for="item in seats" :config="item" :ket="item.id"></v-rect>
                 </v-layer>
             </v-stage>
         </div>
@@ -143,7 +143,8 @@ export default{
                 airplane: {
                     name: null
                 },
-                prices: null,            
+                prices: [], 
+                reservations: []      
             },
 
             seats: [],
@@ -170,14 +171,25 @@ export default{
             for (let i = 0; i < this.flight.airplane.numOfColumns; ++i) {
                 for (let j = 0; j < this.flight.airplane.numOfRows; ++j) {
                     this.seats.push({
-                        x: i * rectSize + i * margin,
-                        y: j * rectSize + j * margin,
+                        x: i * (rectSize + margin),
+                        y: j * (rectSize + margin),
                         width: rectSize,
                         height: rectSize,
                         fill: 'green',
                         stroke: 'black'
                     });
                 }
+            }
+
+            for (let reservation of this.flight.reservations) {
+                this.seats.push({
+                    x: (reservation.seatColumn - 1) * (rectSize + margin),
+                    y: (reservation.seatRow - 1) * (rectSize + margin),
+                    width: rectSize,
+                    height: rectSize,
+                    fill: 'red',
+                    stroke: 'black'
+                });
             }
         },
     },
@@ -186,8 +198,9 @@ export default{
         axios.get(`http://localhost:8080/api/flights/${this.flightId}`)
         .then(response => {
             this.flight = response.data;
-            console.log(this.flight);
             this.createSeatsView();
+        }).catch(error => {
+            alert('Error while loading data from server.');
         });
     }
 }
