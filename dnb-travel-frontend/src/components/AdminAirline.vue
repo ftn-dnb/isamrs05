@@ -1,6 +1,6 @@
 <template>
     <div>
-        <airline-list></airline-list>
+        <add-flight></add-flight>
 
         <airline-settings></airline-settings>
 
@@ -10,9 +10,9 @@
 
 <script>
 import axios from 'axios';
-import AirlineList from './AirlineList.vue';
 import AirlineSettings from './AirlineSettings.vue';
-import FlightList from './FlightList.vue'
+import FlightList from './FlightList.vue';
+import AddFlight from './AddFlight.vue';
 
 export default{
     name:'AdminAirline',
@@ -20,7 +20,7 @@ export default{
     props: {},
 
     components: {
-        AirlineList,
+        AddFlight,
         AirlineSettings,
         FlightList
     },
