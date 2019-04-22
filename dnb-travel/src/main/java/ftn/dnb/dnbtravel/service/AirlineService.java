@@ -1,11 +1,9 @@
 package ftn.dnb.dnbtravel.service;
 
 import ftn.dnb.dnbtravel.dto.AirlineDTO;
+import ftn.dnb.dnbtravel.dto.AirlinePriceListItemDTO;
 import ftn.dnb.dnbtravel.dto.FlightDTO;
-import ftn.dnb.dnbtravel.model.Airline;
-import ftn.dnb.dnbtravel.model.Airplane;
-import ftn.dnb.dnbtravel.model.Destination;
-import ftn.dnb.dnbtravel.model.Flight;
+import ftn.dnb.dnbtravel.model.*;
 import ftn.dnb.dnbtravel.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -77,17 +75,19 @@ public class AirlineService {
         Airplane airplane = airplaneRepository.findOneById(flightToAdd.getAirplane().getId());
 
         Set<Destination> transits = new HashSet<Destination>();
-        flightToAdd.getTransits().stream().forEach(transit -> transits.add(new Destination(transit)));
+        flightToAdd.getTransits().forEach(transit -> transits.add(destinationRepository.findOneById(transit.getId())));
 
-        Flight flight = new Flight(0L, flightToAdd.getStartDateTime(), flightToAdd.getEndDateTime(),
+        Set<AirlinePriceListItem> prices = new HashSet<AirlinePriceListItem>();
+        flightToAdd.getPrices().forEach(item -> prices.add(new AirlinePriceListItem(item)));
+
+        Flight flight = new Flight(null, flightToAdd.getStartDateTime(), flightToAdd.getEndDateTime(),
                 flightToAdd.getTravelTime(), flightToAdd.getTravelLength(), 0, startDestination, endDestination,
-                airline, transits, airplane, new HashSet<>(), new HashSet<>());
+                airline, transits, airplane, prices, new HashSet<>());
 
         airline.getFlights().add(flight);
         airlineRepository.save(airline);
-        Flight savedFlight = flightRepository.save(flight);
 
-        return new FlightDTO(savedFlight);
+        return new FlightDTO(flight);
     }
 
     public List<FlightDTO> getFlights(Long id) {

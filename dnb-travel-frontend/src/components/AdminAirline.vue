@@ -1,18 +1,17 @@
 <template>
     <div>
-        <add-flight></add-flight>
 
-        <airline-settings></airline-settings>
+        <ul>
+            <li><router-link :to="{ name: 'FlightList' }">Flights list</router-link></li>
+            <li><router-link :to="{ name: 'AddFlight' }">Add flight</router-link></li>
+            <li><router-link :to="{ name: 'AirlineSettings' }">Airline settings</router-link></li>
+        </ul>
 
-        <flight-list></flight-list>
     </div>
 </template>
 
 <script>
 import axios from 'axios';
-import AirlineSettings from './AirlineSettings.vue';
-import FlightList from './FlightList.vue';
-import AddFlight from './AddFlight.vue';
 
 export default{
     name:'AdminAirline',
@@ -20,9 +19,6 @@ export default{
     props: {},
 
     components: {
-        AddFlight,
-        AirlineSettings,
-        FlightList
     },
 
     data(){
@@ -35,6 +31,7 @@ export default{
 
     mounted(){
         // @TODO: dobaviti informacije o user-u pa samim tim i ID kompanije za koju je admin
+        // @TODO: za adminov prikaz svih letova omoguciti da mu se prikazuju samo letovi njegove kompanije
     }
 }
 

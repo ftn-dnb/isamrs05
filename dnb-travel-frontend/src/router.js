@@ -10,6 +10,8 @@ import FlightList from './components/FlightList.vue'
 import FlightDetailedView from './components/FlightDetailedView.vue';
 import AirlineList from './components/AirlineList.vue';
 import AirlineDetailedView from './components/AirlineDetailedView.vue';
+import AddFlight from './components/AddFlight.vue';
+import AirlineSettings from './components/AirlineSettings.vue';
 
 Vue.use(Router)
 
@@ -61,6 +63,16 @@ export default new Router({
         props: true,
         name: 'AirlineDetailedView',
         component: AirlineDetailedView
-    }
+    },
+    {
+        path: '/adminAirline/addFlight',
+        name: 'AddFlight',
+        component: AddFlight
+    },
+    {
+        path: '/adminAirline/airlineSettings',
+        name: 'AirlineSettings',
+        component: AirlineSettings
+    },
   ]
 })

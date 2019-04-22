@@ -34,7 +34,7 @@ public class Flight {
     @OneToOne(cascade = CascadeType.ALL)
     private Destination endDestination;
 
-    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private Set<Destination> transits = new HashSet<Destination>();
 
     @ManyToOne

@@ -50,7 +50,7 @@
         </table>
 
         <br />
-        <table v-if="flight.transits.length != 0">
+        <table v-if="flight.transits.length != 0" border="1">
             <caption>Transit destinations</caption>
             
             <tr v-for="transit in flight.transits">

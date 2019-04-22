@@ -174,9 +174,13 @@ export default {
             this.flightToAdd.travelTime = this.getHoursDifference(this.flightToAdd.startDateTime, this.flightToAdd.endDateTime);
             this.flightToAdd.airlineId = 22; // @TODO promeniti
 
-            // axios.post('http://localhost:8080/api/airlines/' + this.airline.id + '/flights', this.flightToAdd).then(response => {
-            //     console.log(reponse.data);
-            // });
+            axios.post('http://localhost:8080/api/airlines/' + this.airline.id + '/flights', this.flightToAdd, { headers: {"Authorization" : `Bearer ${localStorage.getItem('user-token')}`} })
+            .then(response => {
+                alert('Flight successfuly created.');
+
+            }).catch(error => {
+                alert('There was an error while creating new flight.');
+            });
 
         },
 
