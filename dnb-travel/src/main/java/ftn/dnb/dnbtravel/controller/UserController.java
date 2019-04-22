@@ -49,4 +49,11 @@ public class UserController {
         return new ResponseEntity<>(savedUser, HttpStatus.CREATED);
     }
 
+    @RequestMapping(value = "/sysadmin_add", method = RequestMethod.POST)
+    @PreAuthorize("hasRole('SYSTEM_ADMIN')")
+    public ResponseEntity<?> addSystemAdmin(@RequestBody UserDTO user) {
+        userService.addUser(user);
+        return new ResponseEntity<>(user, HttpStatus.CREATED);
+    }
+
 }
