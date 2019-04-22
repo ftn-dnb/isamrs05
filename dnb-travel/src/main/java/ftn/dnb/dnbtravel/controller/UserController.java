@@ -1,13 +1,11 @@
 package ftn.dnb.dnbtravel.controller;
 
 import ftn.dnb.dnbtravel.dto.UserDTO;
-import ftn.dnb.dnbtravel.model.User;
 import ftn.dnb.dnbtravel.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
@@ -47,6 +45,16 @@ public class UserController {
     public ResponseEntity<UserDTO> updateUserById(@RequestBody UserDTO userToEdit) {
         UserDTO savedUser = userService.updateUser(userToEdit);
         return new ResponseEntity<>(savedUser, HttpStatus.CREATED);
+    }
+
+    @GetMapping(path = "/whoami")
+    public ResponseEntity<String> getRoleFromUser(Principal user){
+        UserDTO u = userService.getUserByUsername(user.getName());
+
+        if(u == null){
+            return  new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+        return new ResponseEntity<>(u.getRole(),HttpStatus.OK);
     }
 
 }

@@ -3,7 +3,11 @@ package ftn.dnb.dnbtravel.service;
 import ftn.dnb.dnbtravel.dto.UserDTO;
 import ftn.dnb.dnbtravel.model.User;
 import ftn.dnb.dnbtravel.repository.UserRepository;
+import ftn.dnb.dnbtravel.security.TokenUtils;
+import io.jsonwebtoken.Jwt;
+import io.jsonwebtoken.JwtParser;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.security.oauth2.resource.OAuth2ResourceServerProperties;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -14,6 +18,7 @@ public class UserService {
 
     @Autowired
     private UserRepository userRepository;
+
 
     public List<UserDTO> getAllUsers() {
         List<User> users = userRepository.findAll();
@@ -68,6 +73,15 @@ public class UserService {
 
     public  UserDTO getUserByUsername (UserDTO user){
         User userR = userRepository.findByUsername(user.getUsername());
+
+        if (userR == null)
+            return null;
+
+        return new UserDTO(userR);
+    }
+
+    public UserDTO getUserByUsername(String user){
+        User userR = userRepository.findByUsername(user);
 
         if (userR == null)
             return null;

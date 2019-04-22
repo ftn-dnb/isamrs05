@@ -13,6 +13,7 @@ public class UserDTO {
     private String password;
     private String repeatPassword;
     private String username;
+    private String role;
 
 
     public UserDTO() {
@@ -35,6 +36,7 @@ public class UserDTO {
         this.email = user.getEmail();
         this.password = user.getPassword();
         this.username = user.getUsername();
+        this.role = user.getAuthorityList().get(0).getAuthority();
     }
 
     public Long getId() {
@@ -87,6 +89,14 @@ public class UserDTO {
 
     public String getUsername() {
         return username;
+    }
+
+    public String getRole() {
+        return role;
+    }
+
+    public void setRole(String role) {
+        this.role = role;
     }
 
     public void setUsername(String username) {
