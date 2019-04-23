@@ -1,7 +1,6 @@
 package ftn.dnb.dnbtravel.controller;
 
 import ftn.dnb.dnbtravel.dto.UserDTO;
-import ftn.dnb.dnbtravel.model.User;
 import ftn.dnb.dnbtravel.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -49,11 +48,22 @@ public class UserController {
         return new ResponseEntity<>(savedUser, HttpStatus.CREATED);
     }
 
+    @GetMapping(path = "/whoami")
+    public ResponseEntity<?> getRoleFromUser(Principal user) {
+        UserDTO u = userService.getUserByUsername(user.getName());
+
+        if (u == null) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+        return new ResponseEntity<>(u.convertRoleToString(u.getRole()), HttpStatus.OK);
+    }
+
     @RequestMapping(value = "/sysadmin_add", method = RequestMethod.POST)
     @PreAuthorize("hasRole('SYSTEM_ADMIN')")
     public ResponseEntity<?> addSystemAdmin(@RequestBody UserDTO user) {
         userService.addUser(user);
         return new ResponseEntity<>(user, HttpStatus.CREATED);
+
     }
 
 }

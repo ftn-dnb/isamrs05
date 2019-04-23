@@ -57,6 +57,7 @@ export default{
 
                 alert('Successful login');
                 localStorage.setItem('user-token',response.data.accessToken);
+                localStorage.setItem('role', response.data.role);
                 switch(response.data.role){
                 	case 'ROLE_USER': this.$router.push({path : '/'}); break;
                 	case 'ROLE_SYSTEM_ADMIN': this.$router.push({path : '/adminSystem'}); break;
@@ -67,6 +68,13 @@ export default{
                 }
                 
                 
+            })
+            .catch(error =>{
+            	if(error.response.status === 401){
+            	console.log(error.response);
+            		alert(error.response.data);
+            		return;
+            	}
             });
         }
     },

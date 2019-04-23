@@ -38,6 +38,7 @@ public class TokenUtils {
     static final String AUDIENCE_MOBILE = "mobile";
     static final String AUDIENCE_TABLET = "tablet";
 
+
     @Autowired
     TimeProvider timeProvider;
 

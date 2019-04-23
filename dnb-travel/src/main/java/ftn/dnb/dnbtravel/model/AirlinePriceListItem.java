@@ -1,5 +1,7 @@
 package ftn.dnb.dnbtravel.model;
 
+import ftn.dnb.dnbtravel.dto.AirlinePriceListItemDTO;
+
 import javax.persistence.*;
 import java.util.Date;
 import java.util.Objects;
@@ -25,7 +27,6 @@ public class AirlinePriceListItem {
 
 
     public AirlinePriceListItem() {
-        super();
     }
 
     public AirlinePriceListItem(Long id, int activeDiscount, float price, Date startDate, Date endDate) {
@@ -34,6 +35,14 @@ public class AirlinePriceListItem {
         this.price = price;
         this.startDate = startDate;
         this.endDate = endDate;
+    }
+
+    public AirlinePriceListItem(AirlinePriceListItemDTO dto) {
+        this.id = dto.getId();
+        this.activeDiscount = dto.getActiveDiscount();
+        this.price = dto.getPrice();
+        this.startDate = dto.getStartDate();
+        this.endDate = dto.getEndDate();
     }
 
     public Long getId() {
@@ -81,12 +90,12 @@ public class AirlinePriceListItem {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         AirlinePriceListItem that = (AirlinePriceListItem) o;
-        return id.equals(that.id);
+        return Objects.equals(id, that.id);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id);
+        return Objects.hash(id, price, startDate, endDate, activeDiscount);
     }
 
     @Override

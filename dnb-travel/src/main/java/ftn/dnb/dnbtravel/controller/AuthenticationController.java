@@ -54,7 +54,7 @@ public class AuthenticationController {
                             authenticationRequest.getPassword()));
         }
         catch (AuthenticationException a) {
-            return new ResponseEntity<>(HttpStatus.OK);
+            return new ResponseEntity<>("User authentication fail",HttpStatus.UNAUTHORIZED);
         }
 
         // Ubaci username + password u kontext

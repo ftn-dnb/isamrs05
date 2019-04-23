@@ -68,8 +68,20 @@ export default{
     },
 
     mounted(){
+        
+        
+        //axios.get("http://localhost:8080/api/users/whoami",{ headers: {"Authorization" : `Bearer ${localStorage.getItem('user-token')}`} }).then(response => localStorage.setItem('role', response.data));
+                              //alert(response.data);})
+
+        if(localStorage.getItem('role') === 'ROLE_RAC_ADMIN'){
         axios.get("http://localhost:8080/api/rentACarCompanies/1",{ headers: {"Authorization" : `Bearer ${localStorage.getItem('user-token')}`} }).then(response => this.rentACarCompany = response.data);
         console.log(localStorage.getItem('user-token'));
+        }
+        else{
+            this.$router.push({path : '/'});
+            alert('Invalid user');
+        }
+        //axios.post("http://localhost:8080/api/rentACarCompanies/whoami",{ headers: {"Authorization" : `Bearer ${localStorage.getItem('user-token')}`} }).then(console.log('asdf'));
         //axios({
         //   method:'get',
         //    url:'http://localhost:8080/api/rentACarCompanies/1',
