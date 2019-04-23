@@ -6,6 +6,7 @@ import StartPage from './components/StartPage.vue'
 import AdminHotel from './components/AdminHotel.vue'
 import AdminAirline from './components/AdminAirline.vue'
 import AdminSystem from './components/AdminSystem.vue'
+import axios from 'axios';  
 import FlightList from './components/FlightList.vue'
 import FlightDetailedView from './components/FlightDetailedView.vue';
 import AirlineList from './components/AirlineList.vue';
@@ -25,22 +26,82 @@ export default new Router({
     {
     	path:'/adminRentACar',
     	name: 'AdminRentACar',
-    	component: AdminRentACar
+    	component: AdminRentACar,
+        beforeEnter:(to,from,next)=> {
+            axios.get("http://localhost:8080/api/users/whoami",{ headers: {"Authorization" : `Bearer ${localStorage.getItem('user-token')}`} }).then(response => 
+                {
+                    localStorage.setItem('role', response.data);
+                    if(localStorage.getItem('role') === 'ROLE_RAC_ADMIN'){
+                        next();
+                    }
+                    else{
+                        alert('Page does not exist')
+                        next("");
+                    }
+                
+                });
+            
+        }
     },
     {
     	path:'/adminHotel',
     	name: 'AdminHotel',
-    	component: AdminHotel
+    	component: AdminHotel,
+        beforeEnter:(to,from,next)=> {
+            axios.get("http://localhost:8080/api/users/whoami",{ headers: {"Authorization" : `Bearer ${localStorage.getItem('user-token')}`} }).then(response => 
+                {
+                    localStorage.setItem('role', response.data);
+                    if(localStorage.getItem('role') === 'ROLE_HOTEL_ADMIN'){
+                        next();
+                    }
+                    else{
+                        alert('Page does not exist')
+                        next("");
+                    }
+                
+                });
+            
+        }
     },
     {
     	path:'/adminAirline',
     	name: 'AdminAirline',
-    	component: AdminAirline
+    	component: AdminAirline,
+        beforeEnter:(to,from,next)=> {
+            axios.get("http://localhost:8080/api/users/whoami",{ headers: {"Authorization" : `Bearer ${localStorage.getItem('user-token')}`} }).then(response => 
+                {
+                    localStorage.setItem('role', response.data);
+                    if(localStorage.getItem('role') === 'ROLE_AIRLINE_ADMIN'){
+                        next();
+                    }
+                    else{
+                        alert('Page does not exist')
+                        next("");
+                    }
+                
+                });
+            
+        }
     },
     {
     	path:'/adminSystem',
     	name: 'AdminSystem',
-    	component: AdminSystem
+    	component: AdminSystem,
+        beforeEnter:(to,from,next)=> {
+            axios.get("http://localhost:8080/api/users/whoami",{ headers: {"Authorization" : `Bearer ${localStorage.getItem('user-token')}`} }).then(response => 
+                {
+                    localStorage.setItem('role', response.data);
+                    if(localStorage.getItem('role') === 'ROLE_SYSTEM_ADMIN'){
+                        next();
+                    }
+                    else{
+                        alert('Page does not exist')
+                        next("");
+                    }
+                
+                });
+            
+        }
     },
     {
         path: '/flights',

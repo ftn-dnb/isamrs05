@@ -4,9 +4,7 @@ import com.sun.mail.iap.Response;
 import ftn.dnb.dnbtravel.dto.RentACarCompanyDTO;
 import ftn.dnb.dnbtravel.service.RentACarCompanyService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.*;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
@@ -36,7 +34,7 @@ public class RentACarCompanyController {
     }
 
     @GetMapping(path = "/{id}")
-    @PreAuthorize("hasRole('USER')")
+    @PreAuthorize("hasRole('RAC_ADMIN')")
     public ResponseEntity<RentACarCompanyDTO> getRentACarCompanyById(@PathVariable("id") Long id){
         RentACarCompanyDTO rentACarCompany = rentACarCompanyService.getRentACarCompanyById(id);
         return new ResponseEntity<>(rentACarCompany,(rentACarCompany == null) ? HttpStatus.NOT_FOUND : HttpStatus.OK);
@@ -47,5 +45,7 @@ public class RentACarCompanyController {
         RentACarCompanyDTO rentACarCompany = rentACarCompanyService.updateRentACarCompany(rentACarCompanyToEdit);
         return new ResponseEntity<>(rentACarCompany, (rentACarCompany == null) ? HttpStatus.NOT_FOUND : HttpStatus.OK);
     }
+
+
 
 }
