@@ -34,25 +34,28 @@ public class Flight {
     @OneToOne(cascade = CascadeType.ALL)
     private Destination endDestination;
 
-    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private Set<Destination> transits = new HashSet<Destination>();
 
     @ManyToOne
     private Airline airline;
 
-    @OneToOne(cascade = CascadeType.ALL)
+    @ManyToOne(cascade = CascadeType.ALL)
     private Airplane airplane;
 
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private Set<AirlinePriceListItem> prices = new HashSet<AirlinePriceListItem>();
 
+    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private Set<FlightReservation> reservations = new HashSet<FlightReservation>();
+
     public Flight() {
-        super();
     }
 
     public Flight(Long id, Date startDateTime, Date endDateTime, float travelTime, float travelLength,
                   float rating, Destination startDestination, Destination endDestination, Airline airline,
-                  Set<Destination> transits, Airplane airplane, Set<AirlinePriceListItem> prices) {
+                  Set<Destination> transits, Airplane airplane, Set<AirlinePriceListItem> prices,
+                  Set<FlightReservation> reservations) {
         this.id = id;
         this.startDateTime = startDateTime;
         this.endDateTime = endDateTime;
@@ -65,6 +68,7 @@ public class Flight {
         this.transits = transits;
         this.airplane = airplane;
         this.prices = prices;
+        this.reservations = reservations;
     }
 
     public Long getId() {
@@ -161,6 +165,14 @@ public class Flight {
 
     public void setPrices(Set<AirlinePriceListItem> prices) {
         this.prices = prices;
+    }
+
+    public Set<FlightReservation> getReservations() {
+        return reservations;
+    }
+
+    public void setReservations(Set<FlightReservation> reservations) {
+        this.reservations = reservations;
     }
 
     @Override

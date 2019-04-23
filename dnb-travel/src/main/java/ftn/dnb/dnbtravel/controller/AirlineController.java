@@ -1,11 +1,13 @@
 package ftn.dnb.dnbtravel.controller;
 
 import ftn.dnb.dnbtravel.dto.AirlineDTO;
+import ftn.dnb.dnbtravel.dto.FlightDTO;
 import ftn.dnb.dnbtravel.service.AirlineService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -44,4 +46,18 @@ public class AirlineController {
         AirlineDTO airline = airlineService.updateAirline(airlineToEdit);
         return new ResponseEntity<>(airline, (airline == null) ? HttpStatus.NOT_FOUND : HttpStatus.CREATED);
     }
+
+    @GetMapping(path = "/{id}/flights")
+    public ResponseEntity<List<FlightDTO>> getFlights(@PathVariable Long id) {
+        List<FlightDTO> flights = airlineService.getFlights(id);
+        return new ResponseEntity<>(flights, HttpStatus.OK);
+    }
+
+    @PreAuthorize("hasRole('AIRLINE_ADMIN')")
+    @PostMapping(path = "/{id}/flights")
+    public ResponseEntity<FlightDTO> addFlight(@PathVariable Long id, @RequestBody FlightDTO flightToAdd) {
+        FlightDTO savedFlight = airlineService.addFlight(id, flightToAdd);
+        return new ResponseEntity<>(savedFlight, HttpStatus.CREATED);
+    }
+
 }

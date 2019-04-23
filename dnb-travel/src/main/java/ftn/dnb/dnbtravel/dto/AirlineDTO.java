@@ -2,7 +2,11 @@ package ftn.dnb.dnbtravel.dto;
 
 import ftn.dnb.dnbtravel.model.Address;
 import ftn.dnb.dnbtravel.model.Airline;
+import ftn.dnb.dnbtravel.model.Destination;
+import ftn.dnb.dnbtravel.model.Flight;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 public class AirlineDTO {
@@ -11,15 +15,19 @@ public class AirlineDTO {
     private String name;
     private Address address;
     private String description;
+    private List<DestinationDTO> destinations;
+    private List<FlightDTO> flights;
 
     public AirlineDTO() {
     }
 
-    public AirlineDTO(long id, String name, Address address, String description) {
+    public AirlineDTO(long id, String name, Address address, String description, List<Destination> destinations,
+                      List<Flight> flights) {
         this.id = id;
         this.name = name;
         this.address = address;
         this.description = description;
+
     }
 
     public AirlineDTO(Airline airline) {
@@ -27,6 +35,11 @@ public class AirlineDTO {
         this.name = airline.getName();
         this.address = airline.getAddress();
         this.description = airline.getDescription();
+        this.destinations = new ArrayList<DestinationDTO>();
+        this.flights = new ArrayList<FlightDTO>();
+
+        airline.getDestinations().stream().forEach(dest -> this.destinations.add(new DestinationDTO(dest)));
+        airline.getFlights().stream().forEach(flight -> this.flights.add(new FlightDTO(flight)));
     }
 
     public long getId() {
@@ -59,6 +72,22 @@ public class AirlineDTO {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public List<DestinationDTO> getDestinations() {
+        return destinations;
+    }
+
+    public void setDestinations(List<DestinationDTO> destinations) {
+        this.destinations = destinations;
+    }
+
+    public List<FlightDTO> getFlights() {
+        return flights;
+    }
+
+    public void setFlights(List<FlightDTO> flights) {
+        this.flights = flights;
     }
 
     @Override

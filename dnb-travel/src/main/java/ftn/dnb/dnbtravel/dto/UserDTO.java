@@ -6,6 +6,9 @@ import java.util.Objects;
 
 public class UserDTO {
 
+    //role
+    //1 - sysadmin
+
     private Long id;
     private String firstName;
     private String lastName;
@@ -13,13 +16,12 @@ public class UserDTO {
     private String password;
     private String repeatPassword;
     private String username;
-    private String role;
-
+    private Long role;
 
     public UserDTO() {
     }
 
-    public UserDTO(Long id, String firstName, String lastName, String email, String password, String repeatPassword, String username) {
+    public UserDTO(Long id, String firstName, String lastName, String email, String password, String repeatPassword, String username, Long role) {
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
@@ -27,6 +29,7 @@ public class UserDTO {
         this.password = password;
         this.repeatPassword = repeatPassword;
         this.username = username;
+        this.role = role;
     }
 
     public UserDTO(User user) {
@@ -90,17 +93,17 @@ public class UserDTO {
     public String getUsername() {
         return username;
     }
-
-    public String getRole() {
-        return role;
-    }
-
-    public void setRole(String role) {
-        this.role = role;
-    }
-
+  
     public void setUsername(String username) {
         this.username = username;
+    }
+
+    public Long getRole() {
+        return this.role;
+    }
+
+    public void setRole(Long role) {
+        this.role = role;
     }
     @Override
     public boolean equals(Object o) {

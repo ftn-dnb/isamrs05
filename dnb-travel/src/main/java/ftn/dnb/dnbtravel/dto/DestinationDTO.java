@@ -1,42 +1,25 @@
-package ftn.dnb.dnbtravel.model;
+package ftn.dnb.dnbtravel.dto;
 
-import ftn.dnb.dnbtravel.dto.DestinationDTO;
+import ftn.dnb.dnbtravel.model.Destination;
 
-import javax.persistence.*;
 import java.util.Objects;
 
-@Entity
-public class Destination {
+public class DestinationDTO {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
-
-    @Column(name = "city", nullable = false)
     private String city;
-
-    @Column(name = "country", nullable = false)
     private String country;
-
-    @Column(name = "airportName", nullable = false)
     private String airportName;
-
-    @Column(name = "airportCode", nullable = false, unique = true, length = 3)
     private String airportCode;
-
-    @Column(name = "longitude", nullable = false)
     private float longitude;
-
-    @Column(name = "latitude", nullable = false)
     private float latitude;
 
-
-    public Destination() {
+    public DestinationDTO() {
         super();
     }
 
-    public Destination(Long id, String city, String country, String airportName,
-                       String airportCode, float longitude, float latitude) {
+    public DestinationDTO(Long id, String city, String country, String airportName,
+                          String airportCode, float longitude, float latitude) {
         this.id = id;
         this.city = city;
         this.country = country;
@@ -46,7 +29,7 @@ public class Destination {
         this.latitude = latitude;
     }
 
-    public Destination(DestinationDTO dest) {
+    public DestinationDTO(Destination dest) {
         this.id = dest.getId();
         this.city = dest.getCity();
         this.country = dest.getCountry();
@@ -116,26 +99,12 @@ public class Destination {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        Destination that = (Destination) o;
-        return id.equals(that.id) &&
-                airportCode.equals(that.airportCode);
+        DestinationDTO that = (DestinationDTO) o;
+        return Objects.equals(id, that.id);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, airportCode);
-    }
-
-    @Override
-    public String toString() {
-        return "Destination{" +
-                "id=" + id +
-                ", city='" + city + '\'' +
-                ", country='" + country + '\'' +
-                ", airportName='" + airportName + '\'' +
-                ", airportCode='" + airportCode + '\'' +
-                ", longitude=" + longitude +
-                ", latitude=" + latitude +
-                '}';
+        return Objects.hash(id);
     }
 }

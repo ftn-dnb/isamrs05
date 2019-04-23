@@ -1,14 +1,17 @@
 package ftn.dnb.dnbtravel.service;
 
 import ftn.dnb.dnbtravel.dto.AirlineDTO;
-import ftn.dnb.dnbtravel.model.Airline;
-import ftn.dnb.dnbtravel.repository.AddressRepository;
-import ftn.dnb.dnbtravel.repository.AirlineRepository;
+import ftn.dnb.dnbtravel.dto.AirlinePriceListItemDTO;
+import ftn.dnb.dnbtravel.dto.FlightDTO;
+import ftn.dnb.dnbtravel.model.*;
+import ftn.dnb.dnbtravel.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Service
 public class AirlineService {
@@ -18,6 +21,15 @@ public class AirlineService {
 
     @Autowired
     private AddressRepository addressRepository;
+
+    @Autowired
+    private FlightRepository flightRepository;
+
+    @Autowired
+    private DestinationRepository destinationRepository;
+
+    @Autowired
+    private AirplaneRepository airplaneRepository;
 
     public List<AirlineDTO> getAllAirlines() {
         List<Airline> airlines = airlineRepository.findAll();
@@ -54,5 +66,34 @@ public class AirlineService {
             return null;
 
         return new AirlineDTO(savedAirline);
+    }
+
+    public FlightDTO addFlight(Long airlineId, FlightDTO flightToAdd) {
+        Airline airline = airlineRepository.findOneById(airlineId);
+        Destination startDestination = destinationRepository.findOneById(flightToAdd.getStartDestination().getId());
+        Destination endDestination = destinationRepository.findOneById(flightToAdd.getEndDestination().getId());
+        Airplane airplane = airplaneRepository.findOneById(flightToAdd.getAirplane().getId());
+
+        Set<Destination> transits = new HashSet<Destination>();
+        flightToAdd.getTransits().forEach(transit -> transits.add(destinationRepository.findOneById(transit.getId())));
+
+        Set<AirlinePriceListItem> prices = new HashSet<AirlinePriceListItem>();
+        flightToAdd.getPrices().forEach(item -> prices.add(new AirlinePriceListItem(item)));
+
+        Flight flight = new Flight(null, flightToAdd.getStartDateTime(), flightToAdd.getEndDateTime(),
+                flightToAdd.getTravelTime(), flightToAdd.getTravelLength(), 0, startDestination, endDestination,
+                airline, transits, airplane, prices, new HashSet<>());
+
+        airline.getFlights().add(flight);
+        airlineRepository.save(airline);
+
+        return new FlightDTO(flight);
+    }
+
+    public List<FlightDTO> getFlights(Long id) {
+        List<Flight> flights = flightRepository.findAllByAirlineId(id);
+        List<FlightDTO> dtoFlights = new ArrayList<FlightDTO>();
+        flights.stream().forEach(flight -> dtoFlights.add(new FlightDTO(flight)));
+        return dtoFlights;
     }
 }
