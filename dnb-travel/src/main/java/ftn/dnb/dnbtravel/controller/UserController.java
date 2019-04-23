@@ -36,11 +36,13 @@ public class UserController {
         return new ResponseEntity<>(user, (user == null) ? HttpStatus.NOT_FOUND : HttpStatus.OK);
     }
 
-    @PostMapping(path = "", consumes = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(path = "/register", consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<UserDTO> addUser(@RequestBody UserDTO userToInsert) {
         UserDTO savedUser = userService.addUser(userToInsert);
         return new ResponseEntity<>(savedUser, HttpStatus.CREATED);
     }
+
+
 
     @PutMapping(path = "", consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<UserDTO> updateUserById(@RequestBody UserDTO userToEdit) {
