@@ -3,20 +3,20 @@
         <h1>Hello from Vue.js</h1>
 
 		<!-- Ove 2 komponente ovde samo stoje zbog testiranja, obrisati kad se zavrsi sa njihovim radom -->
-        <user-settings></user-settings>
-        <rent-a-car-company-settings></rent-a-car-company-settings>
+        <login></login>
+
+
     </div>
 </template>
 
 <script>
-import UserSettings from './UserSettings.vue';
-import RentACarCompanySettings from './RentACarCompanySettings.vue'
+
+import Login from './Login.vue';
 
 export default {
     props: {},
     components: {
-		UserSettings,
-        RentACarCompanySettings,
+        Login,
     },
 
     data() {

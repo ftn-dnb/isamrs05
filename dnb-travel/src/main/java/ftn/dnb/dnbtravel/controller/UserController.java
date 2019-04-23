@@ -7,8 +7,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import java.security.Principal;
 import java.util.List;
 
 @RestController
@@ -46,4 +48,12 @@ public class UserController {
         UserDTO savedUser = userService.updateUser(userToEdit);
         return new ResponseEntity<>(savedUser, HttpStatus.CREATED);
     }
+
+    @RequestMapping(value = "/sysadmin_add", method = RequestMethod.POST)
+    @PreAuthorize("hasRole('SYSTEM_ADMIN')")
+    public ResponseEntity<?> addSystemAdmin(@RequestBody UserDTO user) {
+        userService.addUser(user);
+        return new ResponseEntity<>(user, HttpStatus.CREATED);
+    }
+
 }

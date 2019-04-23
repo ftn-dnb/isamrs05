@@ -1,19 +1,21 @@
 <template>
   <div id="app">
-    <!--<router-view/>-->
-    <start-page></start-page>
+    <router-view/>
   </div>
 </template>
 
 <script>
 import StartPage from './components/StartPage.vue';
 import UserSettings from './components/UserSettings.vue';
+import HotelSettings from './components/HotelSettings.vue';
+import HotelRegistration from './components/HotelRegistration.vue';
 
 export default {
     name: 'App',
     components: {
       StartPage,
       UserSettings,
+      HotelSettings
     },
 }
 </script>

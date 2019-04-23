@@ -3,7 +3,9 @@ package ftn.dnb.dnbtravel.model;
 import ftn.dnb.dnbtravel.dto.AirlineDTO;
 
 import javax.persistence.*;
+import java.util.HashSet;
 import java.util.Objects;
+import java.util.Set;
 
 @Entity
 public class Airline {
@@ -15,15 +17,19 @@ public class Airline {
     @Column(name = "name", nullable = false)
     private String name;
 
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL)
     private Address address;
 
     @Column(name = "description", nullable = false)
     private String description;
 
-    // private Set<Destination> destinations; // @TODO: add destinations
+    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private Set<Destination> destinations = new HashSet<Destination>();
 
-    // private Set<Flight> flights; // @TODO: add flights
+    @OneToMany(mappedBy = "airline", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private Set<Flight> flights = new HashSet<Flight>();
+
+
 
     // @TODO: dodati
     // Spisak karata sa popustima za brzu rezervaciju
@@ -34,11 +40,14 @@ public class Airline {
         super();
     }
 
-    public Airline(Long id, String name, Address address, String description) {
+    public Airline(Long id, String name, Address address, String description,
+                   Set<Destination> destinations, Set<Flight> flights) {
         this.id = id;
         this.name = name;
         this.address = address;
         this.description = description;
+        this.destinations = destinations;
+        this.flights = flights;
     }
 
     public Airline(AirlineDTO airlineDTO) {

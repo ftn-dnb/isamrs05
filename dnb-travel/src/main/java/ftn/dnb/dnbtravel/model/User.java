@@ -1,15 +1,21 @@
 package ftn.dnb.dnbtravel.model;
 
 import ftn.dnb.dnbtravel.dto.UserDTO;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.joda.time.DateTime;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import javax.persistence.*;
-import java.util.Objects;
+import java.sql.Timestamp;
+import java.util.*;
 
 @Entity
-public class User {
+@Table(name = "USERS")
+public class User implements UserDetails {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column(name = "firstName", nullable = false)
@@ -18,22 +24,38 @@ public class User {
     @Column(name = "lastName", nullable = false)
     private String lastName;
 
-    @Column(name = "email", nullable = false, unique = true)
+    @Column(name = "email", nullable = false, unique = true, length = 100)
     private String email;
 
     @Column(name = "password", nullable = false)
     private String password;
 
+    @Column(name = "username", nullable = false)
+    private String username;
+
+    @Column(name = "enabled")
+    private boolean enabled;
+
+    @Column(name = "last_password_reset_date")
+    private Timestamp lastPasswordResetDate;
+
+    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @JoinTable(name = "user_authority",
+            joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"),
+            inverseJoinColumns = @JoinColumn(name = "authority_id", referencedColumnName = "id"))
+    private List<Authority> authorityList;
+
     public User() {
         super();
     }
 
-    public User(Long id, String firstName, String lastName, String email, String password) {
+    public User(Long id, String firstName, String lastName, String email, String password,String username) {
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
         this.password = password;
+        this.username = username;
     }
 
     public User(UserDTO dto) {
@@ -41,7 +63,13 @@ public class User {
         this.firstName = dto.getFirstName();
         this.lastName = dto.getLastName();
         this.email = dto.getEmail();
-        this.password = dto.getPassword();
+
+        BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+
+        this.password = encoder.encode(dto.getPassword());
+        this.username = dto.getUsername();
+        this.enabled = true;
+        this.lastPasswordResetDate = new Timestamp(new Date().getTime());
     }
 
     public Long getId() {
@@ -76,11 +104,67 @@ public class User {
         this.email = email;
     }
 
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return authorityList;
+    }
+
+    public void setEnabled(boolean enabled) {
+        this.enabled = enabled;
+    }
+
+    public List<Authority> getAuthorityList() {
+        return authorityList;
+    }
+
+    public void setAuthorityList(List<Authority> authorityList) {
+        this.authorityList = authorityList;
+    }
+
     public String getPassword() {
         return password;
     }
 
+    @Override
+    public String getUsername() {
+        return username;
+    }
+
+    @Override
+    public boolean isAccountNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return true;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return enabled;
+    }
+
+    public Timestamp getLastPasswordResetDate() {
+        return lastPasswordResetDate;
+    }
+
+    public void setLastPasswordResetDate(Timestamp lastPasswordResetDate) {
+        this.lastPasswordResetDate = lastPasswordResetDate;
+    }
+
     public void setPassword(String password) {
+        Timestamp now = new Timestamp(DateTime.now().getMillis());
+        this.setLastPasswordResetDate(now);
         this.password = password;
     }
 
