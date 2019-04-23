@@ -19,3 +19,4 @@ INSERT INTO USER_AUTHORITY (user_id, authority_id) VALUES (7, 5);
 
 INSERT INTO `rentacar_company` (`id`,`name`,`description`) VALUES (1,'Pegaz','acab')
 
+INSERT INTO `cars` (`id`,`name`,`brand`,`manuf_year`,`seats_number`,`rating`,`type`,`company_id`) VALUES (1,'stojdza','zastava',2059,5,5,0,1);

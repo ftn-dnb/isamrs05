@@ -3,6 +3,7 @@ package ftn.dnb.dnbtravel.model;
 import javax.persistence.*;
 
 @Entity
+@Table(name = "CARS")
 public class Car {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -14,10 +15,10 @@ public class Car {
     @Column(name = "brand", nullable = false)
     private String brand;
 
-    @Column(name = "manufYear", nullable = false)
+    @Column(name = "manuf_year", nullable = false)
     private int manufYear;
 
-    @Column(name = "seatsNumber", nullable = false)
+    @Column(name = "seats_number", nullable = false)
     private int seatsNumber;
 
     @Column(name = "type" , nullable = false)
