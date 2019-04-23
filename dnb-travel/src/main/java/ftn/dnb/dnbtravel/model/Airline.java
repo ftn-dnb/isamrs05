@@ -23,7 +23,7 @@ public class Airline {
     @Column(name = "description", nullable = false)
     private String description;
 
-    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private Set<Destination> destinations = new HashSet<Destination>();
 
     @OneToMany(mappedBy = "airline", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
@@ -87,6 +87,22 @@ public class Airline {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public Set<Destination> getDestinations() {
+        return destinations;
+    }
+
+    public void setDestinations(Set<Destination> destinations) {
+        this.destinations = destinations;
+    }
+
+    public Set<Flight> getFlights() {
+        return flights;
+    }
+
+    public void setFlights(Set<Flight> flights) {
+        this.flights = flights;
     }
 
     @Override
