@@ -64,6 +64,12 @@ INSERT INTO FLIGHT_RESERVATION VALUES (72, 1500, 0, '2017-12-01 01:00:00', 25, 2
 INSERT INTO FLIGHT_RESERVATIONS VALUES (50, 71);
 INSERT INTO FLIGHT_RESERVATIONS VALUES (50, 72);
 
+-- CarCompnay
 INSERT INTO `rentacar_company` (`id`,`name`,`description`) VALUES (1,'Pegaz','acab')
+INSERT INTO `rentacar_company` (`id`,`name`,`description`) VALUES (2,'Pegaz2','acab')
 
+--cars
 INSERT INTO `cars` (`id`,`name`,`brand`,`manuf_year`,`seats_number`,`rating`,`type`,`company_id`) VALUES (1,'stojdza','zastava',2059,5,5,0,1);
+INSERT INTO `cars` (`id`,`name`,`brand`,`manuf_year`,`seats_number`,`rating`,`type`,`company_id`) VALUES (2,'stojdza2','zastava',2000,5,5,0,2);
+INSERT INTO `cars` (`id`,`name`,`brand`,`manuf_year`,`seats_number`,`rating`,`type`,`company_id`) VALUES (3,'auto','bmw',2001,5,5,0,2);
+INSERT INTO `cars` (`id`,`name`,`brand`,`manuf_year`,`seats_number`,`rating`,`type`,`company_id`) VALUES (4,'pikacu','bmw',1983,5,5,0,1);
