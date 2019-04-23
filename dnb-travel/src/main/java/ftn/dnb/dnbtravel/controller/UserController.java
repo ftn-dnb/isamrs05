@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
@@ -48,13 +49,14 @@ public class UserController {
     }
 
     @GetMapping(path = "/whoami")
-    public ResponseEntity<String> getRoleFromUser(Principal user){
+    public ResponseEntity<?> getRoleFromUser(Principal user) {
         UserDTO u = userService.getUserByUsername(user.getName());
 
-        if(u == null){
-            return  new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        if (u == null) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
-        return new ResponseEntity<>(u.getRole(),HttpStatus.OK);
+        return new ResponseEntity<>(u.convertRoleToString(u.getRole()), HttpStatus.OK);
+    }
 
     @RequestMapping(value = "/sysadmin_add", method = RequestMethod.POST)
     @PreAuthorize("hasRole('SYSTEM_ADMIN')")

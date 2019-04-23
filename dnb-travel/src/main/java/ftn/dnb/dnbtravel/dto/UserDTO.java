@@ -6,8 +6,6 @@ import java.util.Objects;
 
 public class UserDTO {
 
-    //role
-    //1 - sysadmin
 
     private Long id;
     private String firstName;
@@ -39,7 +37,7 @@ public class UserDTO {
         this.email = user.getEmail();
         this.password = user.getPassword();
         this.username = user.getUsername();
-        this.role = user.getAuthorityList().get(0).getAuthority();
+        this.role = new Long(convertRoleToInt(user.getAuthorityList().get(0).getAuthority()));
     }
 
     public Long getId() {
@@ -105,6 +103,50 @@ public class UserDTO {
     public void setRole(Long role) {
         this.role = role;
     }
+
+    private int convertRoleToInt(String s){
+        switch (s) {
+            case "ROLE_USER":{
+                return 1;
+            }
+            case "ROLE_SYSTEM_ADMIN":{
+                return 2;
+            }
+            case "ROLE_AIRLINE_ADMIN":{
+                return 3;
+            }
+            case "ROLE_HOTEL_ADMIN":{
+                return 4;
+            }
+            case "ROLE_RAC_ADMIN":{
+                return 5;
+            }
+        }
+        return 0; // error
+    }
+
+    public String convertRoleToString(Long l){
+        int a = (int)l.longValue();
+        switch (a) {
+            case 1:{
+                return "ROLE_USER";
+            }
+            case 2:{
+                return "ROLE_SYSTEM_ADMIN";
+            }
+            case 3:{
+                return "ROLE_AIRLINE_ADMIN";
+            }
+            case 4:{
+                return "ROLE_HOTEL_ADMIN";
+            }
+            case 5:{
+                return "ROLE_RAC_ADMIN";
+            }
+        }
+        return "err"; // error
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
