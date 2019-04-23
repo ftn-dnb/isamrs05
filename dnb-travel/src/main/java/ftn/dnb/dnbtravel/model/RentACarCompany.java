@@ -19,19 +19,22 @@ public class RentACarCompany {
     private String description;
 
     //?
-    private Set<Car>Cars;
-    private Set<RACPriceList> priceList;
-    private Set<BranchOffice> offices;
-    private BranchOffice mainOffice;
+
+    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private Set<Car>cars;
+    //private Set<RACPriceList> priceList;
+    //private Set<BranchOffice> offices;
+    //private BranchOffice mainOffice;
 
     public RentACarCompany() {
         super();
     }
 
-    public RentACarCompany(Long id, String name, String description) {
+    public RentACarCompany(Long id, String name, String description, Set<Car> cars) {
         this.id = id;
         this.name = name;
         this.description = description;
+        this.cars = cars;
     }
 
     public RentACarCompany(RentACarCompanyDTO rentACarCompanyDTO){
@@ -63,5 +66,13 @@ public class RentACarCompany {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public Set<Car> getCars() {
+        return cars;
+    }
+
+    public void setCars(Set<Car> cars) {
+        cars = cars;
     }
 }
