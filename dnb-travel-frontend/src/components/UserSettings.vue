@@ -1,14 +1,18 @@
 <template>
     <div>
-        <h3>Podešavanja profila</h3>
+        <h3>Profile settings</h3>
         
         <table>
             <tr>
-                <td>Ime:</td>
-                <td><input type="text" v-model="user.firstName" requeired /></td>
+                <td>Username</td>
+                <td><input type="text" v-model="user.username" disabled></td>
             </tr>
             <tr>
-                <td>Prezime:</td>
+                <td>First name</td>
+                <td><input type="text" v-model="user.firstName" /></td>
+            </tr>
+            <tr>
+                <td>Last name</td>
                 <td><input type="text" v-model="user.lastName" /></td>
             </tr>
             <tr>
@@ -16,21 +20,22 @@
                 <td><input type="email" v-model="user.email" /></td>
             </tr>
             <tr>
-                <td>Sifra</td>
+                <td>Password</td>
                 <td><input type="password" v-model="user.password" /></td>
             </tr>
             <tr>
-                <td>Ponovite sifru</td>
+                <td>Repeat password</td>
                 <td><input type="password" v-model="user.repeatPassword" /></td>
             </tr>
             <tr>
-                <th colspan="2"><input type="button" value="Izmeni profil" v-on:click="editProfile()" /></th>
+                <th colspan="2"><input type="button" value="Update" v-on:click="editProfile()" /></th>
             </tr>
         </table>
     </div>
 </template>
 
 <script>
+
 import axios from 'axios';
 
 export default {
@@ -56,35 +61,38 @@ export default {
                 return;
             }
 
-            axios.put('http://localhost:8080/api/users', this.user)
-            .then(response => {
-                if (response.data === '') {
-                    alert('Error while trying to change user.');
-                    return;
-                }
+            const header = { headers: {"Authorization" : `Bearer ${localStorage.getItem('user-token')}`} };
+            
+            axios.put('http://localhost:8080/api/users', this.user, header)
+            .then(response => { 
 
-                alert('Hotel profile successfully changed.');
-            });
+                axios.post('http://localhost:8080/auth/refresh', {}, header)
+                .then(response => localStorage.setItem('user-token', response.data.accessToken))
+                .catch(error => alert('Error while getting new token.'));
+                
+                alert('Profile successfully updated.');
+            })
+            .catch(error => alert('Error while updating user profile.'));
         },
 
         checkForm() {
             if (!this.user.firstName) {
-                alert('Niste uneli ime.');
+                alert('Please enter first name.');
                 return false;
             } else if (!this.user.lastName) {
-                alert('Niste uneli prezime.');
+                alert('Please enter last name.');
                 return false;
             } else if (!this.user.email) {
-                alert('Niste uneli e-mail.');
+                alert('Please enter e-mail.');
                 return false;
             } else if (!this.user.password) {
-                alert('Niste uneli sifru.');
+                alert('Please enter password.');
                 return false;
             } else if (!this.user.repeatPassword) {
-                alert('Niste uneli proveru sifre.');
+                alert('Please enter password confirmation.');
                 return false;
             } else if (this.user.password !== this.user.repeatPassword) {
-                alert('Sifre koje ste uneli se ne podudaraju.');
+                alert('Two passwords are not the same.');
                 return false;
             }
 
@@ -93,10 +101,15 @@ export default {
     },
 
     mounted() {
-        // @TODO: pokupiti podatke korisnika preko cookie-a za ulogovanog korisnika
-        // Zasad uzima predefinisanog korisnika 1 iz baze
-        axios.get('http://localhost:8080/api/users/1')
-        .then(response => this.user = response.data);
+        const username = localStorage.getItem('username');
+        const header = { headers: {"Authorization" : `Bearer ${localStorage.getItem('user-token')}`} };
+        
+        axios.get(`http://localhost:8080/api/users/info/${username}`, header)
+        .then(response => {
+            this.user = response.data;
+            this.user.password = '';
+        })
+        .catch(error => alert('Error while loading user information.'));
     }
 }
 </script>

@@ -95,7 +95,7 @@ public class TokenUtils {
 
     public Boolean canTokenBeRefreshed(String token, Date lastPasswordReset) {
         final Date created = this.getIssuedAtDateFromToken(token);
-        return (!(this.isCreatedBeforeLastPasswordReset(created, lastPasswordReset))
+        return (this.isCreatedBeforeLastPasswordReset(created, lastPasswordReset)
                 && (!(this.isTokenExpired(token)) || this.ignoreTokenExpiration(token)));
     }
 

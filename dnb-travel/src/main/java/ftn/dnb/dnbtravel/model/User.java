@@ -45,6 +45,9 @@ public class User implements UserDetails {
             inverseJoinColumns = @JoinColumn(name = "authority_id", referencedColumnName = "id"))
     private List<Authority> authorityList;
 
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    private Set<Friendship> friendships = new HashSet<Friendship>();
+
     public User() {
         super();
     }
@@ -166,6 +169,14 @@ public class User implements UserDetails {
         Timestamp now = new Timestamp(DateTime.now().getMillis());
         this.setLastPasswordResetDate(now);
         this.password = password;
+    }
+
+    public Set<Friendship> getFriendships() {
+        return friendships;
+    }
+
+    public void setFriendships(Set<Friendship> friendships) {
+        this.friendships = friendships;
     }
 
     @Override
