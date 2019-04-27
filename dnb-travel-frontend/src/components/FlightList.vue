@@ -1,5 +1,58 @@
 <template>
     <div>
+        <div>
+            <select v-model="filterSearch.startDestination" >
+                <option disabled >Select start destination</option>
+                <option v-for="dest in destinations" :value="dest">
+                    {{dest.airportName}}, {{dest.city}}, {{dest.country}}
+                </option>
+            </select>
+
+            TO
+
+            <select v-model="filterSearch.endDestination">
+                <option disabled >Select end destination</option>
+                <option v-for="dest in destinations" :value="dest">
+                    {{dest.airportName}}, {{dest.city}}, {{dest.country}}
+                </option>
+            </select>
+
+            <br />
+
+            <input type="date" v-model="filterSearch.startDate" />
+            TO
+            <input type="date" v-model="filterSearch.endDate" />
+            
+            <input type="button" @click="searchFlights" value="Search" />
+        </div>
+
+        <div>
+            <div>
+                Transits <br />
+                <input type="checkbox" v-model="filterSearch.isDirect" /> Direct <br />
+                <input type="checkbox" v-model="filterSearch.is1Transit" /> 1 <br />
+                <input type="checkbox" v-model="filterSearch.is2Transits" /> 2 <br />
+                <input type="checkbox" v-model="filterSearch.is3PlusTransits" /> 3+ <br />
+            </div>
+
+            <div>
+                Max duration {{filterSearch.travelTime}}h <br />
+                <input type="range" v-model="filterSearch.travelTime" min="0" max="50" />
+            </div>
+
+            <div>
+                Max length {{filterSearch.travelLength}}km <br />
+                <input type="range" v-model="filterSearch.travelLength" min="0" max="20000" />
+            </div>
+
+            <div>
+                Price range <br />
+                <input type="number" v-model="filterSearch.minPrice" placeholder="Minimum" /> <br />
+                <input type="number" v-model="filterSearch.maxPrice" placeholder="Maximum" />
+            </div>
+
+        </div>
+
         <table border="1">
             <tr>
                 <th>Start destination</th>
@@ -43,12 +96,32 @@ export default {
     
     data() {
         return {
+            minDate: null,
             airlines: [],
             flights: [],
+            destinations: [],
+            filterSearch: {
+                airlineId: null,
+                startDestination: null,
+                endDestination: null,
+                startDate: null,
+                endDate: null,
+                travelTime: null,
+                travelLength: null,
+                minPrice: null,
+                maxPrice: null,
+                isDirect: null,
+                is1Transit: null,
+                is2Transits: null,
+                is3PlusTransits: null,
+            },
         };
     },
 
     methods: {
+        searchFlights() {
+
+        },
     },
 
     mounted() {
@@ -68,6 +141,16 @@ export default {
             axios.get(`http://localhost:8080/api/airlines/${this.airlineId}/flights`)
             .then(response => this.flights = response.data)
         }
+
+        axios.get('http://localhost:8080/api/destinations')
+        .then(response => this.destinations = response.data)
+        .catch(error => alert('Error while loading destinations'));
+
+        let now = new Date();
+        const today = now.toISOString().substring(0,10);
+        this.searchStartDate = this.searchEndDate = today;
+
+        this.filterSearch.airlineId = this.airlineId;
     }
 }
 </script>
