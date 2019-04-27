@@ -113,7 +113,7 @@ export default {
         // @TODO: pokupiti podatke odgovarajuce aviokompanije na osnovu podataka
         // njenog administratora
         // Zasad se uzima predefinisana vrednost iz baze
-        axios.get("http://localhost:8080/api/airlines/5").then(response => this.airline = response.data);
+        axios.get("http://localhost:8080/api/airlines/22").then(response => this.airline = response.data);
     }
 }
 </script>

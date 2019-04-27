@@ -1,3 +1,4 @@
+INSERT INTO `users` (`id`, `email`, `enabled`, `first_name`, `last_name`, `last_password_reset_date`, `password` ,`username`) VALUES (2,'m@m.com',true,'Marko','Markovic','2017-10-01 21:58:58','$2a$04$Vbug2lwwJGrvUXTj6z7ff.97IzVBkrJ1XfApfGNl.Z695zqcnPYra','marko');
 INSERT INTO `users` (`id`, `email`, `enabled`, `first_name`, `last_name`, `last_password_reset_date`, `password` ,`username`) VALUES (3,'p@s.com',true,'Pera','Peric','2017-10-01 21:58:58','$2a$04$Vbug2lwwJGrvUXTj6z7ff.97IzVBkrJ1XfApfGNl.Z695zqcnPYra','peki');
 INSERT INTO `users` (`id`, `email`, `enabled`, `first_name`, `last_name`, `last_password_reset_date`, `password` ,`username`) VALUES (4,'l@s.com',true,'Laza','Peric','2017-10-01 21:58:58','$2a$04$Vbug2lwwJGrvUXTj6z7ff.97IzVBkrJ1XfApfGNl.Z695zqcnPYra','laki');
 INSERT INTO `users` (`id`, `email`, `enabled`, `first_name`, `last_name`, `last_password_reset_date`, `password` ,`username`) VALUES (5,'d@s.com',true,'Djoka','Peric','2017-10-01 21:58:58','$2a$04$Vbug2lwwJGrvUXTj6z7ff.97IzVBkrJ1XfApfGNl.Z695zqcnPYra','djox');
@@ -10,6 +11,7 @@ INSERT INTO AUTHORITY (id, name) VALUES (3, 'ROLE_AIRLINE_ADMIN');
 INSERT INTO AUTHORITY (id, name) VALUES (4, 'ROLE_HOTEL_ADMIN');
 INSERT INTO AUTHORITY (id, name) VALUES (5, 'ROLE_RAC_ADMIN');
 
+INSERT INTO USER_AUTHORITY (user_id, authority_id) VALUES (2, 1);
 INSERT INTO USER_AUTHORITY (user_id, authority_id) VALUES (3, 1);
 INSERT INTO USER_AUTHORITY (user_id, authority_id) VALUES (4, 2);
 INSERT INTO USER_AUTHORITY (user_id, authority_id) VALUES (5, 3);
@@ -57,8 +59,8 @@ INSERT INTO FLIGHT_PRICES VALUES (50, 60);
 INSERT INTO FLIGHT_PRICES VALUES (50, 61);
 
 -- Flight reservation
-INSERT INTO FLIGHT_RESERVATION VALUES (71, 1500, 0, '2017-12-01 00:00:00', 20, 20);
-INSERT INTO FLIGHT_RESERVATION VALUES (72, 1500, 0, '2017-12-01 01:00:00', 25, 25);
+INSERT INTO FLIGHT_RESERVATION VALUES (71, 1500, 0, '2017-12-01 00:00:00', 5, 6);
+INSERT INTO FLIGHT_RESERVATION VALUES (72, 1500, 0, '2017-12-01 01:00:00', 6, 7);
 
 -- Flight reservations
 INSERT INTO FLIGHT_RESERVATIONS VALUES (50, 71);

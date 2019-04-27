@@ -2,6 +2,7 @@ package ftn.dnb.dnbtravel.service;
 
 import ftn.dnb.dnbtravel.dto.UserDTO;
 import ftn.dnb.dnbtravel.model.Authority;
+import ftn.dnb.dnbtravel.model.Friendship;
 import ftn.dnb.dnbtravel.model.User;
 import ftn.dnb.dnbtravel.repository.AuthorityRepository;
 import ftn.dnb.dnbtravel.repository.UserRepository;
@@ -11,9 +12,12 @@ import io.jsonwebtoken.JwtParser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.security.oauth2.resource.OAuth2ResourceServerProperties;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @Service
@@ -24,6 +28,9 @@ public class UserService {
 
     @Autowired
     private AuthorityRepository authorityRepository;
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
 
     public List<UserDTO> getAllUsers() {
@@ -60,29 +67,23 @@ public class UserService {
     }
 
     public UserDTO updateUser(UserDTO user) {
-        List<UserDTO> users = this.getAllUsers();
-        boolean userExists = users.stream().anyMatch(userDTO -> userDTO.getId().equals(user.getId()));
+        User userToUpdate = userRepository.findOneById(user.getId());
 
-        if (!userExists)
-            return null;
-
-        long numOfMatches = users.stream()
-                            .filter(userDTO -> userDTO.getEmail().equals(user.getEmail()) && !userDTO.equals(user))
-                            .count();
-
-        // Email already exists in database
-        if (numOfMatches > 0)
+        if (userToUpdate == null)
             return null;
 
         if (!user.getPassword().equals(user.getRepeatPassword()))
             return null;
 
-        User savedUser = userRepository.save(new User(user));
+        userToUpdate.setFirstName(user.getFirstName());
+        userToUpdate.setLastName(user.getLastName());
+        userToUpdate.setEmail(user.getEmail());
+        userToUpdate.setPassword(passwordEncoder.encode(user.getPassword()));
+        userToUpdate.setLastPasswordResetDate(new Timestamp(System.currentTimeMillis()));
 
-        if (savedUser == null)
-            return null;
+        userToUpdate = userRepository.save(userToUpdate);
 
-        return new UserDTO(savedUser);
+        return new UserDTO(userToUpdate);
     }
 
     public  UserDTO getUserByUsername (UserDTO user){
@@ -101,6 +102,18 @@ public class UserService {
             return null;
 
         return new UserDTO(userR);
+    }
+
+    public boolean addFriend(String myUsername, String friendsUsername) {
+        User me = userRepository.findOneByUsername(myUsername);
+        User friend = userRepository.findOneByUsername(friendsUsername);
+
+        if (me == null || friend == null)
+            return false;
+
+        me.getFriendships().add(new Friendship(friend));
+
+        return true;
     }
 
 }

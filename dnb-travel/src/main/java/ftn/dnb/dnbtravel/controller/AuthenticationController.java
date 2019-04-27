@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -72,15 +73,13 @@ public class AuthenticationController {
 
     @RequestMapping(value = "/refresh", method = RequestMethod.POST)
     public ResponseEntity<?> refreshAuthenticationToken(HttpServletRequest request) {
-
         String token = tokenUtils.getToken(request);
         String username = this.tokenUtils.getUsernameFromToken(token);
         User user = (User) this.userDetailsService.loadUserByUsername(username);
 
-        Device device = deviceProvider.getCurrentDevice(request);
-
-        if (this.tokenUtils.canTokenBeRefreshed(token, user.getLastPasswordResetDate())) {
-            String refreshedToken = tokenUtils.refreshToken(token);
+        if (this.tokenUtils.canTokenBeRefreshed(token, new Date(user.getLastPasswordResetDate().getTime()))) {
+            //String refreshedToken = tokenUtils.refreshToken(token);
+            String refreshedToken = tokenUtils.generateToken(username);
             int expiresIn = tokenUtils.getExpiredIn();
             String role = user.getAuthorities().toString();
             return ResponseEntity.ok(new UserTokenState(refreshedToken, expiresIn,role));
@@ -91,7 +90,7 @@ public class AuthenticationController {
     }
 
     @RequestMapping(value = "/change-password", method = RequestMethod.POST)
-    @PreAuthorize("hasRole('USER')")
+    @PreAuthorize("hasRole('SYSTEM_ADMIN') or hasRole('AIRLINE_ADMIN') or hasRole('RAC_ADMIN') or hasRole('HOTEL_ADMIN') or hasRole('USER')")
     public ResponseEntity<?> changePassword(@RequestBody PasswordChanger passwordChanger) {
         userDetailsService.changePassword(passwordChanger.oldPassword, passwordChanger.newPassword);
 

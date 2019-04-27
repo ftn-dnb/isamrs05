@@ -1,6 +1,7 @@
 package ftn.dnb.dnbtravel.controller;
 
 import ftn.dnb.dnbtravel.dto.UserDTO;
+import ftn.dnb.dnbtravel.messaging.Producer;
 import ftn.dnb.dnbtravel.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -19,9 +20,12 @@ public class UserController {
 
     private UserService userService;
 
+    private Producer producer;
+
     @Autowired
-    public UserController(UserService userService) {
+    public UserController(UserService userService, Producer producer) {
         this.userService = userService;
+        this.producer = producer;
     }
 
 
@@ -43,9 +47,10 @@ public class UserController {
     }
 
     @PutMapping(path = "", consumes = MediaType.APPLICATION_JSON_VALUE)
+    @PreAuthorize("hasRole('SYSTEM_ADMIN') or hasRole('AIRLINE_ADMIN') or hasRole('RAC_ADMIN') or hasRole('HOTEL_ADMIN') or hasRole('USER')")
     public ResponseEntity<UserDTO> updateUserById(@RequestBody UserDTO userToEdit) {
         UserDTO savedUser = userService.updateUser(userToEdit);
-        return new ResponseEntity<>(savedUser, HttpStatus.CREATED);
+        return new ResponseEntity<>(savedUser, (savedUser == null) ? HttpStatus.BAD_REQUEST : HttpStatus.OK);
     }
 
     @GetMapping(path = "/whoami")
@@ -58,6 +63,13 @@ public class UserController {
         return new ResponseEntity<>(u.convertRoleToString(u.getRole()), HttpStatus.OK);
     }
 
+    @GetMapping(path = "/info/{username}")
+    @PreAuthorize("hasRole('SYSTEM_ADMIN') or hasRole('AIRLINE_ADMIN') or hasRole('RAC_ADMIN') or hasRole('HOTEL_ADMIN') or hasRole('USER')")
+    public ResponseEntity<UserDTO> getUserInfoByUsername(@PathVariable String username) {
+        UserDTO user = userService.getUserByUsername(username);
+        return new ResponseEntity<>(user, (user == null) ? HttpStatus.NOT_FOUND : HttpStatus.OK);
+    }
+
     @RequestMapping(value = "/sysadmin_add", method = RequestMethod.POST)
     @PreAuthorize("hasRole('SYSTEM_ADMIN')")
     public ResponseEntity<?> addSystemAdmin(@RequestBody UserDTO user) {
@@ -66,4 +78,14 @@ public class UserController {
 
     }
 
+    @PostMapping(value = "/addFriend")
+    @PreAuthorize("hasRole('USER')")
+    public ResponseEntity<?> requestFriendship(Principal user, @RequestBody String friendsUsername) {
+        if (userService.addFriend(user.getName(), friendsUsername)) {
+            producer.sendMessageTo(friendsUsername, user.getName());
+            return new ResponseEntity<>(HttpStatus.OK);
+        }
+
+        return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+    }
 }

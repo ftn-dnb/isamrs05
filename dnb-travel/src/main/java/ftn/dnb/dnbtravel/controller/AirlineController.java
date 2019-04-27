@@ -41,6 +41,7 @@ public class AirlineController {
         return new ResponseEntity<>(airline, (airline == null) ? HttpStatus.NOT_FOUND : HttpStatus.OK);
     }
 
+    @PreAuthorize("hasRole('AIRLINE_ADMIN')")
     @PutMapping(path = "")
     public ResponseEntity<AirlineDTO> updateAirlineById(@RequestBody AirlineDTO airlineToEdit) {
         AirlineDTO airline = airlineService.updateAirline(airlineToEdit);
