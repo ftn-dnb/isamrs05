@@ -15,7 +15,7 @@ import java.util.*;
 public class User implements UserDetails {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
     @Column(name = "firstName", nullable = false)
@@ -45,8 +45,8 @@ public class User implements UserDetails {
             inverseJoinColumns = @JoinColumn(name = "authority_id", referencedColumnName = "id"))
     private List<Authority> authorityList;
 
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    private Set<Friendship> friendships = new HashSet<Friendship>();
+    //@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    //private Set<Friendship> friendships = new HashSet<Friendship>();
 
     public User() {
         super();
@@ -171,13 +171,13 @@ public class User implements UserDetails {
         this.password = password;
     }
 
-    public Set<Friendship> getFriendships() {
-        return friendships;
-    }
+    //public Set<Friendship> getFriendships() {
+    //    return friendships;
+    //}
 
-    public void setFriendships(Set<Friendship> friendships) {
-        this.friendships = friendships;
-    }
+    //public void setFriendships(Set<Friendship> friendships) {
+    //    this.friendships = friendships;
+    //}
 
     @Override
     public boolean equals(Object o) {

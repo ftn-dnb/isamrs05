@@ -2,7 +2,7 @@
     <div>
         <div>
             <select v-model="filterSearch.startDestination" >
-                <option disabled >Select start destination</option>
+                <option :value="null">Clear</option>
                 <option v-for="dest in destinations" :value="dest">
                     {{dest.airportName}}, {{dest.city}}, {{dest.country}}
                 </option>
@@ -11,7 +11,7 @@
             TO
 
             <select v-model="filterSearch.endDestination">
-                <option disabled >Select end destination</option>
+                <option :value="null">Clear</option>
                 <option v-for="dest in destinations" :value="dest">
                     {{dest.airportName}}, {{dest.city}}, {{dest.country}}
                 </option>
@@ -120,7 +120,9 @@ export default {
 
     methods: {
         searchFlights() {
-
+            axios.post('http://localhost:8080/api/flights', this.filterSearch)
+            .then(response => {this.flights = response.data; })
+            .catch(error => alert('Error while loading flights'));
         },
     },
 

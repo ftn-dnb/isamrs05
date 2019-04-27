@@ -2,7 +2,7 @@ package ftn.dnb.dnbtravel.service;
 
 import ftn.dnb.dnbtravel.dto.UserDTO;
 import ftn.dnb.dnbtravel.model.Authority;
-import ftn.dnb.dnbtravel.model.Friendship;
+//import ftn.dnb.dnbtravel.model.Friendship;
 import ftn.dnb.dnbtravel.model.User;
 import ftn.dnb.dnbtravel.repository.AuthorityRepository;
 import ftn.dnb.dnbtravel.repository.UserRepository;
@@ -111,7 +111,7 @@ public class UserService {
         if (me == null || friend == null)
             return false;
 
-        me.getFriendships().add(new Friendship(friend));
+        //me.getFriendships().add(new Friendship(friend));
 
         return true;
     }
