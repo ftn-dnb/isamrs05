@@ -1,5 +1,87 @@
 <template>
     <div>
+
+        <table>
+            <tr>
+                <td>
+                    From <br />
+                    <select v-model="filterSearch.startDestination" >
+                        <option :value="null">Clear</option>
+                        <option v-for="dest in destinations" :value="dest">
+                            {{dest.airportName}}, {{dest.city}}, {{dest.country}}
+                        </option>
+                    </select>
+                </td>
+                <td>
+                    To <br />
+                    <select v-model="filterSearch.endDestination">
+                        <option :value="null">Clear</option>
+                        <option v-for="dest in destinations" :value="dest">
+                            {{dest.airportName}}, {{dest.city}}, {{dest.country}}
+                        </option>
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    Depart <br />
+                    <input type="date" v-model="filterSearch.startDate" />
+                </td>
+                <td>
+                    Return <br />
+                    <input type="date" v-model="filterSearch.endDate" />
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    Max duration {{filterSearch.travelTime}}h <br />
+                    <input type="range" v-model="filterSearch.travelTime" min="0" max="50" />
+                </td>
+                <td>
+                    Max length {{filterSearch.travelLength}}km <br />
+                    <input type="range" v-model="filterSearch.travelLength" min="0" max="20000" />
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <input type="checkbox" v-model="filterSearch.isDirect" /> Direct flight
+                </td>
+                <td>
+                    <input type="checkbox" v-model="filterSearch.isOneWay" /> One way 
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    Min. price <br />
+                    <input type="number" v-model="filterSearch.minPrice" placeholder="Minimum" min="0" />
+                </td>
+                <td>
+                    Max. price <br />
+                    <input type="number" v-model="filterSearch.maxPrice" placeholder="Maximum" min="0" />
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    Number of people <br />
+                    <input type="number" v-model="filterSearch.numOfPeople" min="0" />
+                </td>
+                <td>
+                    Airline <br />
+                    <select v-model="filterSearch.airlineId">
+                        <option :value="null">Clear</option>
+                        <option v-for="airline in airlines" :value="airline.id">
+                            {{airline.name}}
+                        </option>
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2" align="center">
+                    <input type="button" @click="searchFlights" value="Search" />
+                </td>
+            </tr>
+        </table>
+
         <table border="1">
             <tr>
                 <th>Start destination</th>
@@ -43,12 +125,33 @@ export default {
     
     data() {
         return {
+            minDate: null,
             airlines: [],
             flights: [],
+            destinations: [],
+            filterSearch: {
+                airlineId: null,
+                startDestination: null,
+                endDestination: null,
+                startDate: null,
+                endDate: null,
+                travelTime: null,
+                travelLength: null,
+                minPrice: null,
+                maxPrice: null,
+                isDirect: null,
+                isOneWay: null,
+                numOfPeople: null,
+            },
         };
     },
 
     methods: {
+        searchFlights() {
+            axios.post('http://localhost:8080/api/flights', this.filterSearch)
+            .then(response => {this.flights = response.data; })
+            .catch(error => alert('Error while loading flights'));
+        },
     },
 
     mounted() {
@@ -68,6 +171,16 @@ export default {
             axios.get(`http://localhost:8080/api/airlines/${this.airlineId}/flights`)
             .then(response => this.flights = response.data)
         }
+
+        axios.get('http://localhost:8080/api/destinations')
+        .then(response => this.destinations = response.data)
+        .catch(error => alert('Error while loading destinations'));
+
+        let now = new Date();
+        const today = now.toISOString().substring(0,10);
+        this.searchStartDate = this.searchEndDate = today;
+
+        this.filterSearch.airlineId = this.airlineId;
     }
 }
 </script>

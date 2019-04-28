@@ -1,7 +1,6 @@
 package ftn.dnb.dnbtravel.controller;
 
 import ftn.dnb.dnbtravel.dto.UserDTO;
-import ftn.dnb.dnbtravel.messaging.Producer;
 import ftn.dnb.dnbtravel.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -20,12 +19,12 @@ public class UserController {
 
     private UserService userService;
 
-    private Producer producer;
+    //private Producer producer;
 
     @Autowired
-    public UserController(UserService userService, Producer producer) {
+    public UserController(UserService userService/*, Producer producer*/) {
         this.userService = userService;
-        this.producer = producer;
+        //this.producer = producer;
     }
 
 
@@ -82,7 +81,7 @@ public class UserController {
     @PreAuthorize("hasRole('USER')")
     public ResponseEntity<?> requestFriendship(Principal user, @RequestBody String friendsUsername) {
         if (userService.addFriend(user.getName(), friendsUsername)) {
-            producer.sendMessageTo(friendsUsername, user.getName());
+            //producer.sendMessageTo(friendsUsername, user.getName());
             return new ResponseEntity<>(HttpStatus.OK);
         }
 
