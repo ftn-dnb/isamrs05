@@ -1,57 +1,71 @@
 <template>
     <div>
-        <div>
-            <select v-model="filterSearch.startDestination" >
-                <option :value="null">Clear</option>
-                <option v-for="dest in destinations" :value="dest">
-                    {{dest.airportName}}, {{dest.city}}, {{dest.country}}
-                </option>
-            </select>
-
-            TO
-
-            <select v-model="filterSearch.endDestination">
-                <option :value="null">Clear</option>
-                <option v-for="dest in destinations" :value="dest">
-                    {{dest.airportName}}, {{dest.city}}, {{dest.country}}
-                </option>
-            </select>
-
-            <br />
-
-            <input type="date" v-model="filterSearch.startDate" />
-            TO
-            <input type="date" v-model="filterSearch.endDate" />
-            
-            <input type="button" @click="searchFlights" value="Search" />
-        </div>
-
-        <div>
-            <div>
-                Transits <br />
-                <input type="checkbox" v-model="filterSearch.isDirect" /> Direct <br />
-                <input type="checkbox" v-model="filterSearch.is1Transit" /> 1 <br />
-                <input type="checkbox" v-model="filterSearch.is2Transits" /> 2 <br />
-                <input type="checkbox" v-model="filterSearch.is3PlusTransits" /> 3+ <br />
-            </div>
-
-            <div>
-                Max duration {{filterSearch.travelTime}}h <br />
-                <input type="range" v-model="filterSearch.travelTime" min="0" max="50" />
-            </div>
-
-            <div>
-                Max length {{filterSearch.travelLength}}km <br />
-                <input type="range" v-model="filterSearch.travelLength" min="0" max="20000" />
-            </div>
-
-            <div>
-                Price range <br />
-                <input type="number" v-model="filterSearch.minPrice" placeholder="Minimum" /> <br />
-                <input type="number" v-model="filterSearch.maxPrice" placeholder="Maximum" />
-            </div>
-
-        </div>
+        
+        <table>
+            <tr>
+                <td>
+                    From <br />
+                    <select v-model="filterSearch.startDestination" >
+                        <option :value="null">Clear</option>
+                        <option v-for="dest in destinations" :value="dest">
+                            {{dest.airportName}}, {{dest.city}}, {{dest.country}}
+                        </option>
+                    </select>
+                </td>
+                <td>
+                    To <br />
+                    <select v-model="filterSearch.endDestination">
+                        <option :value="null">Clear</option>
+                        <option v-for="dest in destinations" :value="dest">
+                            {{dest.airportName}}, {{dest.city}}, {{dest.country}}
+                        </option>
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    Depart <br />
+                    <input type="date" v-model="filterSearch.startDate" />
+                </td>
+                <td>
+                    Return <br />
+                    <input type="date" v-model="filterSearch.endDate" />
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    Max duration {{filterSearch.travelTime}}h <br />
+                    <input type="range" v-model="filterSearch.travelTime" min="0" max="50" />
+                </td>
+                <td>
+                    Max length {{filterSearch.travelLength}}km <br />
+                    <input type="range" v-model="filterSearch.travelLength" min="0" max="20000" />
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <input type="checkbox" v-model="filterSearch.isDirect" /> Direct flight
+                </td>
+                <td>
+                    <input type="checkbox" v-model="filterSearch.isOneWay" /> One way 
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    Min. price <br />
+                    <input type="number" v-model="filterSearch.minPrice" placeholder="Minimum" />
+                </td>
+                <td>
+                    Max. price <br />
+                    <input type="number" v-model="filterSearch.maxPrice" placeholder="Maximum" />
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2" align="center">
+                    <input type="button" @click="searchFlights" value="Search" />
+                </td>
+            </tr>
+        </table>
 
         <table border="1">
             <tr>
@@ -111,9 +125,7 @@ export default {
                 minPrice: null,
                 maxPrice: null,
                 isDirect: null,
-                is1Transit: null,
-                is2Transits: null,
-                is3PlusTransits: null,
+                isOneWay: null,
             },
         };
     },

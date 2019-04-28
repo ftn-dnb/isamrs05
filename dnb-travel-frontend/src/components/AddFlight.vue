@@ -60,6 +60,11 @@
             </tr>
             <tr>
                 <td colspan="2">
+                    <input type="checkbox" v-model="flightToAdd.isOneWay" /> One-way
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2">
                     <table>
                         <caption>Price list</caption>
                         <tr>
@@ -143,6 +148,7 @@ export default {
                 airlineId: null,
                 prices: [],
                 airplane: null,
+                isOneWay: null,
             },
             priceItem: {
                 startDate: null,
