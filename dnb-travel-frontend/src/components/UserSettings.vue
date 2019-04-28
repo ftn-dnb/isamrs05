@@ -68,31 +68,31 @@ export default {
 
                 axios.post('http://localhost:8080/auth/refresh', {}, header)
                 .then(response => localStorage.setItem('user-token', response.data.accessToken))
-                .catch(error => alert('Error while getting new token.'));
+                .catch(error => this.$toasted.error('Error while getting new token.', {duration:5000}));
                 
-                alert('Profile successfully updated.');
+                this.$toasted.success('Profile successfully updated.', {duration:5000});
             })
-            .catch(error => alert('Error while updating user profile.'));
+            .catch(error => this.$toasted.error('Error while updating user profile.', {duration:5000}));
         },
 
         checkForm() {
             if (!this.user.firstName) {
-                alert('Please enter first name.');
+                this.$toasted.info('Please enter first name.', {duration:5000});
                 return false;
             } else if (!this.user.lastName) {
-                alert('Please enter last name.');
+                this.$toasted.info('Please enter last name.', {duration:5000});
                 return false;
             } else if (!this.user.email) {
-                alert('Please enter e-mail.');
+                this.$toasted.info('Please enter e-mail.', {duration:5000});
                 return false;
             } else if (!this.user.password) {
-                alert('Please enter password.');
+                this.$toasted.info('Please enter password.', {duration:5000});
                 return false;
             } else if (!this.user.repeatPassword) {
-                alert('Please enter password confirmation.');
+                this.$toasted.info('Please enter password confirmation.', {duration:5000});
                 return false;
             } else if (this.user.password !== this.user.repeatPassword) {
-                alert('Two passwords are not the same.');
+                this.$toasted.info('Two passwords are not the same.', {duration:5000});
                 return false;
             }
 
@@ -109,7 +109,7 @@ export default {
             this.user = response.data;
             this.user.password = '';
         })
-        .catch(error => alert('Error while loading user information.'));
+        .catch(error => this.$toasted.error('Error while loading user information.', {duration:5000}));
     }
 }
 </script>

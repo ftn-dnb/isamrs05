@@ -2,9 +2,11 @@ import Vue from 'vue'
 import App from './App.vue'
 import router from './router'
 import VueKonva from 'vue-konva'
+import Toasted from 'vue-toasted';
 
 Vue.config.productionTip = false
 Vue.use(VueKonva)
+Vue.use(Toasted)
 
 new Vue({
   router,

@@ -96,7 +96,7 @@ export default {
     mounted() {
          axios.get('http://localhost:8080/api/airlines/' + this.airlineId)
          .then(response => this.airline = response.data)
-         .catch(error => alert('Error while loading data.'));
+         .catch(error => this.$toasted.error('Error while loading data.', {duration:5000}));
     }
 }
 </script>

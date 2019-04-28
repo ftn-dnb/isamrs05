@@ -9,6 +9,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
+import java.nio.charset.StandardCharsets;
 import java.security.Principal;
 import java.util.List;
 
@@ -34,6 +37,7 @@ public class UserController {
     }
 
     @GetMapping(path = "/{id}")
+    @PreAuthorize("hasRole('SYSTEM_ADMIN') or hasRole('AIRLINE_ADMIN') or hasRole('RAC_ADMIN') or hasRole('HOTEL_ADMIN') or hasRole('USER')")
     public ResponseEntity<UserDTO> getUserById(@PathVariable("id") Long id) {
         UserDTO user = userService.getUserById(id);
         return new ResponseEntity<>(user, (user == null) ? HttpStatus.NOT_FOUND : HttpStatus.OK);
@@ -75,6 +79,13 @@ public class UserController {
         userService.addUser(user);
         return new ResponseEntity<>(user, HttpStatus.CREATED);
 
+    }
+
+    @GetMapping(value = "/find/{firstLastName}")
+    @PreAuthorize("hasRole('USER')")
+    public ResponseEntity<List<UserDTO>> findUsersByName(@PathVariable String firstLastName) throws UnsupportedEncodingException {
+        firstLastName = URLDecoder.decode(firstLastName, StandardCharsets.UTF_8.toString());
+        return new ResponseEntity<>(userService.findUsersByName(firstLastName), HttpStatus.OK);
     }
 
     @PostMapping(value = "/addFriend")

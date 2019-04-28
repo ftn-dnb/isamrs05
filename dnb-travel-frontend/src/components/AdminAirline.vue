@@ -2,10 +2,6 @@
     <div>
 
         <ul>
-            <!-- <li><router-link :to="{ name: 'FlightList' }">Flights list</router-link></li> -->
-            <!-- <li><router-link :to="{ name: 'AddFlight' }">Add flight</router-link></li>-->
-            <!-- <li><router-link :to="{ name: 'AirlineSettings' }">Airline settings</router-link></li>-->
-
             <li><a href="#" @click="showComponent('AirlineSettings')">Airline settings</a></li>
             <li><a href="#" @click="showComponent('FlightList')">Flight list</a></li>
             <li><a href="#" @click="showComponent('AddFlight')">Add flight</a></li>
