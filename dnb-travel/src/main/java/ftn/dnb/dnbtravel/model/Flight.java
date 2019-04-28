@@ -28,6 +28,9 @@ public class Flight {
     @Column(name = "rating", nullable = false)
     private float rating;
 
+    @Column(name = "isOneWay", nullable = false)
+    private boolean isOneWay;
+
     @OneToOne(cascade = CascadeType.ALL)
     private Destination startDestination;
 
@@ -49,13 +52,14 @@ public class Flight {
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private Set<FlightReservation> reservations = new HashSet<FlightReservation>();
 
+
     public Flight() {
     }
 
     public Flight(Long id, Date startDateTime, Date endDateTime, float travelTime, float travelLength,
                   float rating, Destination startDestination, Destination endDestination, Airline airline,
                   Set<Destination> transits, Airplane airplane, Set<AirlinePriceListItem> prices,
-                  Set<FlightReservation> reservations) {
+                  Set<FlightReservation> reservations, boolean isOneWay) {
         this.id = id;
         this.startDateTime = startDateTime;
         this.endDateTime = endDateTime;
@@ -69,6 +73,7 @@ public class Flight {
         this.airplane = airplane;
         this.prices = prices;
         this.reservations = reservations;
+        this.isOneWay = isOneWay;
     }
 
     public Long getId() {
@@ -173,6 +178,14 @@ public class Flight {
 
     public void setReservations(Set<FlightReservation> reservations) {
         this.reservations = reservations;
+    }
+
+    public boolean isOneWay() {
+        return isOneWay;
+    }
+
+    public void setOneWay(boolean oneWay) {
+        isOneWay = oneWay;
     }
 
     @Override

@@ -1,6 +1,6 @@
 <template>
     <div>
-        
+
         <table>
             <tr>
                 <td>
@@ -53,11 +53,26 @@
             <tr>
                 <td>
                     Min. price <br />
-                    <input type="number" v-model="filterSearch.minPrice" placeholder="Minimum" />
+                    <input type="number" v-model="filterSearch.minPrice" placeholder="Minimum" min="0" />
                 </td>
                 <td>
                     Max. price <br />
-                    <input type="number" v-model="filterSearch.maxPrice" placeholder="Maximum" />
+                    <input type="number" v-model="filterSearch.maxPrice" placeholder="Maximum" min="0" />
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    Number of people <br />
+                    <input type="number" v-model="filterSearch.numOfPeople" min="0" />
+                </td>
+                <td>
+                    Airline <br />
+                    <select v-model="filterSearch.airlineId">
+                        <option :value="null">Clear</option>
+                        <option v-for="airline in airlines" :value="airline.id">
+                            {{airline.name}}
+                        </option>
+                    </select>
                 </td>
             </tr>
             <tr>
@@ -126,6 +141,7 @@ export default {
                 maxPrice: null,
                 isDirect: null,
                 isOneWay: null,
+                numOfPeople: null,
             },
         };
     },

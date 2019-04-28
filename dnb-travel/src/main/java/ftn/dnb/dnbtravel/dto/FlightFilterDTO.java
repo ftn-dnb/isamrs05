@@ -14,17 +14,15 @@ public class FlightFilterDTO {
     private Float minPrice;
     private Float maxPrice;
     private Boolean isDirect;
-    private Boolean is1Transit;
-    private Boolean is2Transits;
-    private Boolean is3PlusTransits;
+    private Boolean isOneWay;
+    private Integer numOfPeople;
 
     public FlightFilterDTO() {
     }
 
     public FlightFilterDTO(Long airlineId, DestinationDTO startDestination, DestinationDTO endDestination,
                            Date startDate, Date endDate, Float travelTime, Float travelLength, Float minPrice,
-                           Float maxPrice, Boolean isDirect, Boolean is1Transit, Boolean is2Transits,
-                           Boolean is3PlusTransits) {
+                           Float maxPrice, Boolean isDirect, Boolean isOneWay, Integer numOfPeople) {
         this.airlineId = airlineId;
         this.startDestination = startDestination;
         this.endDestination = endDestination;
@@ -35,9 +33,8 @@ public class FlightFilterDTO {
         this.minPrice = minPrice;
         this.maxPrice = maxPrice;
         this.isDirect = isDirect;
-        this.is1Transit = is1Transit;
-        this.is2Transits = is2Transits;
-        this.is3PlusTransits = is3PlusTransits;
+        this.isOneWay = isOneWay;
+        this.numOfPeople = numOfPeople;
     }
 
     public Long getAirlineId() {
@@ -112,35 +109,27 @@ public class FlightFilterDTO {
         this.maxPrice = maxPrice;
     }
 
-    public Boolean getDirect() {
+    public Boolean getIsDirect() {
         return isDirect;
     }
 
-    public void setDirect(Boolean direct) {
+    public void setIsDirect(Boolean direct) {
         isDirect = direct;
     }
 
-    public Boolean getIs1Transit() {
-        return is1Transit;
+    public Boolean getIsOneWay() {
+        return isOneWay;
     }
 
-    public void setIs1Transit(Boolean is1Transit) {
-        this.is1Transit = is1Transit;
+    public void setIsOneWay(Boolean isOneWay) {
+        this.isOneWay = isOneWay;
     }
 
-    public Boolean getIs2Transits() {
-        return is2Transits;
+    public Integer getNumOfPeople() {
+        return numOfPeople;
     }
 
-    public void setIs2Transits(Boolean is2Transits) {
-        this.is2Transits = is2Transits;
-    }
-
-    public Boolean getIs3PlusTransits() {
-        return is3PlusTransits;
-    }
-
-    public void setIs3PlusTransits(Boolean is3PlusTransits) {
-        this.is3PlusTransits = is3PlusTransits;
+    public void setNumOfPeople(Integer numOfPeople) {
+        this.numOfPeople = numOfPeople;
     }
 }

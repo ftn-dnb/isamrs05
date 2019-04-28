@@ -47,8 +47,8 @@ INSERT INTO `airline_destinations` VALUES(23, 12);
 INSERT INTO `airline_destinations` VALUES(24, 13);
 
 -- Flights
-INSERT INTO `flight` VALUES(50, '2017-10-01 21:58:58', 5, '2017-09-30 21:58:58', 1200, 24, 22, 20, 11, 12);
-INSERT INTO `flight` VALUES(51, '2016-10-01 21:58:58', 5, '2016-09-30 21:58:58', 1200, 24, 23, 21, 11, 12);
+INSERT INTO `flight` VALUES(50, '2017-10-01 21:58:58', true, 5, '2017-09-30 21:58:58', 1200, 24, 22, 20, 11, 12);
+INSERT INTO `flight` VALUES(51, '2016-10-01 21:58:58', false, 5, '2016-09-30 21:58:58', 1200, 24, 23, 21, 11, 12);
 
 -- Airline price list items
 INSERT INTO `airline_price_list_item` VALUES(60, 10, '2017-11-01 00:00:00', 1500, '2017-10-01 00:00:00');
