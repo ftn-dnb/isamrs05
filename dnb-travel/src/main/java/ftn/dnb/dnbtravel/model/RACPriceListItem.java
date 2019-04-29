@@ -1,13 +1,28 @@
 package ftn.dnb.dnbtravel.model;
 
+import javax.persistence.*;
 import java.util.Date;
 
+@Entity
 public class RACPriceListItem {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private Long id;
+
+    @Column(name = "active_discount")
     private double activeDiscount;
+
+    @Column(name = "start_date")
     private Date startDate;
+
+    @Column(name = "end_date")
     private Date endDate;
+
+    @Column(name = "price_day", nullable = false)
     private int pricePerDay;
+
+    @OneToOne(cascade = CascadeType.ALL)
     private RACPriceList racPriceList;
 
     public RACPriceListItem(){

@@ -3,6 +3,7 @@ package ftn.dnb.dnbtravel.model;
 import ftn.dnb.dnbtravel.dto.RentACarCompanyDTO;
 
 import javax.persistence.*;
+import java.util.Calendar;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -18,23 +19,36 @@ public class RentACarCompany {
     @Column(name = "description", nullable = false)
     private String description;
 
-    //?
+    @Column(name = "rating", nullable = false)
+    private double rating;
 
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    private Set<Car>cars;
-    //private Set<RACPriceList> priceList;
-    //private Set<BranchOffice> offices;
-    //private BranchOffice mainOffice;
+    private Set<Car>cars = new HashSet<>();
+
+    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private Set<RACPriceList> priceList = new HashSet<>();
+
+    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private Set<BranchOffice> offices = new HashSet<>();
+
+    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private BranchOffice mainOffice;
 
     public RentACarCompany() {
         super();
     }
 
-    public RentACarCompany(Long id, String name, String description, Set<Car> cars) {
+    public RentACarCompany(Long id, String name, String description,
+                           double rating, Set<Car> cars, Set<RACPriceList> priceList,
+                           Set<BranchOffice> offices, BranchOffice mainOffice) {
         this.id = id;
         this.name = name;
         this.description = description;
+        this.rating = rating;
         this.cars = cars;
+        this.priceList = priceList;
+        this.offices = offices;
+        this.mainOffice = mainOffice;
     }
 
     public RentACarCompany(RentACarCompanyDTO rentACarCompanyDTO){
@@ -74,5 +88,37 @@ public class RentACarCompany {
 
     public void setCars(Set<Car> cars) {
         cars = cars;
+    }
+
+    public double getRating() {
+        return rating;
+    }
+
+    public void setRating(double rating) {
+        this.rating = rating;
+    }
+
+    public Set<RACPriceList> getPriceList() {
+        return priceList;
+    }
+
+    public void setPriceList(Set<RACPriceList> priceList) {
+        this.priceList = priceList;
+    }
+
+    public Set<BranchOffice> getOffices() {
+        return offices;
+    }
+
+    public void setOffices(Set<BranchOffice> offices) {
+        this.offices = offices;
+    }
+
+    public BranchOffice getMainOffice() {
+        return mainOffice;
+    }
+
+    public void setMainOffice(BranchOffice mainOffice) {
+        this.mainOffice = mainOffice;
     }
 }

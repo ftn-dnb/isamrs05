@@ -1,9 +1,21 @@
 package ftn.dnb.dnbtravel.model;
 
+import javax.persistence.*;
+
+@Entity
 public class BranchOffice {
 
+    @Id
+    @GeneratedValue(strategy =  GenerationType.AUTO)
+    private Long id;
+
+    @Column(name = "name", nullable = false)
     private String name;
+
+    @OneToOne(cascade = CascadeType.ALL)
     private Address address;
+
+    @OneToOne(cascade = CascadeType.ALL)
     private RentACarCompany company;
 
     public BranchOffice(){
