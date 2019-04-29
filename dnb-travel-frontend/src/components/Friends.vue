@@ -18,10 +18,10 @@
             <caption>List of friends</caption>
 
             <tr v-for="friend in friendships">
-                <td v-if="friend.status == 'DENIED'">{{friend.friendFirstName}} {{friend.friendLastName}} ({{friend.friendUsername}})</td>
+                <td v-if="friend.status == 'ACCEPTED'">{{friend.friendFirstName}} {{friend.friendLastName}} ({{friend.friendUsername}})</td>
                 <td>
                     <span v-if="friend.status == 'ACCEPTED'">
-                        <input type="button" value="Unfriend" @click="unfriend(friend.username)" />
+                        <input type="button" value="Unfriend" @click="unfriend(friend.friendUsername)" />
                     </span>
                 </td>
             </tr>
@@ -58,7 +58,13 @@ export default {
             const header = {headers: {"Authorization" : `Bearer ${localStorage.getItem('user-token')}`}};
 
             axios.get(`http://localhost:8080/api/users/find/${this.searchUser}`, header)
-            .then(response => this.searchedUsers = response.data)
+            .then(response => {
+                this.searchedUsers = response.data;
+
+                if (this.searchedUsers == '') {
+                    this.$toasted.info('There are no users with that match given name.', {duration:5000});
+                }
+            })
             .catch(error => this.$toasted.error('Error while getting users.', {duration:5000}));
         },
 
@@ -73,7 +79,14 @@ export default {
         },
 
         unfriend(friendUsername) {
+            const header = {headers: {"Authorization" : `Bearer ${localStorage.getItem('user-token')}`, "Content-Type": "text/plain"}};
 
+            axios.post('http://localhost:8080/api/users/friends/removeFriend', friendUsername, header)
+            .then(response => {
+                this.friendships = response.data.friendships;
+                this.$toasted.success('User is removed from friends list.', {duration: 5000});
+            })
+            .catch(error => this.$toasted.error('There was an error while removing friend.', {duration:5000}));
         },
     },
 
@@ -83,7 +96,6 @@ export default {
         axios.get(`http://localhost:8080/api/users/info/${localStorage.getItem('username')}`, header)
         .then(response => this.friendships = response.data.friendships)
         .catch(error => this.$toasted.error('Error while loading data about friends.', {duration:5000}));
-        // @TODO u listi pored svakog staviti i ikonicu za uklanjanje ako je prijateljstvo prihvaceno
     }
 }
 </script>

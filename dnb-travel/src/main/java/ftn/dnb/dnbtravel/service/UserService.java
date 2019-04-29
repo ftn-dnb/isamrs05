@@ -4,6 +4,7 @@ import ftn.dnb.dnbtravel.dto.UserDTO;
 import ftn.dnb.dnbtravel.model.Authority;
 //import ftn.dnb.dnbtravel.model.Friendship;
 import ftn.dnb.dnbtravel.model.Friendship;
+import ftn.dnb.dnbtravel.model.FriendshipStatus;
 import ftn.dnb.dnbtravel.model.User;
 import ftn.dnb.dnbtravel.repository.AuthorityRepository;
 import ftn.dnb.dnbtravel.repository.UserRepository;
@@ -127,6 +128,28 @@ public class UserService {
             return false;
 
         me.getFriendships().add(new Friendship(friend));
+
+        return true;
+    }
+
+    public boolean removeFriend(String myUsername, String friendsUsername) {
+        User me = userRepository.findOneByUsername(myUsername);
+        User friend = userRepository.findByUsername(friendsUsername);
+
+        if (me == null || friend == null)
+            return false;
+
+        Friendship fr1 = me.getFriendships().stream().filter(f -> f.getFriend().equals(friend)).findFirst().get();
+        Friendship fr2 = friend.getFriendships().stream().filter(f -> f.getFriend().equals(me)).findFirst().get();
+
+        if (fr1 == null || fr2 == null)
+            return false;
+
+        fr1.setStatus(FriendshipStatus.DENIED);
+        fr2.setStatus(FriendshipStatus.DENIED);
+
+        userRepository.save(me);
+        userRepository.save(friend);
 
         return true;
     }

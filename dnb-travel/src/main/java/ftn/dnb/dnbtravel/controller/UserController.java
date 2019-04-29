@@ -88,12 +88,25 @@ public class UserController {
         return new ResponseEntity<>(userService.findUsersByName(firstLastName), HttpStatus.OK);
     }
 
-    @PostMapping(value = "/addFriend")
+    @PostMapping(value = "/friends/addFriend")
     @PreAuthorize("hasRole('USER')")
     public ResponseEntity<?> requestFriendship(Principal user, @RequestBody String friendsUsername) {
+
+        //@TODO ne mozes sebe dodati za prijatelja
+
         if (userService.addFriend(user.getName(), friendsUsername)) {
             //producer.sendMessageTo(friendsUsername, user.getName());
             return new ResponseEntity<>(HttpStatus.OK);
+        }
+
+        return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+    }
+
+    @PostMapping(value = "/friends/removeFriend")
+    @PreAuthorize("hasRole('USER')")
+    public ResponseEntity<UserDTO> removeFriend(Principal user, @RequestBody String friendsUsername) {
+        if (userService.removeFriend(user.getName(), friendsUsername)) {
+            return new ResponseEntity<>(userService.getUserByUsername(user.getName()), HttpStatus.OK);
         }
 
         return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
