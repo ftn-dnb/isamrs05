@@ -37,7 +37,11 @@ public class UserController {
     }
 
     @PostMapping(path = "/register", consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<UserDTO> addUser(@RequestBody UserDTO userToInsert) {
+    public ResponseEntity<?> addUser(@RequestBody UserDTO userToInsert) {
+        ResponseEntity errResposne = userService.checkSameData(userToInsert.getUsername(),userToInsert.getEmail());
+        if (errResposne != null){
+            return errResposne;
+        }
         UserDTO savedUser = userService.addUser(userToInsert);
         return new ResponseEntity<>(savedUser, HttpStatus.CREATED);
     }

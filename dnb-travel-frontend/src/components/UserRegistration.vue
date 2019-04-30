@@ -88,7 +88,13 @@ export default{
                     alert('Successful registration');
                     return;
                 }
-            })
+            }).catch(error =>{
+                if(error.response.status === 409){
+                console.log(error.response);
+                    alert(error.response.data);
+                    return;
+                }
+            });
         },
 
     },
