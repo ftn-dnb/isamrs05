@@ -18,11 +18,11 @@ INSERT INTO `user_authority` (user_id, authority_id) VALUES (5, 3);
 INSERT INTO `user_authority` (user_id, authority_id) VALUES (6, 4);
 INSERT INTO `user_authority` (user_id, authority_id) VALUES (7, 5);
 
-INSERT INTO `friendship` VALUES (1, 0, 2);
-INSERT INTO `friendship` VALUES (2, 0, 3);
+--INSERT INTO `friendship` VALUES (1, 0, 2);
+--INSERT INTO `friendship` VALUES (2, 0, 3);
 
-INSERT INTO `users_friendships` VALUES (3, 1);
-INSERT INTO `users_friendships` VALUES (2, 2);
+--INSERT INTO `users_friendships` VALUES (3, 1);
+--INSERT INTO `users_friendships` VALUES (2, 2);
 
 -- Destinations
 INSERT INTO `destination` VALUES (11, 'JFK', 'John. F. Kennedy. International Airport', 'New York', 'US', 123.23, 132.23);

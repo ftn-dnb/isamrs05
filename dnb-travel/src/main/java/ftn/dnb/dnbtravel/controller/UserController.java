@@ -1,6 +1,7 @@
 package ftn.dnb.dnbtravel.controller;
 
 import ftn.dnb.dnbtravel.dto.UserDTO;
+import ftn.dnb.dnbtravel.messaging.Producer;
 import ftn.dnb.dnbtravel.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -22,12 +23,12 @@ public class UserController {
 
     private UserService userService;
 
-    //private Producer producer;
+    private Producer producer;
 
     @Autowired
-    public UserController(UserService userService/*, Producer producer*/) {
+    public UserController(UserService userService, Producer producer) {
         this.userService = userService;
-        //this.producer = producer;
+        this.producer = producer;
     }
 
 
@@ -90,13 +91,10 @@ public class UserController {
 
     @PostMapping(value = "/friends/addFriend")
     @PreAuthorize("hasRole('USER')")
-    public ResponseEntity<?> requestFriendship(Principal user, @RequestBody String friendsUsername) {
-
-        //@TODO ne mozes sebe dodati za prijatelja
-
+    public ResponseEntity<UserDTO> requestFriendship(Principal user, @RequestBody String friendsUsername) {
         if (userService.addFriend(user.getName(), friendsUsername)) {
-            //producer.sendMessageTo(friendsUsername, user.getName());
-            return new ResponseEntity<>(HttpStatus.OK);
+            producer.sendMessageTo(friendsUsername, user.getName());
+            return new ResponseEntity<>(userService.getUserByUsername(user.getName()), HttpStatus.OK);
         }
 
         return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
@@ -106,6 +104,26 @@ public class UserController {
     @PreAuthorize("hasRole('USER')")
     public ResponseEntity<UserDTO> removeFriend(Principal user, @RequestBody String friendsUsername) {
         if (userService.removeFriend(user.getName(), friendsUsername)) {
+            return new ResponseEntity<>(userService.getUserByUsername(user.getName()), HttpStatus.OK);
+        }
+
+        return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+    }
+
+    @PostMapping(value = "/friends/acceptFriend")
+    @PreAuthorize("hasRole('USER')")
+    public ResponseEntity<UserDTO> acceptFriend(Principal user, @RequestBody String friendsUsername) {
+        if (userService.acceptFriend(user.getName(), friendsUsername)) {
+            return new ResponseEntity<>(userService.getUserByUsername(user.getName()), HttpStatus.OK);
+        }
+
+        return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+    }
+
+    @PostMapping(value = "/friends/declineFriend")
+    @PreAuthorize("hasRole('USER')")
+    public ResponseEntity<UserDTO> declineFriend(Principal user, @RequestBody String friendsUsername) {
+        if (userService.declineFriend(user.getName(), friendsUsername)) {
             return new ResponseEntity<>(userService.getUserByUsername(user.getName()), HttpStatus.OK);
         }
 
