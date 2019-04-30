@@ -23,6 +23,9 @@ public class RACPriceListItem {
     private int pricePerDay;
 
     @OneToOne(cascade = CascadeType.ALL)
+    private Car car;
+
+    @OneToOne(cascade = CascadeType.ALL)
     private RACPriceList racPriceList;
 
     public RACPriceListItem(){
@@ -75,5 +78,13 @@ public class RACPriceListItem {
 
     public void setRacPriceList(RACPriceList racPriceList) {
         this.racPriceList = racPriceList;
+    }
+
+    public Car getCar() {
+        return car;
+    }
+
+    public void setCar(Car car) {
+        this.car = car;
     }
 }

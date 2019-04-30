@@ -19,6 +19,12 @@ export default{
 
     data(){
         return{
+            filter:{
+                "startDate": null,
+                "endDate": null,
+                "pricePerDay": null,
+            },
+            items: [],
         };
     },
 
@@ -26,7 +32,10 @@ export default{
     },
 
     mounted(){
-
+       axios.post('http://localhost:8080/api/rentACarCompanies/carSearch', this.filter)
+            .then(response => {
+                this.items = response.data;
+                cosole.log(this.items) });
     }
 }
 
