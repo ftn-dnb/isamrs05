@@ -2,12 +2,14 @@
     <div>
         ADMIN RENT A CAR
     <rent-a-car-company-settings/>
+    <user-settings/>
     </div>
 </template>
 
 <script>
 import axios from 'axios';
 import RentACarCompanySettings from './RentACarCompanySettings';
+import UserSettings from './UserSettings'
 
 
 export default{
@@ -15,6 +17,7 @@ export default{
     props: {},
     components: {
         RentACarCompanySettings,
+        UserSettings,
     },
 
     data(){
