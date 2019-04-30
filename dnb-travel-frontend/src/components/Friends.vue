@@ -76,7 +76,7 @@ export default {
                 this.searchedUsers = response.data;
 
                 if (this.searchedUsers == '') {
-                    this.$toasted.info('There are no users with that match given name.', {duration:5000});
+                    this.$toasted.info('There are no users that match given name.', {duration:5000});
                 }
             })
             .catch(error => this.$toasted.error('Error while getting users.', {duration:5000}));
