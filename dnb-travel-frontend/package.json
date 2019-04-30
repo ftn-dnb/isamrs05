@@ -16,6 +16,7 @@
     "vue": "^2.6.6",
     "vue-konva": "^2.0.4",
     "vue-router": "^3.0.1",
+    "vue-toasted": "^1.1.26",
     "webstomp-client": "^1.2.6"
   },
   "devDependencies": {

@@ -71,37 +71,31 @@ export default {
             }
 
             axios.put('http://localhost:8080/api/airlines', this.airline)
-            .then(response => {
-                if (response.data === '') {
-                    alert('Doslo je do greske prilikom izmene profila aviokompanije');
-                    return;
-                }
-
-                alert('Profil aviokompanije je uspesno izmenjen');
-            });
+            .then(response => this.$toasted.success('Profile successfully updated.', {duration:5000}))
+            .catch(error => this.$toasted.error('Error while updating airline data.', {duration:5000}));
         },
 
         checkForm() {
             if (!this.airline.name) {
-                alert('Morate uneti ime aviokompanije.');
+                this.$toasted.info('Morate uneti ime aviokompanije.', {duration:5000});
                 return false;
             } else if (!this.airline.description) {
-                alert('Morate uneti promotivni opis kompanije.');
+                this.$toasted.info('Morate uneti promotivni opis kompanije.', {duration:5000});
                 return false;
             } else if (!this.airline.address.streetName) {
-                alert('Morate uneti naziv ulice.');
+                this.$toasted.info('Morate uneti naziv ulice.', {duration:5000});
                 return false;
             } else if (!this.airline.address.streetNumber) {
-                alert('Morate uneti ulicni broj.');
+                this.$toasted.info('Morate uneti ulicni broj.', {duration:5000});
                 return false;
             } else if (!this.airline.address.city) {
-                alert('Morate uneti naziv grada.');
+                this.$toasted.info('Morate uneti naziv grada.', {duration:5000});
                 return false;
             } else if (!this.airline.address.country) {
-                alert('Morate uneti naziv drzave.');
+                this.$toasted.info('Morate uneti naziv drzave.', {duration:5000});
                 return false;
             } else if (!this.airline.address.postalCode) {
-                alert('Morate uneti postanski broj grada.');
+                this.$toasted.info('Morate uneti postanski broj grada.', {duration:5000});
                 return false;
             }
 

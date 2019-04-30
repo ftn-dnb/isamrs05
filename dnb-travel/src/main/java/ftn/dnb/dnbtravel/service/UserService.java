@@ -3,6 +3,8 @@ package ftn.dnb.dnbtravel.service;
 import ftn.dnb.dnbtravel.dto.UserDTO;
 import ftn.dnb.dnbtravel.model.Authority;
 //import ftn.dnb.dnbtravel.model.Friendship;
+import ftn.dnb.dnbtravel.model.Friendship;
+import ftn.dnb.dnbtravel.model.FriendshipStatus;
 import ftn.dnb.dnbtravel.model.User;
 import ftn.dnb.dnbtravel.repository.AuthorityRepository;
 import ftn.dnb.dnbtravel.repository.UserRepository;
@@ -19,6 +21,7 @@ import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class UserService {
@@ -104,6 +107,18 @@ public class UserService {
         return new UserDTO(userR);
     }
 
+    public List<UserDTO> findUsersByName(String firstLastName) {
+        String name = firstLastName.toLowerCase().replaceAll("\\s+", "");
+        List<UserDTO> users = getAllUsers();
+        List<UserDTO> result = users.stream().filter(u -> {
+            String userName = u.getFirstName() + u.getLastName();
+            userName = userName.toLowerCase();
+            return userName.toLowerCase().equals(name) && u.getRole() == 1;
+        }).collect(Collectors.toList());
+
+        return result;
+    }
+
     public boolean addFriend(String myUsername, String friendsUsername) {
         User me = userRepository.findOneByUsername(myUsername);
         User friend = userRepository.findOneByUsername(friendsUsername);
@@ -111,7 +126,89 @@ public class UserService {
         if (me == null || friend == null)
             return false;
 
-        //me.getFriendships().add(new Friendship(friend));
+        if (me.equals(friend))
+            return false;
+
+        boolean friendshipExists1 = me.getFriendships().stream()
+                .anyMatch(f -> f.getFriend().equals(friend) && (f.getStatus().equals(FriendshipStatus.ACCEPTED) || f.getStatus().equals(FriendshipStatus.REQUEST)));
+
+        boolean friendshipExists2 = friend.getFriendships().stream()
+                .anyMatch(f -> f.getFriend().equals(me) && (f.getStatus().equals(FriendshipStatus.ACCEPTED) || f.getStatus().equals(FriendshipStatus.REQUEST)));
+
+        if (friendshipExists1 || friendshipExists2)
+            return false;
+
+        me.getFriendships().add(new Friendship(friend, FriendshipStatus.PENDING));
+        friend.getFriendships().add(new Friendship(me, FriendshipStatus.REQUEST));
+
+        userRepository.save(me);
+        userRepository.save(friend);
+
+        return true;
+    }
+
+    public boolean removeFriend(String myUsername, String friendsUsername) {
+        User me = userRepository.findOneByUsername(myUsername);
+        User friend = userRepository.findByUsername(friendsUsername);
+
+        if (me == null || friend == null)
+            return false;
+
+        Friendship fr1 = me.getFriendships().stream().filter(f -> f.getFriend().equals(friend)).findFirst().orElse(null);
+        Friendship fr2 = friend.getFriendships().stream().filter(f -> f.getFriend().equals(me)).findFirst().orElse(null);
+
+        if (fr1 == null || fr2 == null)
+            return false;
+
+        me.getFriendships().remove(fr1);
+        friend.getFriendships().remove(fr2);
+
+        userRepository.save(me);
+        userRepository.save(friend);
+
+        return true;
+    }
+
+    public boolean acceptFriend(String myUsername, String friendsUsername) {
+        User me = userRepository.findOneByUsername(myUsername);
+        User friend = userRepository.findByUsername(friendsUsername);
+
+        if (me == null || friend == null)
+            return false;
+
+        Friendship fr1 = me.getFriendships().stream().filter(f -> f.getFriend().equals(friend)).findFirst().orElse(null);
+        Friendship fr2 = friend.getFriendships().stream().filter(f -> f.getFriend().equals(me)).findFirst().orElse(null);
+
+        if (fr1 == null || fr2 == null)
+            return false;
+
+        fr1.setStatus(FriendshipStatus.ACCEPTED);
+        fr2.setStatus(FriendshipStatus.ACCEPTED);
+
+        userRepository.save(me);
+        userRepository.save(friend);
+
+        return true;
+    }
+
+    public boolean declineFriend(String myUsername, String friendsUsername) {
+        User me = userRepository.findOneByUsername(myUsername);
+        User friend = userRepository.findByUsername(friendsUsername);
+
+        if (me == null || friend == null)
+            return false;
+
+        Friendship fr1 = me.getFriendships().stream().filter(f -> f.getFriend().equals(friend)).findFirst().orElse(null);
+        Friendship fr2 = friend.getFriendships().stream().filter(f -> f.getFriend().equals(me)).findFirst().orElse(null);
+
+        if (fr1 == null || fr2 == null)
+            return false;
+
+        me.getFriendships().remove(fr1);
+        friend.getFriendships().remove(fr2);
+
+        userRepository.save(me);
+        userRepository.save(friend);
 
         return true;
     }

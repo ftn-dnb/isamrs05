@@ -150,7 +150,7 @@ export default {
         searchFlights() {
             axios.post('http://localhost:8080/api/flights', this.filterSearch)
             .then(response => {this.flights = response.data; })
-            .catch(error => alert('Error while loading flights'));
+            .catch(error => this.$toasted('Error while loading flights', {duration:5000}));
         },
     },
 
@@ -174,7 +174,7 @@ export default {
 
         axios.get('http://localhost:8080/api/destinations')
         .then(response => this.destinations = response.data)
-        .catch(error => alert('Error while loading destinations'));
+        .catch(error => this.$toasted.error('Error while loading destinations', {duration:5000}));
 
         let now = new Date();
         const today = now.toISOString().substring(0,10);

@@ -182,47 +182,46 @@ export default {
 
             axios.post('http://localhost:8080/api/airlines/' + this.airline.id + '/flights', this.flightToAdd, { headers: {"Authorization" : `Bearer ${localStorage.getItem('user-token')}`} })
             .then(response => {
-                alert('Flight successfuly created.');
-
+                this.$toasted.success('Flight successfuly created.', {duration:5000});
             }).catch(error => {
-                alert('There was an error while creating new flight.');
+                this.$toasted.error('There was an error while creating new flight.', {duration:5000});
             });
 
         },
 
         checkAddFlightForm() {
             if (this.flightToAdd.startDestination == null) {
-                alert('You must choose start destination.');
+                this.$toasted.info('You must choose start destination.', {duration:5000});
                 return false;
             } else if (this.flightToAdd.endDestination == null) {
-                alert('You must choose end destination.');
+                this.$toasted.info('You must choose end destination.', {duration:5000});
                 return false;
             } else if (this.flightToAdd.startDateTime == null) {
-                alert('You must pick take off date and time.');
+                this.$toasted.info('You must pick take off date and time.', {duration:5000});
                 return false;
             } else if (this.flightToAdd.endDateTime == null) {
-                alert('You must pick landing date and time.');
+                this.$toasted.info('You must pick landing date and time.', {duration:5000});
                 return false;
             } else if (this.flightToAdd.airplane == null) {
-                alert('You must choose airplane for this flight.');
+                this.$toasted.info('You must choose airplane for this flight.', {duration:5000});
                 return false;
             } else if (this.flightToAdd.prices.length === 0) {
-                alert('You must enter at least one price list item.');
+                this.$toasted.info('You must enter at least one price list item.', {duration:5000});
                 return false;
             } else if (this.flightToAdd.travelLength === '' || this.flightToAdd.travelLength == null) {
-                alert('You must enter travel length.');
+                this.$toasted.info('You must enter travel length.', {duration:5000});
                 return false;
             } else if (this.isDateGreaterThan(this.flightToAdd.startDateTime, this.flightToAdd.endDateTime)) {
-                alert('Takeoff date and time must be before landing date and time');
+                this.$toasted.info('Takeoff date and time must be before landing date and time', {duration:5000});
                 return false;
             } else if (this.flightToAdd.startDestination.id === this.flightToAdd.endDestination.id) {
-                alert('Start and end destinations must be different.');
+                this.$toasted.info('Start and end destinations must be different.', {duration:5000});
                 return false;
             } else if (this.isDestinationInTransits(this.flightToAdd.startDestination.id) != null) {
-                alert('Start destination can\' be in transits list.');
+                this.$toasted.info('Start destination can\' be in transits list.', {duration:5000});
                 return false;
             } else if (this.isDestinationInTransits(this.flightToAdd.endDestination.id) != null) {
-                alert('End destination can\' be in transits list.');
+                this.$toasted.info('End destination can\' be in transits list.', {duration:5000});
                 return false;
             }
 
@@ -231,25 +230,25 @@ export default {
 
         checkPriceListForm() {
             if (this.priceItem.startDate == null) {
-                alert('You must choose start date for price list item.');
+                this.$toasted.info('You must choose start date for price list item.', {duration:5000});
                 return false;
             } else if (this.priceItem.endDate == null) {
-                alert('You must choose end date for price list item.');
+                this.$toasted.info('You must choose end date for price list item.', {duration:5000});
                 return false;
             } else if (this.priceItem.price === '') {
-                alert('You must enter price.');
+                this.$toasted.info('You must enter price.', {duration:5000});
                 return false;
             } else if (this.priceItem.price < 0) {
-                alert('Price must be above 0.');
+                this.$toasted.info('Price must be above 0.', {duration:5000});
                 return false;
             } else if (this.priceItem.activeDiscount === '') {
-                alert('You must enter discount.');
+                this.$toasted.info('You must enter discount.', {duration:5000});
                 return false;
             } else if (this.priceItem.activeDiscount < 0 || this.priceItem.activeDiscount > 100) {
-                alert('Discount must be between 0 and 100.');
+                this.$toasted.info('Discount must be between 0 and 100.', {duration:5000});
                 return false;
             } else if (this.isDateGreaterThan(this.priceItem.startDate, this.priceItem.endDate)) {
-                alert('Start date must be before end date.');
+                this.$toasted.info('Start date must be before end date.', {duration:5000});
                 return false;
             } 
 
