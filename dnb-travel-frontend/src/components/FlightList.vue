@@ -1,6 +1,5 @@
 <template>
     <div>
-
         <table>
             <tr>
                 <td>
@@ -121,6 +120,7 @@ export default {
     props: {
         airlineId: null
     },
+
     components: {},
     
     data() {

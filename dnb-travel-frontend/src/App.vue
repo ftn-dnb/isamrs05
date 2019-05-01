@@ -1,30 +1,28 @@
 <template>
-  <div id="app">
-    <router-view/>
-  </div>
+    <v-app>
+        <v-content>
+            <Navbar />
+
+            <v-container class="mx-4 mb-4">
+                <router-view />
+            </v-container>
+        </v-content>
+    </v-app>
 </template>
 
 <script>
-import StartPage from './components/StartPage.vue';
-import UserSettings from './components/UserSettings.vue';
-import HotelSettings from './components/HotelSettings.vue';
-import HotelRegistration from './components/HotelRegistration.vue';
+import Navbar from './components/Navbar.vue';
 
 export default {
-    name: 'App',
-    components: {
-      StartPage,
-      UserSettings,
-      HotelSettings
-    },
+  name: 'App',
+
+  components: {
+    Navbar,
+  },
+
+  data () {
+    return {
+    }
+  }
 }
 </script>
-
-<style>
-#app {
-  font-family: 'Avenir', Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  color: #2c3e50;
-}
-</style>

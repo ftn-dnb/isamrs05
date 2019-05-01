@@ -1,0 +1,58 @@
+<template>
+	<nav>
+		<v-toolbar>
+			<v-toolbar-side-icon class="grey--text" @click="drawer = !drawer">
+			</v-toolbar-side-icon>
+
+			<v-toolbar-title class="text-uppercase grey--text">
+				<span>DNB</span>
+				<span class="font-weight-light">TRAVEL</span>
+			</v-toolbar-title>
+		</v-toolbar>
+
+		<v-navigation-drawer v-model="drawer" app class="secondary">
+			<v-list>
+				<v-list-tile v-for="item in airlineAdminDrawer" :key="item.text" router :to="item.route">
+					<v-list-tile-action>
+					    <v-icon dark>{{item.icon}}</v-icon> 
+					</v-list-tile-action>
+					<v-list-tile-content>
+						<v-list-tile-title class="white--text">{{item.text}}</v-list-tile-title>
+					</v-list-tile-content>
+				</v-list-tile>
+			</v-list>
+		</v-navigation-drawer>
+
+	</nav>
+</template>
+
+<script>
+export default {
+	name: 'Navbar',
+
+	props: {},
+	components: {},
+
+	data() {
+		return {
+			drawer: false,
+
+			airlineAdminDrawer: [
+				{ icon: 'flight_takeoff', text: 'Flights', route: '/flights' },
+				{ icon: 'airplanemode_active', text: 'Add flight', route: '/add-flight' },
+				{ icon: 'work_outline', text: 'Company settings', route: '/airline-settings' },
+				{ icon: 'perm_identity', text: 'Profile settings', route: '/user-settings' },
+			],
+		}
+	},
+
+	methods: {
+	},
+
+	mounted() {
+	}
+}	
+</script>
+
+<style>
+</style>
