@@ -4,13 +4,14 @@ import App from './App.vue'
 import router from './router'
 import VueKonva from 'vue-konva'
 import Toasted from 'vue-toasted';
-import DatetimePicker from 'vuetify-datetime-picker'
-import 'vuetify-datetime-picker/src/stylus/main.styl'
+import Datetime from 'vue-datetime'
+import 'vue-datetime/dist/vue-datetime.css'
 
 Vue.config.productionTip = false
 Vue.use(VueKonva)
 Vue.use(Toasted)
-Vue.use(DatetimePicker)
+Vue.use(Datetime)
+
 
 new Vue({
   router,
