@@ -1,29 +1,176 @@
 <template>
     <div>
-        <h3>Your company is: {{airline.name}}</h3>
-        <h3>Fill out this form to add new flight</h3>
+        <h3 class="subheading grey--text">Add new flight</h3>
+
+        <v-form ref="addNewFlightForm">
+            <v-combobox label="Select start destination" 
+                v-model="flightToAdd.startDestination" 
+                :items="airline.destinations" 
+                item-text="airportName" 
+                return-object
+                prepend-icon="flight_takeoff"
+            ></v-combobox>
+
+            <v-combobox label="Select end destination" 
+                v-model="flightToAdd.endDestination" 
+                :items="airline.destinations" 
+                item-text="airportName" 
+                return-object
+                prepend-icon="flight_land"
+            ></v-combobox>
+
+            <v-menu>
+                <v-text-field label="Departure date" 
+                    slot="activator" 
+                    :value="formattedDate(flightToAdd.startDateTime)"
+                    prepend-icon="event"
+                ></v-text-field>
+                <v-date-picker v-model="flightToAdd.startDateTime">
+                </v-date-picker>
+            </v-menu>
+            <v-menu>
+                <v-text-field label="Departure time" 
+                    slot="activator" 
+                    :value="startTime"
+                    prepend-icon="schedule"
+                    ></v-text-field>
+                <v-time-picker v-model="startTime">
+                </v-time-picker>
+            </v-menu>
+            <br/>
+            <v-menu>
+                <v-text-field label="Return date" 
+                    slot="activator" 
+                    :value="formattedDate(flightToAdd.endDateTime)"
+                    prepend-icon="event"
+                    ></v-text-field>
+                <v-date-picker v-model="flightToAdd.endDateTime">
+                </v-date-picker>
+            </v-menu>
+            <v-menu>
+                <v-text-field label="Return time" 
+                    slot="activator" 
+                    :value="endTime"
+                    prepend-icon="schedule"
+                    ></v-text-field>
+                <v-time-picker v-model="endTime">
+                </v-time-picker>
+            </v-menu>
+
+            <v-select label="Transits" 
+                v-model="flightToAdd.transits" 
+                :items="destinations" 
+                multiple 
+                attach 
+                chips 
+                item-text="airportName" 
+                return-object
+                prepend-icon="transit_enterexit"
+            ></v-select>
+
+            <v-combobox label="Airplane" 
+                v-model="flightToAdd.airplane" 
+                :items="airplanes" 
+                item-text="name" 
+                return-object
+                prepend-icon="local_airport"
+            ></v-combobox>
+
+            <v-text-field type="number"
+                label="Travel length (km)" 
+                v-model="flightToAdd.travelLength" 
+                min="0" 
+                prepend-icon="directions_walk"
+            ></v-text-field>
+
+            <v-checkbox label="One-way" v-model="flightToAdd.isOneWay"></v-checkbox>
+
+            <v-data-table :headers="priceListHeaders" :items="flightToAdd.prices">
+                <template v-slot:items="props">
+                    <td>{{ formattedDate(props.item.startDate) }}</td>
+                    <td>{{ formattedDate(props.item.endDate) }}</td>
+                    <td>{{ props.item.price }}</td>
+                    <td>{{ props.item.activeDiscount }}</td>
+                </template>
+
+                <template v-slot:footer>
+                    <td :colspan="priceListHeaders.length">
+                        <v-dialog v-model="dialog" width="500">
+                            <template v-slot:activator="{ on }">
+                                <v-btn v-on="on">
+                                    <v-icon left>add_circle</v-icon>
+                                    <span>Add item</span>
+                                </v-btn>
+                            </template>
+
+                            <v-card>
+                                <v-card-title class="headline grey--text lighten-2" primary-title>
+                                  Add new price list item
+                                </v-card-title>
+
+                                <v-card-text>
+                                    <v-form ref="addPriceListItemForm">
+                                        <v-menu>
+                                            <v-text-field label="Start date" 
+                                                slot="activator" 
+                                                :value="formattedDate(priceItem.startDate)"
+                                                :rules="priceItemStartDate"
+                                                prepend-icon="event"
+                                                ></v-text-field>
+                                            <v-date-picker v-model="priceItem.startDate">
+                                            </v-date-picker>
+                                        </v-menu>
+
+                                        <v-menu>
+                                            <v-text-field label="End date" 
+                                                slot="activator" 
+                                                :value="formattedDate(priceItem.endDate)"
+                                                :rules="priceItemEndDate"
+                                                prepend-icon="event"
+                                            ></v-text-field>
+                                            <v-date-picker v-model="priceItem.endDate"></v-date-picker>
+                                        </v-menu>
+
+                                        <v-text-field type="number" 
+                                            label="Price" 
+                                            v-model="priceItem.price" min="0"
+                                            :rules="priceItemPrice"
+                                            prepend-icon="attach_money"
+                                        ></v-text-field>
+                                        
+                                        <v-text-field type="number" 
+                                            label="Discount %" 
+                                            v-model="priceItem.activeDiscount" 
+                                            min="0" 
+                                            max="100"
+                                            :rules="priceItemDiscount"
+                                            prepend-icon="arrow_downward"
+                                        ></v-text-field>
+                                    </v-form>
+                                </v-card-text>
+
+                                <v-divider></v-divider>
+
+                                <v-card-actions>
+                                    <v-spacer></v-spacer>
+                                    <v-btn @click="addPriceListItem">
+                                        <v-icon left>add</v-icon>
+                                        <span>Add item</span>
+                                    </v-btn>
+                                </v-card-actions>
+                            </v-card>
+                        </v-dialog>
+                    </td>
+                </template>
+            </v-data-table>
+            
+            <v-btn @click="addFlight">
+                <v-icon left>add</v-icon>
+                <span>Add flight</span>
+            </v-btn>
+        </v-form>        
 
         <table>
-            <tr>
-                <td>Start destination</td>
-                <td>
-                    <select v-model="flightToAdd.startDestination">
-                        <option v-for="dest in airline.destinations" :value="dest">
-                            {{dest.airportName}}, {{dest.city}}, {{dest.country}}
-                        </option>
-                    </select>
-                </td>
-            </tr>
-            <tr>
-                <td>End destination</td>
-                <td>
-                    <select v-model="flightToAdd.endDestination">
-                        <option v-for="dest in airline.destinations" :value="dest">
-                            {{dest.airportName}}, {{dest.city}}, {{dest.country}}
-                        </option>
-                    </select>
-                </td>
-            </tr>
             <tr>
                 <td>Take off date & time</td>
                 <td><input type="datetime-local" v-model="flightToAdd.startDateTime" :min="minDateTime" /></td>
@@ -32,86 +179,15 @@
                 <td>Landing date & time</td>
                 <td><input type="datetime-local" v-model="flightToAdd.endDateTime" :min="minDateTime" /></td>
             </tr>
-            <tr>
-                <td>Transit destinations</td>
-                <td>
-                    <select multiple v-model="flightToAdd.transits">
-                        <option v-for="dest in destinations" :value="dest">
-                            {{dest.airportName}}, {{dest.city}}, {{dest.country}}
-                        </option>
-                    </select>
-                </td>                
-            </tr>
-            <tr>
-                <td>Airplane</td>
-                <td>
-                    <select v-model="flightToAdd.airplane">
-                        <option v-for="ap in airplanes" :value="ap">
-                            {{ap.name}}, {{ap.numOfRows * ap.numOfColumns}} seats
-                        </option>
-                    </select>
-                </td>
-            </tr>
-            <tr>
-                <td>Travel length (km)</td>
-                <td>
-                    <input type="number" v-model="flightToAdd.travelLength" /> 
-                </td>
-            </tr>
-            <tr>
-                <td colspan="2">
-                    <input type="checkbox" v-model="flightToAdd.isOneWay" /> One-way
-                </td>
-            </tr>
-            <tr>
-                <td colspan="2">
-                    <table>
-                        <caption>Price list</caption>
-                        <tr>
-                            <th>From</th>
-                            <th>To</th>
-                            <th>Price</th>
-                            <th>Discount</th>
-                            <th>&nbsp;</th>
-                        </tr>
-                        <tr v-for="price in flightToAdd.prices">
-                            <td>{{price.startDate}}</td>
-                            <td>{{price.endDate}}</td>
-                            <td>{{price.price}}</td>
-                            <td>{{price.activeDiscount}}</td>
-                            <td>&nbsp;</td>
-                        </tr>
-                        <tr>
-                            <td>
-                                <input type="date" v-model="priceItem.startDate" :min="minDate" />
-                            </td>
-                            <td>
-                                <input type="date" v-model="priceItem.endDate" :min="minDate" />
-                            </td>
-                            <td>
-                                <input type="number" v-model="priceItem.price" min="0" />
-                            </td>
-                            <td>
-                                <input type="number" v-model="priceItem.activeDiscount" min="0" max="100" />
-                            </td>
-                            <td>
-                                <input type="button" value="Add price item" @click="addPriceListItem" />
-                            </td>
-                        </tr>
-                    </table>
-                </td>
-            </tr>
-            <tr>
-                <td colspan="2">
-                    <input type="button" value="Add flight" @click="addFlight" />
-                </td>
-            </tr>
+
         </table>
     </div>
 </template>
 
 <script>
+
 import axios from 'axios';
+import format from 'date-fns/format';
 
 export default {
     name: 'AddFlight',
@@ -120,8 +196,34 @@ export default {
     
     data() {
         return {
+            dialog: false,
+            priceListHeaders: [
+                { text: 'From', value: 'startDate' },
+                { text: 'To', value: 'endDate' },
+                { text: 'Price', value: 'price' },
+                { text: 'Discount %', value: 'activeDiscount' },
+            ],
+            priceItemStartDate: [
+                v => (v && v.length > 0) || 'Please select start date',
+                v => (v && this.isDateGreaterThan(this.priceItem.endDate, this.priceItem.startDate)) || 'Start date must be before end date'
+            ],
+            priceItemEndDate: [
+                v => (v && v.length > 0) || 'Please select end date',
+                v => (v && this.isDateGreaterThan(this.priceItem.endDate, this.priceItem.startDate)) || 'End date must be after start date'
+            ],
+            priceItemPrice: [
+                v => (v && v.length > 0) || 'Please fill out this field',
+                v => (v && v >= 0) || 'Price can\'t be below 0'
+            ],
+            priceItemDiscount: [
+                v => (v && v.length > 0) || 'Please fill out this field',
+                v => (v && v >= 0 && v <= 100) || 'Discount must be between 0 and 100 %'
+            ],
+
             minDate: null,
             minDateTime: null,
+            startTime: null,
+            endTime: null,
             airline: {
                 id: null,
                 name: null,
@@ -153,23 +255,25 @@ export default {
             priceItem: {
                 startDate: null,
                 endDate: null,
-                price: 0,
-                activeDiscount: 0,
+                price: null,
+                activeDiscount: null,
             },
         };
     },
 
     methods: {
         addPriceListItem() {
-            if (!this.checkPriceListForm()) {
+            if (!this.$refs.addPriceListItemForm.validate()) {
                 return;
             }
 
             this.flightToAdd.prices.push(JSON.parse(JSON.stringify(this.priceItem)));
             this.priceItem.startDate = null;
             this.priceItem.endDate = null;
-            this.priceItem.price = 0;
-            this.priceItem.activeDiscount = 0;
+            this.priceItem.price = null;
+            this.priceItem.activeDiscount = null;
+
+            this.dialog = false;
         },
 
         addFlight() {
@@ -228,37 +332,14 @@ export default {
             return true;
         },
 
-        checkPriceListForm() {
-            if (this.priceItem.startDate == null) {
-                this.$toasted.info('You must choose start date for price list item.', {duration:5000});
-                return false;
-            } else if (this.priceItem.endDate == null) {
-                this.$toasted.info('You must choose end date for price list item.', {duration:5000});
-                return false;
-            } else if (this.priceItem.price === '') {
-                this.$toasted.info('You must enter price.', {duration:5000});
-                return false;
-            } else if (this.priceItem.price < 0) {
-                this.$toasted.info('Price must be above 0.', {duration:5000});
-                return false;
-            } else if (this.priceItem.activeDiscount === '') {
-                this.$toasted.info('You must enter discount.', {duration:5000});
-                return false;
-            } else if (this.priceItem.activeDiscount < 0 || this.priceItem.activeDiscount > 100) {
-                this.$toasted.info('Discount must be between 0 and 100.', {duration:5000});
-                return false;
-            } else if (this.isDateGreaterThan(this.priceItem.startDate, this.priceItem.endDate)) {
-                this.$toasted.info('Start date must be before end date.', {duration:5000});
-                return false;
-            } 
-
-            return true;
+        formattedDate(date) {
+            return date ? format(date, 'Do MMM YYYY') : '';
         },
 
         isDateGreaterThan(date1, date2) {
             const d1 = new Date(date1);
             const d2 = new Date(date2);
-            return d1.getTime() > d2.getTime();
+            return d1.getTime() >= d2.getTime();
         },
 
         isDestinationInTransits(destinationId) {
@@ -286,7 +367,7 @@ export default {
         let now = new Date();
         this.minDate = now.toISOString().substring(0,10);
         this.minDateTime = now.toISOString().substring(0, 16); 
-        this.flightToAdd.startDateTime = this.flightToAdd.endDateTime = this.minDateTime;
+        //this.flightToAdd.startDateTime = this.flightToAdd.endDateTime = this.minDateTime;
         this.priceItem.startDate = this.priceItem.endDate = this.minDate;
     }
 }

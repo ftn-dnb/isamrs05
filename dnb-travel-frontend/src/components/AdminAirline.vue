@@ -1,25 +1,11 @@
 <template>
     <div>
 
-        <ul>
-            <li><a href="#" @click="showComponent('AirlineSettings')">Airline settings</a></li>
-            <li><a href="#" @click="showComponent('FlightList')">Flight list</a></li>
-            <li><a href="#" @click="showComponent('AddFlight')">Add flight</a></li>
-            <li><a href="#" @click="showComponent('UserSettings')">Profile settings</a></li>
-        </ul>
-
-        <component :is="currentComponent"></component>
-
     </div>
 </template>
 
 <script>
 import axios from 'axios';
-
-import AirlineSettings from './AirlineSettings.vue';
-import FlightList from './FlightList.vue';
-import AddFlight from './AddFlight.vue';
-import UserSettings from './UserSettings.vue';
 
 export default{
     name:'AdminAirline',
@@ -27,22 +13,14 @@ export default{
     props: {},
 
     components: {
-        AirlineSettings,
-        FlightList,
-        AddFlight,
-        UserSettings,
     },
 
     data(){
         return{
-            currentComponent: 'AirlineSettings',
         };
     },
 
     methods: { 
-        showComponent(componentName) {
-            this.currentComponent = componentName;
-        },
     },
 
     mounted(){
