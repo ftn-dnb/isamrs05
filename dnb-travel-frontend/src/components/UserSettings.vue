@@ -1,36 +1,20 @@
 <template>
     <div>
-        <h3>Profile settings</h3>
+        <h3 class="subheading grey--text">Profile settings</h3>
         
-        <table>
-            <tr>
-                <td>Username</td>
-                <td><input type="text" v-model="user.username" disabled></td>
-            </tr>
-            <tr>
-                <td>First name</td>
-                <td><input type="text" v-model="user.firstName" /></td>
-            </tr>
-            <tr>
-                <td>Last name</td>
-                <td><input type="text" v-model="user.lastName" /></td>
-            </tr>
-            <tr>
-                <td>E-mail</td>
-                <td><input type="email" v-model="user.email" /></td>
-            </tr>
-            <tr>
-                <td>Password</td>
-                <td><input type="password" v-model="user.password" /></td>
-            </tr>
-            <tr>
-                <td>Repeat password</td>
-                <td><input type="password" v-model="user.repeatPassword" /></td>
-            </tr>
-            <tr>
-                <th colspan="2"><input type="button" value="Update" v-on:click="editProfile()" /></th>
-            </tr>
-        </table>
+        <v-form ref="userUpdateForm">
+            <v-text-field label="Username" v-model="user.username" prepend-icon="person" :rules="inputRules"></v-text-field>
+            <v-text-field label="First name" v-model="user.firstName" prepend-icon="person" :rules="inputRules"></v-text-field>
+            <v-text-field label="Last name" v-model="user.lastName" prepend-icon="person" :rules="inputRules"></v-text-field>
+            <v-text-field type="email" label="E-mail" v-model="user.email" prepend-icon="email" :rules="inputRules"></v-text-field>
+            <v-text-field type="password" label="Password" v-model="user.password" prepend-icon="lock" :rules="inputRules"></v-text-field>
+            <v-text-field type="password" label="Repeat password" v-model="user.repeatPassword"prepend-icon="lock" :rules="passwordInputRules"></v-text-field>
+            
+            <v-btn @click="editProfile">
+                <v-icon left>update</v-icon>
+                <span>Update profile</span>
+            </v-btn>
+        </v-form>
     </div>
 </template>
 
@@ -41,9 +25,17 @@ import axios from 'axios';
 export default {
     name: 'UserSettings',
     props: [],
+    components: {},
     
     data() {
         return {
+            inputRules: [
+                v => (v && v.length > 0) || 'Please fill out this field'
+            ],
+            passwordInputRules: [
+                v => (v && v.length > 0) || 'Please fill out this field',
+                v => (v && v === this.user.password) || 'Your passwords don\'t match'
+            ],
             user: {
                 id: null,
                 firstName: null,
@@ -57,7 +49,7 @@ export default {
 
     methods: {
         editProfile() {
-            if (!this.checkForm()) {
+            if (!this.$refs.userUpdateForm.validate()) {
                 return;
             }
 
@@ -68,36 +60,12 @@ export default {
 
                 axios.post('http://localhost:8080/auth/refresh', {}, header)
                 .then(response => localStorage.setItem('user-token', response.data.accessToken))
-                .catch(error => alert('Error while getting new token.'));
+                .catch(error => this.$toasted.error('Error while getting new token.', {duration:5000}));
                 
-                alert('Profile successfully updated.');
+                this.$toasted.success('Profile successfully updated.', {duration:5000});
             })
-            .catch(error => alert('Error while updating user profile.'));
+            .catch(error => this.$toasted.error('Error while updating user profile.', {duration:5000}));
         },
-
-        checkForm() {
-            if (!this.user.firstName) {
-                alert('Please enter first name.');
-                return false;
-            } else if (!this.user.lastName) {
-                alert('Please enter last name.');
-                return false;
-            } else if (!this.user.email) {
-                alert('Please enter e-mail.');
-                return false;
-            } else if (!this.user.password) {
-                alert('Please enter password.');
-                return false;
-            } else if (!this.user.repeatPassword) {
-                alert('Please enter password confirmation.');
-                return false;
-            } else if (this.user.password !== this.user.repeatPassword) {
-                alert('Two passwords are not the same.');
-                return false;
-            }
-
-            return true;
-        }
     },
 
     mounted() {
@@ -109,12 +77,11 @@ export default {
             this.user = response.data;
             this.user.password = '';
         })
-        .catch(error => alert('Error while loading user information.'));
+        .catch(error => this.$toasted.error('Error while loading user information.', {duration:5000}));
     }
 }
 </script>
 
 <style scoped>
-
 </style>
 

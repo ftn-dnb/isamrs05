@@ -1,40 +1,22 @@
 <template>
     <div>
-        <h3>Podešavanja profila aviokompanije {{ airline.name }}</h3>
+        
+        <h3 class="subheading grey--text">Airline company settings</h3>
 
-        <table>
-            <tr>
-                <td>Naziv:</td>
-                <td><input type="text" v-model="airline.name" /></td>
-            </tr>
-            <tr>
-                <td>Ulica:</td>
-                <td><input type="text" v-model="airline.address.streetName" /></td>
-            </tr>
-            <tr>
-                <td>Broj:</td>
-                <td><input type="number" v-model="airline.address.streetNumber" /></td>
-            </tr>
-            <tr>
-                <td>Grad:</td>
-                <td><input type="text" v-model="airline.address.city" /></td>
-            </tr>
-            <tr>
-                <td>Drzava:</td>
-                <td><input type="text" v-model="airline.address.country" /></td>
-            </tr>
-            <tr>
-                <td>Postanski broj:</td>
-                <td><input type="text" v-model="airline.address.postalCode" /></td>
-            </tr>
-            <tr>
-                <td>Promotivni opis</td>
-                <td><textarea v-model="airline.description"></textarea></td>
-            </tr>
-            <tr>
-                <th colspan="2"><input type="submit" value="Izmeni profil" @click="editInfo" /></th>
-            </tr>
-        </table>
+        <v-form ref="airlineUpdateForm">
+            <v-text-field label="Name" v-model="airline.name" prepend-icon="work" :rules="inputRules"></v-text-field>
+            <v-text-field label="Street" v-model="airline.address.streetName" prepend-icon="place" :rules="inputRules"></v-text-field>
+            <v-text-field label="Street number" v-model="airline.address.streetNumber" prepend-icon="place" :rules="inputRules"></v-text-field>
+            <v-text-field label="City" v-model="airline.address.city" prepend-icon="place" :rules="inputRules"></v-text-field>
+            <v-text-field label="Country" v-model="airline.address.country" prepend-icon="place" :rules="inputRules"></v-text-field>
+            <v-text-field label="Postal code" v-model="airline.address.postalCode" prepend-icon="place" :rules="inputRules"></v-text-field>
+            <v-textarea label="Description" v-model="airline.description" prepend-icon="description" :rules="inputRules"></v-textarea>
+
+            <v-btn @click="editInfo">
+                <v-icon left>update</v-icon>
+                <span>Update company</span>
+            </v-btn>
+        </v-form>
     </div>
 </template>
 
@@ -48,6 +30,9 @@ export default {
     
     data() {
         return {
+            inputRules: [
+                v => (v && v.length > 0) || 'Please fill out this field'
+            ],
             airline: {
                 id: null,
                 name: null,
@@ -66,46 +51,13 @@ export default {
 
     methods: {
         editInfo() {
-            if (!this.checkForm()) {
+            if (!this.$refs.airlineUpdateForm.validate()) {
                 return;
             }
 
             axios.put('http://localhost:8080/api/airlines', this.airline)
-            .then(response => {
-                if (response.data === '') {
-                    alert('Doslo je do greske prilikom izmene profila aviokompanije');
-                    return;
-                }
-
-                alert('Profil aviokompanije je uspesno izmenjen');
-            });
-        },
-
-        checkForm() {
-            if (!this.airline.name) {
-                alert('Morate uneti ime aviokompanije.');
-                return false;
-            } else if (!this.airline.description) {
-                alert('Morate uneti promotivni opis kompanije.');
-                return false;
-            } else if (!this.airline.address.streetName) {
-                alert('Morate uneti naziv ulice.');
-                return false;
-            } else if (!this.airline.address.streetNumber) {
-                alert('Morate uneti ulicni broj.');
-                return false;
-            } else if (!this.airline.address.city) {
-                alert('Morate uneti naziv grada.');
-                return false;
-            } else if (!this.airline.address.country) {
-                alert('Morate uneti naziv drzave.');
-                return false;
-            } else if (!this.airline.address.postalCode) {
-                alert('Morate uneti postanski broj grada.');
-                return false;
-            }
-
-            return true;
+            .then(response => this.$toasted.success('Profile successfully updated.', {duration:5000}))
+            .catch(error => this.$toasted.error('Error while updating airline data.', {duration:5000}));
         },
     },
 

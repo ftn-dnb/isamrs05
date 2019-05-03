@@ -1,6 +1,7 @@
 package ftn.dnb.dnbtravel.controller;
 
 import ftn.dnb.dnbtravel.dto.UserDTO;
+import ftn.dnb.dnbtravel.messaging.Producer;
 import ftn.dnb.dnbtravel.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -9,6 +10,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
+import java.nio.charset.StandardCharsets;
 import java.security.Principal;
 import java.util.List;
 
@@ -19,12 +23,12 @@ public class UserController {
 
     private UserService userService;
 
-    //private Producer producer;
+    private Producer producer;
 
     @Autowired
-    public UserController(UserService userService/*, Producer producer*/) {
+    public UserController(UserService userService, Producer producer) {
         this.userService = userService;
-        //this.producer = producer;
+        this.producer = producer;
     }
 
 
@@ -34,6 +38,7 @@ public class UserController {
     }
 
     @GetMapping(path = "/{id}")
+    @PreAuthorize("hasRole('SYSTEM_ADMIN') or hasRole('AIRLINE_ADMIN') or hasRole('RAC_ADMIN') or hasRole('HOTEL_ADMIN') or hasRole('USER')")
     public ResponseEntity<UserDTO> getUserById(@PathVariable("id") Long id) {
         UserDTO user = userService.getUserById(id);
         return new ResponseEntity<>(user, (user == null) ? HttpStatus.NOT_FOUND : HttpStatus.OK);
@@ -77,12 +82,49 @@ public class UserController {
 
     }
 
-    @PostMapping(value = "/addFriend")
+    @GetMapping(value = "/find/{firstLastName}")
     @PreAuthorize("hasRole('USER')")
-    public ResponseEntity<?> requestFriendship(Principal user, @RequestBody String friendsUsername) {
+    public ResponseEntity<List<UserDTO>> findUsersByName(@PathVariable String firstLastName) throws UnsupportedEncodingException {
+        firstLastName = URLDecoder.decode(firstLastName, StandardCharsets.UTF_8.toString());
+        return new ResponseEntity<>(userService.findUsersByName(firstLastName), HttpStatus.OK);
+    }
+
+    @PostMapping(value = "/friends/addFriend")
+    @PreAuthorize("hasRole('USER')")
+    public ResponseEntity<UserDTO> requestFriendship(Principal user, @RequestBody String friendsUsername) {
         if (userService.addFriend(user.getName(), friendsUsername)) {
-            //producer.sendMessageTo(friendsUsername, user.getName());
-            return new ResponseEntity<>(HttpStatus.OK);
+            producer.sendMessageTo(friendsUsername, user.getName());
+            return new ResponseEntity<>(userService.getUserByUsername(user.getName()), HttpStatus.OK);
+        }
+
+        return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+    }
+
+    @PostMapping(value = "/friends/removeFriend")
+    @PreAuthorize("hasRole('USER')")
+    public ResponseEntity<UserDTO> removeFriend(Principal user, @RequestBody String friendsUsername) {
+        if (userService.removeFriend(user.getName(), friendsUsername)) {
+            return new ResponseEntity<>(userService.getUserByUsername(user.getName()), HttpStatus.OK);
+        }
+
+        return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+    }
+
+    @PostMapping(value = "/friends/acceptFriend")
+    @PreAuthorize("hasRole('USER')")
+    public ResponseEntity<UserDTO> acceptFriend(Principal user, @RequestBody String friendsUsername) {
+        if (userService.acceptFriend(user.getName(), friendsUsername)) {
+            return new ResponseEntity<>(userService.getUserByUsername(user.getName()), HttpStatus.OK);
+        }
+
+        return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+    }
+
+    @PostMapping(value = "/friends/declineFriend")
+    @PreAuthorize("hasRole('USER')")
+    public ResponseEntity<UserDTO> declineFriend(Principal user, @RequestBody String friendsUsername) {
+        if (userService.declineFriend(user.getName(), friendsUsername)) {
+            return new ResponseEntity<>(userService.getUserByUsername(user.getName()), HttpStatus.OK);
         }
 
         return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
