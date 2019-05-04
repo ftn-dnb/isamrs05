@@ -35,6 +35,6 @@ public class DestinationController {
     @PreAuthorize("hasRole('SYSTEM_ADMIN')")
     public ResponseEntity<DestinationDTO> addDestination(@RequestBody DestinationDTO destinationToAdd) {
         DestinationDTO destination = destinationService.addDestination(destinationToAdd);
-        return new ResponseEntity<>(destination, (destination == null) ? HttpStatus.NOT_FOUND : HttpStatus.OK);
+        return new ResponseEntity<>(destination, (destination == null) ? HttpStatus.BAD_REQUEST : HttpStatus.OK);
     }
 }

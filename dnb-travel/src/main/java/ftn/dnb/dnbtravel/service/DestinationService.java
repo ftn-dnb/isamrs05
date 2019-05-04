@@ -23,7 +23,11 @@ public class DestinationService {
     }
 
     public DestinationDTO addDestination(DestinationDTO destination) {
-        Destination dest = destinationRepository.save(new Destination(destination));
-        return new DestinationDTO(dest);
+        try {
+            Destination dest = destinationRepository.save(new Destination(destination));
+            return new DestinationDTO(dest);
+        } catch (Exception e) {
+            return null;
+        }
     }
 }
