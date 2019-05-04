@@ -1,8 +1,6 @@
 <template>
     <div>
-        ADMIN RENT A CAR
-    <rent-a-car-company-settings/>
-    <user-settings/>
+        
     </div>
 </template>
 

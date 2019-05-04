@@ -10,9 +10,9 @@
 			</v-toolbar-title>
 		</v-toolbar>
 
-		<v-navigation-drawer v-model="drawer" app class="secondary">
-			<v-list>
-				<v-list-tile v-for="item in airlineAdminDrawer" :key="item.text" router :to="item.route">
+		<v-navigation-drawer v-model="drawer" app class="secondary" >
+			<v-list  >
+				<v-list-tile v-for="item in lista" :key="item.text" router :to="item.route">
 					<v-list-tile-action>
 					    <v-icon dark>{{item.icon}}</v-icon> 
 					</v-list-tile-action>
@@ -27,6 +27,8 @@
 </template>
 
 <script>
+import {bus} from '../main';
+
 export default {
 	name: 'Navbar',
 
@@ -35,21 +37,52 @@ export default {
 
 	data() {
 		return {
+			role: null,
 			drawer: false,
-
+			lista: null,
 			airlineAdminDrawer: [
 				{ icon: 'flight_takeoff', text: 'Flights', route: '/flights' },
 				{ icon: 'airplanemode_active', text: 'Add flight', route: '/add-flight' },
 				{ icon: 'work_outline', text: 'Company settings', route: '/airline-settings' },
 				{ icon: 'perm_identity', text: 'Profile settings', route: '/user-settings' },
 			],
+
+			rentACarAdminDrawer: [
+			{icon: 'work_outline', text: 'Company settings', route: '/rent-a-car-settings'},
+			{icon: 'perm_identity', text: 'Profile settings', route: '/user-settings'},
+			],
+			
 		}
 	},
+	created(){
+		bus.$on('roleChanged', (data) =>{
+			if(data === 'ROLE_RAC_ADMIN'){
+				this.lista = this.rentACarAdminDrawer;
+			}
+			else if(data === 'ROLE_AIRLINE_ADMIN'){
+				this.lista = this.airlineAdminDrawer;
+			}
+			else if(data ==='ROLE_SYSTEM_ADMIN'){
+				//dodati
+			}
+			else if(data === 'ROLE_HOTEL_ADMIN'){
+				//dodati
+			}
+			else if(data === 'ROLE_USER'){
+				//dodati
+			}
+			else{
+				//default
+			}
 
+		})
+	},
 	methods: {
+
 	},
 
 	mounted() {
+		
 	}
 }	
 </script>

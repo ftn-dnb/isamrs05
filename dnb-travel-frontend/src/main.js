@@ -12,6 +12,7 @@ Vue.use(VueKonva)
 Vue.use(Toasted)
 Vue.use(Datetime)
 
+export const bus = new Vue();
 
 new Vue({
   router,

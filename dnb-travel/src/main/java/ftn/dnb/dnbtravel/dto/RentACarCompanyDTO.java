@@ -1,5 +1,6 @@
 package ftn.dnb.dnbtravel.dto;
 
+import ftn.dnb.dnbtravel.model.Address;
 import ftn.dnb.dnbtravel.model.RentACarCompany;
 
 public class RentACarCompanyDTO {
@@ -12,7 +13,7 @@ public class RentACarCompanyDTO {
         super();
     }
 
-    public RentACarCompanyDTO(long id, String name, String description) {
+    public RentACarCompanyDTO(long id, String name, String description,Address address) {
         this.id = id;
         this.name = name;
         this.description = description;
