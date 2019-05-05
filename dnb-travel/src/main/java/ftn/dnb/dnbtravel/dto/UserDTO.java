@@ -2,6 +2,8 @@ package ftn.dnb.dnbtravel.dto;
 
 import ftn.dnb.dnbtravel.model.User;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 public class UserDTO {
@@ -15,6 +17,7 @@ public class UserDTO {
     private String repeatPassword;
     private String username;
     private Long role;
+    private List<FriendshipDTO> friendships;
 
     public UserDTO() {
     }
@@ -38,6 +41,9 @@ public class UserDTO {
         this.password = user.getPassword();
         this.username = user.getUsername();
         this.role = new Long(convertRoleToInt(user.getAuthorityList().get(0).getAuthority()));
+
+        this.friendships = new ArrayList<>();
+        user.getFriendships().stream().forEach(f -> friendships.add(new FriendshipDTO(f)));
     }
 
     public Long getId() {
@@ -102,6 +108,14 @@ public class UserDTO {
 
     public void setRole(Long role) {
         this.role = role;
+    }
+
+    public List<FriendshipDTO> getFriendships() {
+        return friendships;
+    }
+
+    public void setFriendships(List<FriendshipDTO> friendships) {
+        this.friendships = friendships;
     }
 
     private int convertRoleToInt(String s){

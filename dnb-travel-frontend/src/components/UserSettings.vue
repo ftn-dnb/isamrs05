@@ -1,44 +1,41 @@
 <template>
     <div>
-        <h3>Podešavanja profila</h3>
+        <h3 class="subheading grey--text">Profile settings</h3>
         
-        <table>
-            <tr>
-                <td>Ime:</td>
-                <td><input type="text" v-model="user.firstName" requeired /></td>
-            </tr>
-            <tr>
-                <td>Prezime:</td>
-                <td><input type="text" v-model="user.lastName" /></td>
-            </tr>
-            <tr>
-                <td>E-mail</td>
-                <td><input type="email" v-model="user.email" /></td>
-            </tr>
-            <tr>
-                <td>Sifra</td>
-                <td><input type="password" v-model="user.password" /></td>
-            </tr>
-            <tr>
-                <td>Ponovite sifru</td>
-                <td><input type="password" v-model="user.repeatPassword" /></td>
-            </tr>
-            <tr>
-                <th colspan="2"><input type="button" value="Izmeni profil" v-on:click="editProfile()" /></th>
-            </tr>
-        </table>
+        <v-form ref="userUpdateForm">
+            <v-text-field label="Username" v-model="user.username" prepend-icon="person" :rules="inputRules"></v-text-field>
+            <v-text-field label="First name" v-model="user.firstName" prepend-icon="person" :rules="inputRules"></v-text-field>
+            <v-text-field label="Last name" v-model="user.lastName" prepend-icon="person" :rules="inputRules"></v-text-field>
+            <v-text-field type="email" label="E-mail" v-model="user.email" prepend-icon="email" :rules="inputRules"></v-text-field>
+            <v-text-field type="password" label="Password" v-model="user.password" prepend-icon="lock" :rules="inputRules"></v-text-field>
+            <v-text-field type="password" label="Repeat password" v-model="user.repeatPassword"prepend-icon="lock" :rules="passwordInputRules"></v-text-field>
+            
+            <v-btn @click="editProfile">
+                <v-icon left>update</v-icon>
+                <span>Update profile</span>
+            </v-btn>
+        </v-form>
     </div>
 </template>
 
 <script>
+
 import axios from 'axios';
 
 export default {
     name: 'UserSettings',
     props: [],
+    components: {},
     
     data() {
         return {
+            inputRules: [
+                v => (v && v.length > 0) || 'Please fill out this field'
+            ],
+            passwordInputRules: [
+                v => (v && v.length > 0) || 'Please fill out this field',
+                v => (v && v === this.user.password) || 'Your passwords don\'t match'
+            ],
             user: {
                 id: null,
                 firstName: null,
@@ -52,56 +49,39 @@ export default {
 
     methods: {
         editProfile() {
-            if (!this.checkForm()) {
+            if (!this.$refs.userUpdateForm.validate()) {
                 return;
             }
 
-            axios.put('http://localhost:8080/api/users', this.user)
-            .then(response => {
-                if (response.data === '') {
-                    alert('Error while trying to change user.');
-                    return;
-                }
+            const header = { headers: {"Authorization" : `Bearer ${localStorage.getItem('user-token')}`} };
+            
+            axios.put('http://localhost:8080/api/users', this.user, header)
+            .then(response => { 
 
-                alert('Hotel profile successfully changed.');
-            });
+                axios.post('http://localhost:8080/auth/refresh', {}, header)
+                .then(response => localStorage.setItem('user-token', response.data.accessToken))
+                .catch(error => this.$toasted.error('Error while getting new token.', {duration:5000}));
+                
+                this.$toasted.success('Profile successfully updated.', {duration:5000});
+            })
+            .catch(error => this.$toasted.error('Error while updating user profile.', {duration:5000}));
         },
-
-        checkForm() {
-            if (!this.user.firstName) {
-                alert('Niste uneli ime.');
-                return false;
-            } else if (!this.user.lastName) {
-                alert('Niste uneli prezime.');
-                return false;
-            } else if (!this.user.email) {
-                alert('Niste uneli e-mail.');
-                return false;
-            } else if (!this.user.password) {
-                alert('Niste uneli sifru.');
-                return false;
-            } else if (!this.user.repeatPassword) {
-                alert('Niste uneli proveru sifre.');
-                return false;
-            } else if (this.user.password !== this.user.repeatPassword) {
-                alert('Sifre koje ste uneli se ne podudaraju.');
-                return false;
-            }
-
-            return true;
-        }
     },
 
     mounted() {
-        // @TODO: pokupiti podatke korisnika preko cookie-a za ulogovanog korisnika
-        // Zasad uzima predefinisanog korisnika 1 iz baze
-        axios.get('http://localhost:8080/api/users/1')
-        .then(response => this.user = response.data);
+        const username = localStorage.getItem('username');
+        const header = { headers: {"Authorization" : `Bearer ${localStorage.getItem('user-token')}`} };
+        
+        axios.get(`http://localhost:8080/api/users/info/${username}`, header)
+        .then(response => {
+            this.user = response.data;
+            this.user.password = '';
+        })
+        .catch(error => this.$toasted.error('Error while loading user information.', {duration:5000}));
     }
 }
 </script>
 
 <style scoped>
-
 </style>
 

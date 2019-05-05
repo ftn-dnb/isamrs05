@@ -13,6 +13,8 @@ import AirlineList from './components/AirlineList.vue';
 import AirlineDetailedView from './components/AirlineDetailedView.vue';
 import AddFlight from './components/AddFlight.vue';
 import AirlineSettings from './components/AirlineSettings.vue';
+import LoggedInStartPage from './components/LoggedInStartPage.vue';
+import UserSettings from './components/UserSettings.vue';
 
 Vue.use(Router)
 
@@ -22,6 +24,11 @@ export default new Router({
       path: '/',
       name: 'StartPage',
       component: StartPage
+    },
+    {
+        path: '/home',
+        name: 'LoggedInStartPage',
+        component: LoggedInStartPage
     },
     {
     	path:'/adminRentACar',
@@ -126,14 +133,19 @@ export default new Router({
         component: AirlineDetailedView
     },
     {
-        path: '/adminAirline/addFlight',
+        path: '/add-flight',
         name: 'AddFlight',
         component: AddFlight
     },
     {
-        path: '/adminAirline/airlineSettings',
+        path: '/airline-settings',
         name: 'AirlineSettings',
         component: AirlineSettings
+    },
+    {
+        path: '/user-settings',
+        name: 'UserSettings',
+        component: UserSettings
     },
   ]
 })

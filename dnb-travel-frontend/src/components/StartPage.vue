@@ -6,6 +6,7 @@
             <li><router-link :to="{ name: 'FlightList' }">Flights list</router-link></li>
             <li><router-link :to="{ name: 'AirlineList' }">Airlines list</router-link></li>
         </ul>
+
     </div>
 </template>
 
