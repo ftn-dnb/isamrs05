@@ -13,6 +13,8 @@ import io.jsonwebtoken.Jwt;
 import io.jsonwebtoken.JwtParser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.security.oauth2.resource.OAuth2ResourceServerProperties;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -53,13 +55,10 @@ public class UserService {
     }
 
     public UserDTO addUser(UserDTO user) {
-
-
         User userProba = new User(user);
         userProba.setAuthorityList(new ArrayList<Authority>());
         userProba.getAuthorityList().add(authorityRepository.findOneById(user.getRole()));
         User savedUser = userRepository.save(userProba);
-
 
         //List<Authority> lista = authorityRepository.findAll();
 
@@ -106,6 +105,21 @@ public class UserService {
 
         return new UserDTO(userR);
     }
+
+
+    public ResponseEntity<?> checkSameData(String username, String email){
+        // same username in database
+        User userSameName = userRepository.findByUsername(username);
+        if(userSameName != null){
+            return new ResponseEntity<>("That username is already in use", HttpStatus.CONFLICT);
+        }
+
+        // same email in database
+        User userSameMail = userRepository.findByEmail(email);
+        if(userSameMail != null){
+            return new ResponseEntity<>("That email address is already in use", HttpStatus.CONFLICT);
+        }
+        return  null;
 
     public List<UserDTO> findUsersByName(String firstLastName) {
         String name = firstLastName.toLowerCase().replaceAll("\\s+", "");
