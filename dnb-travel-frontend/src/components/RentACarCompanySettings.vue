@@ -1,21 +1,14 @@
 <template>
     <div>
-        <h3> Settings for Rent-a-car company: {{rentACarCompany.name}} </h3>
-        <table>
-            <tr>
-                <td>Company name:</td>
-                <td><input type="text" v-model="rentACarCompany.name" /></td>
-            </tr>
-            <tr>
-                <td>
-                    Company description:
-                </td>
-                <td><textarea v-model="rentACarCompany.description"></textarea></td>
-            </tr>
-            <tr>
-                <th colspan="2"><input type="submit" value="Change profile" @click="editInfo" /></th>
-            </tr>
-        </table>
+        <h3 class="subheading grey--text"> Rent a car company settings</h3>
+        <v-form ref="companyUpdateForm">
+            <v-text-field label = "Name" v-model="rentACarCompany.name" prepend-icon="work" :rules="inputRules"></v-text-field>
+            <v-textarea label = "Description" v-model="rentACarCompany.description" prepend-icon="info" :rules="inputRules"></v-textarea>
+            <v-btn @click="editInfo">
+                <v-icon left>done</v-icon>
+                <span>Update company</span>
+            </v-btn>
+        </v-form>
     </div>
 </template>
 
@@ -29,6 +22,9 @@ export default{
 
     data(){
         return {
+            inputRules:[
+                v =>(v && v.length > 0) || 'Please fill out this field'
+            ],
             rentACarCompany: {
                 id: null,
                 name: null,
@@ -39,56 +35,24 @@ export default{
 
     methods:{
         editInfo(){
-            if(!this.checkForm()){
-                return;
-            }
-
-            axios.put('http://localhost:8080/api/rentACarCompanies/1', this.rentACarCompany)
-            .then(response => {
-                if(response.data === ''){
-                    alert('Error: Message');
-                    return
-                }
-
-                alert('Successful update');
-            });
+            const header = {headers : {"Authorization": `Bearer ${localStorage.getItem('user-token')} `} };
+            axios.put('http://localhost:8080/api/rentACarCompanies', this.rentACarCompany, header)
+            .then(response => this.$toasted.success('Company successfully updated', {duration:5000}))
+            .catch(error => this.$toasted.error('Error while updating compnay profile'));
         },
-
-        checkForm(){
-            if(!this.rentACarCompany.name){
-                alert('Please enter company name');
-                return false;
-            } else if(!this.rentACarCompany.description){
-                alert('Please enter company description');
-                return false;
-            }
-
-            return true; 
-        }
     },
 
     mounted(){
-        
-        
-        //axios.get("http://localhost:8080/api/users/whoami",{ headers: {"Authorization" : `Bearer ${localStorage.getItem('user-token')}`} }).then(response => localStorage.setItem('role', response.data));
-                              //alert(response.data);})
 
         if(localStorage.getItem('role') === 'ROLE_RAC_ADMIN'){
-        axios.get("http://localhost:8080/api/rentACarCompanies/1",{ headers: {"Authorization" : `Bearer ${localStorage.getItem('user-token')}`} }).then(response => this.rentACarCompany = response.data);
+        axios.get("http://localhost:8080/api/rentACarCompanies/1",{ headers: {"Authorization" : `Bearer ${localStorage.getItem('user-token')}`} })
+        .then(response => this.rentACarCompany = response.data);
         console.log(localStorage.getItem('user-token'));
         }
         else{
             this.$router.push({path : '/'});
             alert('Invalid user');
         }
-        //axios.post("http://localhost:8080/api/rentACarCompanies/whoami",{ headers: {"Authorization" : `Bearer ${localStorage.getItem('user-token')}`} }).then(console.log('asdf'));
-        //axios({
-        //   method:'get',
-        //    url:'http://localhost:8080/api/rentACarCompanies/1',
-         //   responseType:'application/json',
-         //   headers:{"authorization" : `Bearer ${localStorage.getItem('user-token')}`}
-          //  })
-          //  .then(response => this.rentACarCompany = response.data);
 
     }
 

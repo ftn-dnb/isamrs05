@@ -15,7 +15,7 @@
 
 <script>
 import axios from 'axios';
-
+import {bus} from '../main';
 
 export default{
     name:'Login',
@@ -59,6 +59,7 @@ export default{
                 localStorage.setItem('user-token',response.data.accessToken);
                 localStorage.setItem('role', response.data.role);
                 localStorage.setItem('username', this.user.username);
+                bus.$emit('roleChanged', localStorage.getItem('role'));
 
                 switch(response.data.role){
                 	case 'ROLE_USER': this.$router.push({path : '/home'}); break;
