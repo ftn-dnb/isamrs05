@@ -57,7 +57,7 @@ public class UserService {
     public UserDTO addUser(UserDTO user) {
         User userProba = new User(user);
         userProba.setAuthorityList(new ArrayList<Authority>());
-        userProba.getAuthorityList().add(authorityRepository.findOneById(user.getRole()));
+        userProba.getAuthorityList().add(authorityRepository.findOneById(user.convertRoleToLong()));
         User savedUser = userRepository.save(userProba);
 
         //List<Authority> lista = authorityRepository.findAll();
@@ -107,19 +107,20 @@ public class UserService {
     }
 
 
-    public ResponseEntity<?> checkSameData(String username, String email){
+    public ResponseEntity<?> checkSameData(String username, String email) {
         // same username in database
         User userSameName = userRepository.findByUsername(username);
-        if(userSameName != null){
+        if (userSameName != null) {
             return new ResponseEntity<>("That username is already in use", HttpStatus.CONFLICT);
         }
 
         // same email in database
         User userSameMail = userRepository.findByEmail(email);
-        if(userSameMail != null){
+        if (userSameMail != null) {
             return new ResponseEntity<>("That email address is already in use", HttpStatus.CONFLICT);
         }
-        return  null;
+        return null;
+    }
 
     public List<UserDTO> findUsersByName(String firstLastName) {
         String name = firstLastName.toLowerCase().replaceAll("\\s+", "");
@@ -127,7 +128,7 @@ public class UserService {
         List<UserDTO> result = users.stream().filter(u -> {
             String userName = u.getFirstName() + u.getLastName();
             userName = userName.toLowerCase();
-            return userName.toLowerCase().equals(name) && u.getRole() == 1;
+            return userName.toLowerCase().equals(name) && u.convertRoleToLong() == 1;
         }).collect(Collectors.toList());
 
         return result;
