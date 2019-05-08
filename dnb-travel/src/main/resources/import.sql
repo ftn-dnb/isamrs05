@@ -40,9 +40,9 @@ INSERT INTO `address` VALUES(32, 'Belgrade', 'Serbia', 11000, 'Bulevar', 213);
 INSERT INTO `address` VALUES(33, 'Athens', 'Greece', 5433, 'Alfa', 24);
 
 -- Airlines
-INSERT INTO `airline` VALUES(22, 'Best airline company in US', 'United', 31);
-INSERT INTO `airline` VALUES(23, 'Najbolja aviokompanija', 'AirSerbia', 32);
-INSERT INTO `airline` VALUES(24, 'Best company in Greece', 'AirGreece', 33);
+INSERT INTO `airline` VALUES(22, 'Best airline company in US', 'United', 4, 31);
+INSERT INTO `airline` VALUES(23, 'Najbolja aviokompanija', 'AirSerbia', 3, 32);
+INSERT INTO `airline` VALUES(24, 'Best company in Greece', 'AirGreece', 5, 33);
 
 -- Destinations where airlines work
 INSERT INTO `airline_destinations` VALUES(22, 11);
@@ -65,11 +65,20 @@ INSERT INTO `flight_prices` VALUES (50, 60);
 INSERT INTO `flight_prices` VALUES (50, 61);
 
 -- Flight reservation
-INSERT INTO `flight_reservation` VALUES (71, 1500, 0, '2017-12-01 00:00:00', 5, 6);
-INSERT INTO `flight_reservation` VALUES (72, 1500, 0, '2017-12-01 01:00:00', 6, 7);
+INSERT INTO `flight_reservation` VALUES (71, 1000, 0, '2019-01-01 00:00:00', 5, 6);
+INSERT INTO `flight_reservation` VALUES (72, 1000, 0, '2019-01-04 01:00:00', 6, 7);
+INSERT INTO `flight_reservation` VALUES (73, 1000, 0, '2019-02-01 00:00:00', 5, 7);
+INSERT INTO `flight_reservation` VALUES (74, 1400, 0, '2019-03-01 01:00:00', 6, 8);
+INSERT INTO `flight_reservation` VALUES (75, 1600, 0, '2019-03-01 00:00:00', 5, 9);
+INSERT INTO `flight_reservation` VALUES (76, 1500, 0, '2019-05-02 01:00:00', 1, 1);
 
 -- Flight reservations
 INSERT INTO `flight_reservations` VALUES (50, 71);
 INSERT INTO `flight_reservations` VALUES (50, 72);
+INSERT INTO `flight_reservations` VALUES (50, 73);
+INSERT INTO `flight_reservations` VALUES (50, 74);
+INSERT INTO `flight_reservations` VALUES (50, 75);
+INSERT INTO `flight_reservations` VALUES (50, 76);
+
 
 INSERT INTO `rentacar_company` (`id`,`name`,`description`) VALUES (1,'Pegaz','acab')

@@ -15,6 +15,7 @@ public class AirlineDTO {
     private String name;
     private Address address;
     private String description;
+    private float rating;
     private List<DestinationDTO> destinations;
     private List<FlightDTO> flights;
 
@@ -22,12 +23,12 @@ public class AirlineDTO {
     }
 
     public AirlineDTO(long id, String name, Address address, String description, List<Destination> destinations,
-                      List<Flight> flights) {
+                      List<Flight> flights, float rating) {
         this.id = id;
         this.name = name;
         this.address = address;
         this.description = description;
-
+        this.rating = rating;
     }
 
     public AirlineDTO(Airline airline) {
@@ -37,6 +38,7 @@ public class AirlineDTO {
         this.description = airline.getDescription();
         this.destinations = new ArrayList<DestinationDTO>();
         this.flights = new ArrayList<FlightDTO>();
+        this.rating = airline.getRating();
 
         airline.getDestinations().stream().forEach(dest -> this.destinations.add(new DestinationDTO(dest)));
         airline.getFlights().stream().forEach(flight -> this.flights.add(new FlightDTO(flight)));
@@ -88,6 +90,14 @@ public class AirlineDTO {
 
     public void setFlights(List<FlightDTO> flights) {
         this.flights = flights;
+    }
+
+    public float getRating() {
+        return rating;
+    }
+
+    public void setRating(float rating) {
+        this.rating = rating;
     }
 
     @Override

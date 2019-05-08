@@ -1,17 +1,14 @@
 package ftn.dnb.dnbtravel.service;
 
-import ftn.dnb.dnbtravel.dto.AirlineDTO;
-import ftn.dnb.dnbtravel.dto.AirlinePriceListItemDTO;
-import ftn.dnb.dnbtravel.dto.FlightDTO;
+import ftn.dnb.dnbtravel.dto.*;
 import ftn.dnb.dnbtravel.model.*;
 import ftn.dnb.dnbtravel.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 @Service
 public class AirlineService {
@@ -95,5 +92,66 @@ public class AirlineService {
         List<FlightDTO> dtoFlights = new ArrayList<FlightDTO>();
         flights.stream().forEach(flight -> dtoFlights.add(new FlightDTO(flight)));
         return dtoFlights;
+    }
+
+    public AirlineStatsDTO getStatsFroCompany(AirlineStatsFilterDTO filter) {
+        Airline airline = airlineRepository.findOneById(filter.getAirlineId());
+
+        if (airline == null)
+            return null;
+
+        AirlineStatsDTO stats = new AirlineStatsDTO();
+        LinkedHashMap<String, Float> income = new LinkedHashMap<>();
+
+        if (filter.getDateTo() == null)
+            filter.setDateTo(new Date());
+
+        if (filter.getDateFrom() == null)
+            income = this.filterReservationsToDate(airline, filter.getDateTo());
+        else
+            income = this.filterReservationsFromToDate(airline, filter.getDateFrom(), filter.getDateTo());
+
+        income.forEach((key, value) -> stats.getIncome().add(new IncomeDTO(key, value)));
+
+        return stats;
+    }
+
+    private LinkedHashMap filterReservationsToDate(Airline airline, Date to) {
+        LinkedHashMap<String, Float> income = new LinkedHashMap<>();
+
+        DateFormat formatter = new SimpleDateFormat("dd.MM.yyyy.");
+
+        for (Flight flight : airline.getFlights()) {
+            for (FlightReservation reservation : flight.getReservations()) {
+                if (reservation.getReservationDate().before(to)) {
+                    String dateKey = formatter.format(reservation.getReservationDate());
+                    if (income.containsKey(dateKey))
+                        income.put(dateKey, income.get(dateKey) + reservation.getPrice());
+                    else
+                        income.put(dateKey, reservation.getPrice());
+                }
+            }
+        }
+
+        return income;
+    }
+
+    private LinkedHashMap filterReservationsFromToDate(Airline airline, Date from, Date to) {
+        LinkedHashMap<String, Float> income = new LinkedHashMap<>();
+        DateFormat formatter = new SimpleDateFormat("dd.MM.yyyy.");
+
+        for (Flight flight : airline.getFlights()) {
+            for (FlightReservation reservation : flight.getReservations()) {
+                if (reservation.getReservationDate().after(from) && reservation.getReservationDate().before(to)) {
+                    String dateKey = formatter.format(reservation.getReservationDate());
+                    if (income.containsKey(dateKey))
+                        income.put(dateKey, income.get(dateKey) + reservation.getPrice());
+                    else
+                        income.put(dateKey, reservation.getPrice());
+                }
+            }
+        }
+
+        return income;
     }
 }

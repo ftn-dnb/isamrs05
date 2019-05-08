@@ -30,7 +30,24 @@
             </v-tab-item>
 
             <v-tab-item>
-                bb
+                <v-menu>
+                    <v-text-field label="From" slot="activator" prepend-icon="event" v-model="filter.dateFrom"></v-text-field>
+                    <v-date-picker v-model="filter.dateFrom"></v-date-picker>
+                </v-menu>
+                <v-menu>
+                    <v-text-field label="To" slot="activator" prepend-icon="event" v-model="filter.dateTo"></v-text-field>
+                    <v-date-picker v-model="filter.dateTo"></v-date-picker>
+                </v-menu>
+
+                <v-btn @click="showIncome" small>
+                    <v-icon left>search</v-icon>
+                    <span>Search</span>
+                </v-btn>
+
+                <GChart
+                    type="LineChart"
+                    :data="chartData"
+                />
             </v-tab-item>
 
             <v-tab-item>
@@ -43,6 +60,7 @@
 <script>
 
 import axios from 'axios';
+import GChart from 'vue-google-charts';
 
 export default {
     name: 'AirlineStats',
@@ -51,7 +69,13 @@ export default {
     
     data() {
         return {
+            filter: {
+                airlineId: null,
+                dateFrom: null,
+                dateTo: null,
+            },
             airline: {
+                id: null,
                 rating: 0,
                 ratingInt: 0,
                 flights: [],
@@ -63,10 +87,27 @@ export default {
                 { text: 'Return date time', value: 'endDateTime' },
                 { text: 'Rating', value: 'rating' },
             ],
+            chartData: [],
         };
     },
 
     methods: {
+        showIncome() {
+            const header = {headers:{"Authorization":`Bearer ${localStorage.getItem('user-token')}`} };
+            // @TODO promeniti da uzmia ID kompanije od admina
+            this.filter.airlineId = 22;
+
+            axios.post('http://localhost:8080/api/airlines/stats', this.filter, header)
+            .then(response => {
+                this.chartData = [['Date', 'Income']];
+
+                for (let inc of response.data.income) {
+                    console.log(inc);
+                    this.chartData.push([inc.date, inc.income]);
+                }
+            });
+
+        },
     },
 
     mounted() {
@@ -78,6 +119,8 @@ export default {
             this.airline = response.data;
             this.airline.ratingInt = parseInt(this.airline.rating);
         });
+
+        this.showIncome();
     }
 }
 </script>
