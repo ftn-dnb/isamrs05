@@ -70,7 +70,7 @@ public class UserController {
         if (u == null) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
-        return new ResponseEntity<>(u.convertRoleToString(u.getRole()), HttpStatus.OK);
+        return new ResponseEntity<>(u.convertRoleToString(u.convertRoleToLong()), HttpStatus.OK);
     }
 
     @GetMapping(path = "/info/{username}")

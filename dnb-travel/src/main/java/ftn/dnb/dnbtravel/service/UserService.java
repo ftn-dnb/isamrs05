@@ -57,7 +57,7 @@ public class UserService {
     public UserDTO addUser(UserDTO user) {
         User userProba = new User(user);
         userProba.setAuthorityList(new ArrayList<Authority>());
-        userProba.getAuthorityList().add(authorityRepository.findOneById(user.getRole()));
+        userProba.getAuthorityList().add(authorityRepository.findOneById(user.convertRoleToLong()));
         User savedUser = userRepository.save(userProba);
 
         //List<Authority> lista = authorityRepository.findAll();
@@ -121,13 +121,14 @@ public class UserService {
         }
         return null;
     }
+
     public List<UserDTO> findUsersByName(String firstLastName) {
         String name = firstLastName.toLowerCase().replaceAll("\\s+", "");
         List<UserDTO> users = getAllUsers();
         List<UserDTO> result = users.stream().filter(u -> {
             String userName = u.getFirstName() + u.getLastName();
             userName = userName.toLowerCase();
-            return userName.toLowerCase().equals(name) && u.getRole() == 1;
+            return userName.toLowerCase().equals(name) && u.convertRoleToLong() == 1;
         }).collect(Collectors.toList());
 
         return result;
