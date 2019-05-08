@@ -1,29 +1,18 @@
 <template>
     <div>
-        <table>
-            <tr>
-                <td>Username: </td><td><input type="text" placeholder="username" v-model="user.username" /></td>
-            </tr>
-            <tr>
-                <td>Password: </td><td><input type="text" placeholder="password" v-model="user.password"/></td>
-            </tr>
-            <tr>
-                <td>Repeat Password: </td><td><input type="text" placeholder="password" v-model="user.repeatPassword"/></td>
-            </tr>  
-            <tr>
-                <td>First Name: </td><td><input type="text" placeholder="first_name" v-model="user.firstName"/></td>
-            </tr>    
-            <tr>    
-                <td>Last Name: </td><td><input type="text" placeholder="last_name" v-model="user.lastName"/></td>
-            </tr>    
-            <tr>    
-                <td>Email: </td>
-                <td><input type="text" placeholder="email" v-model="user.email"/></td>
-            </tr>
-            <tr>
-                <th colspan="2"><input type="submit" value="Register" @click="register()"></th>
-            </tr>
-        </table>
+        <v-form ref="registerForm">
+            <v-text-field label="Username" v-model="user.username" prepend-icon="person" :rules="inputRules"></v-text-field>
+            <v-text-field label="First name" v-model="user.firstName" prepend-icon="person" :rules="inputRules"></v-text-field>
+            <v-text-field label="Last name" v-model="user.lastName" prepend-icon="person" :rules="inputRules"></v-text-field>
+            <v-text-field type="email" label="E-mail" v-model="user.email" prepend-icon="email" :rules="inputRules"></v-text-field>
+            <v-text-field type="password" label="Password" v-model="user.password" prepend-icon="lock" :rules="inputRules"></v-text-field>
+            <v-text-field type="password" label="Repeat password" v-model="user.repeatPassword"prepend-icon="lock" :rules="passwordInputRules"></v-text-field>
+            
+            <v-btn @click="register">
+                <v-icon left>done</v-icon>
+                <span>Register</span>
+            </v-btn>
+        </v-form>
     </div>
 </template>
 
@@ -38,6 +27,13 @@ export default{
 
     data(){
         return{
+            inputRules: [
+                v => (v && v.length > 0) || 'Please fill out this field'
+            ],
+            passwordInputRules: [
+                v => (v && v.length > 0) || 'Please fill out this field',
+                v => (v && v === this.user.password) || 'Your passwords don\'t match'
+            ],
             user:{
                 id: null,
                 username: null,
@@ -45,53 +41,32 @@ export default{
                 firstName: null,
                 lastName: null,
                 email: null,
-                role: '1'
+
+                role: 'ROLE_USER'
             },
         };
     },
 
     methods:{ 
-        checkForm(){
-            if(!this.user.username){
-                alert('Please enter username');
-                return false;
-            } else if(!this.user.password){
-                alert('Please enter password');
-                return false;
-            } else if(!this.user.repeatPassword){
-                alert('Please re-enter password');
-                return false; 
-            } else if(!this.user.firstName){
-                alert('Please enter first name');
-                return false;
-            } else if(!this.user.lastName){
-                alert('Please enter last name');
-                return false;
-            } else if(!this.user.email){
-                alert('Please enter email'); // proveriti da li je validan podatak
-                return false;
-            }
-            return true;
-        },
-
         register(){
-            if(!this.checkForm()){
+            if (!this.$refs.registerForm.validate()) {
                 return;
             }
+
             axios.post('http://localhost:8080/api/users/register'
             ,this.user)
             .then(response => {
                 if (response.data === '') {
-                    alert('Error');
+                    this.$toasted.error('Registration failed', {duration:5000});
                     return;
                 } else {
-                    alert('Successful registration');
+                    this.$toasted.success('Successful registration', {duration:5000});
                     return;
                 }
             }).catch(error =>{
                 if(error.response.status === 409){
                 console.log(error.response);
-                    alert(error.response.data);
+                    this.$toasted.error(error.response.data, {duration:5000});
                     return;
                 }
             });

@@ -46,7 +46,7 @@ export default{
                     return;
                 }
 
-                alert('Successful login');
+                this.$toasted.success('Successful login', {duration:5000});
                 localStorage.setItem('user-token',response.data.accessToken);
                 localStorage.setItem('role', response.data.role);
                 localStorage.setItem('username', this.user.username);
@@ -58,15 +58,14 @@ export default{
                 	case 'ROLE_AIRLINE_ADMIN': this.$router.push({path : '/adminAirline'}); break;
                 	case 'ROLE_HOTEL_ADMIN':  this.$router.push({path : '/adminHotel'}); break;
                 	case 'ROLE_RAC_ADMIN': this.$router.push({path : '/adminRentACar'}); break;
-                	default: alert('User not recognized');
+                	default: this.$toasted.error('User not recognized', {duration:5000});
                 }
                 
                 
             })
             .catch(error =>{
             	if(error.response.status === 401){
-            	console.log(error.response);
-            		alert(error.response.data);
+                    this.$toasted.error(error.response.data, {duration:5000});
             		return;
             	}
             });

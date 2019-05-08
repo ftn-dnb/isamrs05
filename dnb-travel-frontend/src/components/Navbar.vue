@@ -26,9 +26,10 @@
             </div>
             
             <div v-else-if="this.role != null">
-            <router-link :to="{ name: 'UserSettings'}">User</router-link>
-            &nbsp;
-            <router-link :to="{name:'Logout'}">SignOut</router-link>
+	            <v-btn :to ="{name: 'Logout'}">
+	                     <v-icon left>input</v-icon>
+	                     <span>Logout</span>
+            	</v-btn>
             </div>
 		</v-toolbar>
 
@@ -80,6 +81,10 @@ export default {
 			userDrawer:[
 			{ icon: 'perm_identity', text: 'Profile settings', route: '/user-settings'},
 			],
+
+			defaultUser:[
+			
+			],
 			
 		}
 	},
@@ -88,11 +93,9 @@ export default {
 			this.role = localStorage.getItem('role');
 			if(data === 'ROLE_RAC_ADMIN'){
 				this.lista = this.rentACarAdminDrawer;
-				this.role = 'asd';
 			}
 			else if(data === 'ROLE_AIRLINE_ADMIN'){
 				this.lista = this.airlineAdminDrawer;
-				this.role = 'asd';
 			}
 			else if(data ==='ROLE_SYSTEM_ADMIN'){
 				//dodati
@@ -101,10 +104,10 @@ export default {
 				//dodati
 			}
 			else if(data === 'ROLE_USER'){
-				//dodati
+				this.lista = this.userDrawer;
 			}
 			else{
-				//default
+				this.lista = this.defaultUser
 			}
 
 		});
