@@ -7,5 +7,6 @@ import java.util.List;
 
 public interface AuthorityRepository extends JpaRepository<Authority, Long> {
     Authority findOneById(Long id);
+
     List<Authority> findAll();
 }

@@ -51,6 +51,11 @@ export default {
 			{icon: 'work_outline', text: 'Company settings', route: '/rent-a-car-settings'},
 			{icon: 'perm_identity', text: 'Profile settings', route: '/user-settings'},
 			],
+
+			sysAdminDrawer: [
+				{icon: 'perm_identity', text: 'Profile settings', route: '/user-settings'},
+				{icon: 'add_circle', text: 'Add admins', route: '/adminSystem'},
+			],
 			
 		}
 	},
@@ -63,7 +68,7 @@ export default {
 				this.lista = this.airlineAdminDrawer;
 			}
 			else if(data ==='ROLE_SYSTEM_ADMIN'){
-				//dodati
+				this.lista = this.sysAdminDrawer;
 			}
 			else if(data === 'ROLE_HOTEL_ADMIN'){
 				//dodati
