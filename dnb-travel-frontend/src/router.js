@@ -15,7 +15,10 @@ import AddFlight from './components/AddFlight.vue';
 import AirlineSettings from './components/AirlineSettings.vue';
 import LoggedInStartPage from './components/LoggedInStartPage.vue';
 import UserSettings from './components/UserSettings.vue';
-import RentACarCompanySettings from './components/RentACarCompanySettings.vue'
+import RentACarCompanySettings from './components/RentACarCompanySettings.vue';
+import UserRegistration from './components/UserRegistration.vue';
+import Logout from './components/Logout.vue';
+import Login from './components/Login.vue';
 
 Vue.use(Router)
 
@@ -152,6 +155,21 @@ export default new Router({
         path: '/rent-a-car-settings',
         name: 'RentACarCompanySettings',
         component: RentACarCompanySettings
+    },
+    {
+        path: '/registration',
+        name: 'Registration',
+        component: UserRegistration
+    },
+    {
+        path: '/logout',
+        name: 'Logout',
+        component: Logout
+    },
+    {
+        path: '/login',
+        name: 'Login',
+        component: Login
     },
   ]
 })

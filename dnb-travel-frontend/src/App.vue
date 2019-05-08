@@ -1,11 +1,10 @@
 <template>
     <v-app>
         <v-content>
-            <Navbar />
-
-            <v-container class="mx-4 mb-4">
-                <router-view />
-            </v-container>
+           <Navbar />
+              <v-container class="mx-4 mb-4">
+                 <router-view/>
+              </v-container>
         </v-content>
     </v-app>
 </template>
