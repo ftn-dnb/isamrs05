@@ -73,3 +73,30 @@ INSERT INTO `flight_reservations` VALUES (50, 71);
 INSERT INTO `flight_reservations` VALUES (50, 72);
 
 INSERT INTO `rentacar_company` (`id`,`name`,`description`) VALUES (1,'Pegaz','acab')
+
+-- Hotels
+INSERT INTO `hotel` (`id`, `name`, `description`, `rating`, `address_id`) VALUES (1, 'Hotel1', 'Ovo je Hotel1', 5.0, 32)
+INSERT INTO `hotel` (`id`, `name`, `description`, `rating`, `address_id`) VALUES (2, 'Hotel2', 'Ovo je Hotel2', 5.0, 33)
+
+-- Rooms
+INSERT INTO `room` (`id`, `room_number`, `floor`, `rating`, `capacity`, `hotel_id`) VALUES (1, 21, 2, 4.0, 3, 1);
+INSERT INTO `room` (`id`, `room_number`, `floor`, `rating`, `capacity`, `hotel_id`) VALUES (2, 22, 2, 5.0, 2, 2);
+INSERT INTO `room` (`id`, `room_number`, `floor`, `rating`, `capacity`, `hotel_id`) VALUES (3, 25, 2, 5.0, 2, 1);
+
+INSERT INTO `hotel_rooms` (`hotel_id`, `rooms_id`) VALUES (1, 1)
+INSERT INTO `hotel_rooms` (`hotel_id`, `rooms_id`) VALUES (2, 2)
+INSERT INTO `hotel_rooms` (`hotel_id`, `rooms_id`) VALUES (1, 3)
+-- Price List
+INSERT INTO `hotel_price_list` (`id`, `hotel_id`) VALUES (1, 1);
+INSERT INTO `hotel_price_list` (`id`, `hotel_id`) VALUES (2, 2);
+
+INSERT INTO `hotel_hotel_price_lists` (`hotel_id`, `hotel_price_lists_id`) VALUES (1,1)
+INSERT INTO `hotel_hotel_price_lists` (`hotel_id`, `hotel_price_lists_id`) VALUES (2,2)
+-- Price List Item
+INSERT INTO `hotel_price_list_item` (`id`, `active_discount`, `start_date`, `end_date`, `price_per_day`, `room_id`, `hotel_price_list_id`) VALUES (1, 0.5, '2019-10-01 22:00:00', '2019-10-01 22:30:00', 40, 1, 1);
+
+-- list <-> list_item
+INSERT INTO `hotel_price_list_hotel_price_list_items` (`hotel_price_list_id`, `hotel_price_list_items_id`) VALUES (1, 1);
+
+-- room <-> list_item
+INSERT INTO `room_hotel_price_list_items` (`room_id`, `hotel_price_list_items_id`) VALUES (1, 1)

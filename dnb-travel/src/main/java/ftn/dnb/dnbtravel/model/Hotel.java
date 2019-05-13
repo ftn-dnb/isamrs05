@@ -2,6 +2,7 @@ package ftn.dnb.dnbtravel.model;
 
 
 import javax.persistence.*;
+import java.util.Set;
 
 @Entity
 public class Hotel {
@@ -13,8 +14,33 @@ public class Hotel {
     @Column(name = "name", nullable = false)
     private String name;
 
-    @Column(name = "address", nullable = false)
-    private String address;
+    @Column(name = "description", nullable = false)
+    private String description;
+
+    @Column(name = "rating", nullable = false)
+    private double rating;
+
+    @OneToOne(cascade = CascadeType.ALL)
+    private Address address;
+
+    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private Set<Room> rooms;
+
+    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private Set<HotelPriceList> hotelPriceLists;
+
+    public Hotel() {
+        super();
+    }
+
+    public Hotel(String name, String description, double rating, Address address, Set<Room> rooms, Set<HotelPriceList> hotelPriceLists) {
+        this.name = name;
+        this.description = description;
+        this.rating = rating;
+        this.address = address;
+        this.rooms = rooms;
+        this.hotelPriceLists = hotelPriceLists;
+    }
 
     public Long getId() {
         return id;
@@ -25,19 +51,50 @@ public class Hotel {
     }
 
     public String getName() {
-        return this.name;
+        return name;
     }
 
     public void setName(String name) {
         this.name = name;
     }
 
-    public String getAddress() {
-        return this.address;
+    public Address getAddress() {
+        return address;
     }
 
-    public void setAddress(String address) {
+    public void setAddress(Address address) {
         this.address = address;
     }
 
+    public Set<Room> getRooms() {
+        return rooms;
+    }
+
+    public void setRooms(Set<Room> rooms) {
+        this.rooms = rooms;
+    }
+
+    public Set<HotelPriceList> getHotelPriceLists() {
+        return hotelPriceLists;
+    }
+
+    public void setHotelPriceLists(Set<HotelPriceList> hotelPriceLists) {
+        this.hotelPriceLists = hotelPriceLists;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public double getRating() {
+        return rating;
+    }
+
+    public void setRating(double rating) {
+        this.rating = rating;
+    }
 }

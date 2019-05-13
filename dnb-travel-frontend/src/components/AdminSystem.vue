@@ -5,7 +5,7 @@
             <v-text-field label="Username" v-model="user.username" prepend-icon="person" :rules="inputRules"></v-text-field>
             <v-text-field label="First Name" v-model="user.firstName" prepend-icon="person" :rules="inputRules"></v-text-field>
             <v-text-field label="Last Name" v-model="user.lastName" prepend-icon="person" :rules="inputRules"></v-text-field>
-            <v-text-field type="email" label="E-Mail" v-model="user.email" prepend-icon="email" :rules="inputRules"></v-text-field>
+            <v-text-field type="email" label="E-Mail" v-model="user.email" prepend-icon="email" :rules="emailRules"></v-text-field>
             <v-text-field type="password" label="Enter New Password" v-model="user.password" prepend-icon="lock" :rules="inputRules"></v-text-field>
             <v-text-field type="password" label="Repeat New Password" v-model="user.repeatPassword" prepend-icon="lock" :rules="passwordInputRules"></v-text-field>
             <v-container fluid>
@@ -42,6 +42,10 @@ export default{
             passwordInputRules: [
                 v => (v && v.length > 0) || 'Please fill out this field',
                 v => (v && v === this.user.password) || 'Repeated password doesn\'t match'
+            ],
+            pattern : /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
+            emailRules: [
+                v => (v && this.pattern.test(v)) || 'Email not valid.'
             ],
             user:{
                 id: null,
