@@ -1,6 +1,8 @@
 package ftn.dnb.dnbtravel.controller;
 
 import com.sun.mail.iap.Response;
+import ftn.dnb.dnbtravel.dto.CarFilterDTO;
+import ftn.dnb.dnbtravel.dto.RACListItemDTO;
 import ftn.dnb.dnbtravel.dto.RentACarCompanyDTO;
 import ftn.dnb.dnbtravel.service.RentACarCompanyService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -47,6 +49,10 @@ public class RentACarCompanyController {
         return new ResponseEntity<>(rentACarCompany, (rentACarCompany == null) ? HttpStatus.NOT_FOUND : HttpStatus.OK);
     }
 
-
+    @PostMapping(path = "/carSearch")
+    public ResponseEntity<?> searchCars(@RequestBody CarFilterDTO filter){
+        List<RACListItemDTO> items = rentACarCompanyService.searchCar(filter);
+        return new ResponseEntity<>(items,HttpStatus.OK);
+    }
 
 }
