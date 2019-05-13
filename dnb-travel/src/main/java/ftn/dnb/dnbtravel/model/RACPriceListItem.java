@@ -3,7 +3,7 @@ package ftn.dnb.dnbtravel.model;
 import javax.persistence.*;
 import java.util.Date;
 
-@Entity
+@Entity(name = "racpricelistitem")
 public class RACPriceListItem {
 
     @Id
@@ -25,7 +25,10 @@ public class RACPriceListItem {
     @OneToOne(cascade = CascadeType.ALL)
     private Car car;
 
-    @OneToOne(cascade = CascadeType.ALL)
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinTable(name = "racitem_car",
+            joinColumns = @JoinColumn(name = "racitem_id", referencedColumnName = "id"),
+            inverseJoinColumns = @JoinColumn(name = "car_id", referencedColumnName = "id"))
     private RACPriceList racPriceList;
 
     public RACPriceListItem(){

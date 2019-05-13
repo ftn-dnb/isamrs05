@@ -4,17 +4,21 @@ import javax.persistence.*;
 import java.util.HashSet;
 import java.util.Set;
 
-@Entity
+@Entity(name = "racpricelist")
 public class RACPriceList {
 
     @Id
     @GeneratedValue(strategy =  GenerationType.AUTO)
     private Long id;
 
-    @OneToOne(cascade = CascadeType.ALL)
+    @ManyToOne(cascade = CascadeType.ALL)
     private RentACarCompany company;
 
+
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinTable(name = "racpricelist_items",
+            joinColumns = @JoinColumn(name = "racpricelist_id", referencedColumnName = "id"),
+            inverseJoinColumns = @JoinColumn(name = "item_id", referencedColumnName = "id"))
     private Set<RACPriceListItem> items = new HashSet<>();
 
     public RACPriceList(){

@@ -66,8 +66,8 @@ INSERT INTO FLIGHT_RESERVATIONS VALUES (50, 72);
 
 
 -- CarCompnay
-INSERT INTO `rentacar_company` (`id`,`name`,`description`,rating) VALUES (1,'Pegaz','acab',1.0);
-INSERT INTO `rentacar_company` (`id`,`name`,`description`,rating) VALUES (2,'Pegaz2','acab',1.5);
+INSERT INTO `rac` (`id`,`name`,`description`,rating) VALUES (1,'Pegaz','acab',1.0);
+INSERT INTO `rac` (`id`,`name`,`description`,rating) VALUES (2,'Pegaz2','acab',1.5);
 
 --cars
 INSERT INTO `cars` (`id`,`name`,`brand`,`manuf_year`,`seats_number`,`rating`,`type`,`company_id`) VALUES (1,'stojdza','zastava',2059,5,5,0,1);
@@ -78,7 +78,7 @@ INSERT INTO `cars` (`id`,`name`,`brand`,`manuf_year`,`seats_number`,`rating`,`ty
 -- List
 
 -- ListItem
-INSERT  INTO `racprice_list_item` (`id`,`active_discount`,`start_date`,`end_date`,`price_day`,`car_id`) VALUES (1,0,'2017-10-01 21:58:58','2017-10-10 21:58:58',100,1);
-INSERT  INTO `racprice_list_item` (`id`,`active_discount`,`start_date`,`end_date`,`price_day`,`car_id`) VALUES (2,0.3,'2017-10-11 21:58:58','2017-10-21 21:58:58',50,1);
-INSERT  INTO `racprice_list_item` (`id`,`active_discount`,`start_date`,`end_date`,`price_day`,`car_id`) VALUES (3,0.1,'2017-10-01 21:58:58','2017-10-10 21:58:58',100,2);
-INSERT  INTO `racprice_list_item` (`id`,`active_discount`,`start_date`,`end_date`,`price_day`,`car_id`) VALUES (4,0.2,'2017-10-11 21:58:58','2017-10-21 21:58:58',50,2);
+INSERT  INTO `racpricelistitem` (`id`,`active_discount`,`start_date`,`end_date`,`price_day`,`car_id`) VALUES (1,0,'2017-10-01 21:58:58','2017-10-10 21:58:58',100,1);
+INSERT  INTO `racpricelistitem` (`id`,`active_discount`,`start_date`,`end_date`,`price_day`,`car_id`) VALUES (2,0.3,'2017-10-11 21:58:58','2017-10-21 21:58:58',50,1);
+INSERT  INTO `racpricelistitem` (`id`,`active_discount`,`start_date`,`end_date`,`price_day`,`car_id`) VALUES (3,0.1,'2017-10-01 21:58:58','2017-10-10 21:58:58',100,2);
+INSERT  INTO `racpricelistitem` (`id`,`active_discount`,`start_date`,`end_date`,`price_day`,`car_id`) VALUES (4,0.2,'2017-10-11 21:58:58','2017-10-21 21:58:58',50,2);

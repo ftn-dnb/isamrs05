@@ -7,7 +7,7 @@ import java.util.Calendar;
 import java.util.HashSet;
 import java.util.Set;
 
-@Entity
+@Entity(name = "rac")
 public class RentACarCompany {
     @Id
     @GeneratedValue(strategy =  GenerationType.AUTO)
@@ -23,14 +23,26 @@ public class RentACarCompany {
     private double rating;
 
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinTable(name = "rac_cars",
+            joinColumns = @JoinColumn(name = "rac_id", referencedColumnName = "id"),
+            inverseJoinColumns = @JoinColumn(name = "car_id", referencedColumnName = "id"))
     private Set<Car>cars = new HashSet<>();
 
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinTable(name = "rac_pricelist",
+            joinColumns = @JoinColumn(name = "rac_id", referencedColumnName = "id"),
+            inverseJoinColumns = @JoinColumn(name = "pricelist_id",referencedColumnName = "id"))
     private Set<RACPriceList> priceList = new HashSet<>();
 
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinTable(name = "rac_offices",
+            joinColumns = @JoinColumn(name = "rac_id", referencedColumnName = "id"),
+            inverseJoinColumns = @JoinColumn(name = "office_id", referencedColumnName = "id"))
     private Set<BranchOffice> offices = new HashSet<>();
 
+    @JoinTable(name = "main_office",
+            joinColumns = @JoinColumn(name = "rac_id", referencedColumnName = "id"),
+            inverseJoinColumns = @JoinColumn(name = "office_id", referencedColumnName = "id"))
     @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private BranchOffice mainOffice;
 

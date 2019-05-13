@@ -15,7 +15,7 @@ public class BranchOffice {
     @OneToOne(cascade = CascadeType.ALL)
     private Address address;
 
-    @OneToOne(cascade = CascadeType.ALL)
+    @ManyToOne(cascade = CascadeType.ALL)
     private RentACarCompany company;
 
     public BranchOffice(){

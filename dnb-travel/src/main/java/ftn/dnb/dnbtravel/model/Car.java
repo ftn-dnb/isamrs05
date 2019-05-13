@@ -27,7 +27,7 @@ public class Car {
     @Column(name = "rating", nullable = false)
     private double rating;
 
-    @OneToOne(cascade = CascadeType.ALL)
+    @ManyToOne(cascade = CascadeType.ALL)
     private RentACarCompany company;
 
     public Car(){
