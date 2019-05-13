@@ -67,13 +67,15 @@ public class RentACarCompanyService {
     public List<RACListItemDTO> searchCar(CarFilterDTO filter){
         List<RACListItemDTO> list = this.getAllItems();
 
+        //start date
         if (filter.getStartDate() != null)
             list = list.stream().filter(f -> f.getStartDate().after(filter.getStartDate())).collect(Collectors.toList());
 
-
+        //end date
         if(filter.getEndDate() != null)
             list = list.stream().filter(f -> f.getEndDate().before(filter.getEndDate())).collect(Collectors.toList());
 
+        //price per day max price
         if(filter.getPricePerDay() != null)
             list = list.stream().filter(f->{
                     if(f.getPricePerDay() <= filter.getPricePerDay())
@@ -81,6 +83,29 @@ public class RentACarCompanyService {
                 return false;
             }).collect(Collectors.toList());
 
+        //seats number
+        if(filter.getSeatsNumber() != null)
+            list = list.stream().filter(f->{
+                if(f.getCar().getSeatsNumber() >= filter.getSeatsNumber())
+                    return true;
+                return false;
+            }).collect(Collectors.toList());
+
+        //type
+        if(filter.getType() != null)
+            list = list.stream().filter(f->{
+                if(f.getCar().getType() == filter.getType())
+                    return true;
+                return false;
+            }).collect(Collectors.toList());
+
+        //brand
+        if(filter.getBrand() != null)
+            list = list.stream().filter(f->{
+                if(f.getCar().getBrand().toLowerCase().equals(filter.getBrand().toLowerCase()))
+                    return true;
+                return false;
+            }).collect(Collectors.toList());
 
         return list;
     }

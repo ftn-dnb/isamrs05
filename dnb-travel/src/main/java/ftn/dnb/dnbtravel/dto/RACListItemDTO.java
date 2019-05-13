@@ -13,20 +13,20 @@ public class RACListItemDTO {
     private Date startDate;
     private Date endDate;
     private int pricePerDay;
-    private Car car;
+    private CarDTO car;
 
-    public RACListItemDTO(Date startDate, Date endDate, int pricePerDay, Car car) {
+    public RACListItemDTO(Date startDate, Date endDate, int pricePerDay) {
         this.startDate = startDate;
         this.endDate = endDate;
         this.pricePerDay = pricePerDay;
-        this.car = car;
+
     }
 
     public RACListItemDTO(RACPriceListItem item){
         this.startDate = item.getStartDate();
         this.endDate = item.getEndDate();
         this.pricePerDay = item.getPricePerDay();
-        this.car = item.getCar();
+        this.car = new CarDTO(item.getCar());
     }
 
     public Date getStartDate() {
@@ -53,11 +53,11 @@ public class RACListItemDTO {
         this.pricePerDay = pricePerDay;
     }
 
-    public Car getCar() {
+    public CarDTO getCar() {
         return car;
     }
 
-    public void setCar(Car car) {
+    public void setCar(CarDTO car) {
         this.car = car;
     }
 }
