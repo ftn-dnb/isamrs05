@@ -23,6 +23,7 @@ public class FlightDTO {
     private AirplaneDTO airplane;
     private List<AirlinePriceListItemDTO> prices;
     private List<FlightReservationDTO> reservations;
+    private boolean isOneWay;
 
     public FlightDTO() {
         super();
@@ -42,6 +43,7 @@ public class FlightDTO {
         this.airplane = new AirplaneDTO(flight.getAirplane());
         this.prices = new ArrayList<AirlinePriceListItemDTO>();
         this.reservations = new ArrayList<FlightReservationDTO>();
+        this.isOneWay = flight.isOneWay();
 
         flight.getTransits().stream().forEach(destination -> this.transits.add(new DestinationDTO(destination)));
         flight.getPrices().stream().forEach(price -> this.prices.add(new AirlinePriceListItemDTO(price)));
@@ -150,6 +152,14 @@ public class FlightDTO {
 
     public void setReservations(List<FlightReservationDTO> reservations) {
         this.reservations = reservations;
+    }
+
+    public boolean isOneWay() {
+        return isOneWay;
+    }
+
+    public void setOneWay(boolean oneWay) {
+        isOneWay = oneWay;
     }
 
     @Override

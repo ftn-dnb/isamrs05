@@ -2,6 +2,8 @@ package ftn.dnb.dnbtravel.dto;
 
 import ftn.dnb.dnbtravel.model.User;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 public class UserDTO {
@@ -14,12 +16,13 @@ public class UserDTO {
     private String password;
     private String repeatPassword;
     private String username;
-    private Long role;
+    private String role;
+    private List<FriendshipDTO> friendships;
 
     public UserDTO() {
     }
 
-    public UserDTO(Long id, String firstName, String lastName, String email, String password, String repeatPassword, String username, Long role) {
+    public UserDTO(Long id, String firstName, String lastName, String email, String password, String repeatPassword, String username, String role) {
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
@@ -37,7 +40,10 @@ public class UserDTO {
         this.email = user.getEmail();
         this.password = user.getPassword();
         this.username = user.getUsername();
-        this.role = new Long(convertRoleToInt(user.getAuthorityList().get(0).getAuthority()));
+        this.role = user.getAuthorityList().get(0).getAuthority();
+
+        this.friendships = new ArrayList<>();
+        user.getFriendships().stream().forEach(f -> friendships.add(new FriendshipDTO(f)));
     }
 
     public Long getId() {
@@ -96,33 +102,41 @@ public class UserDTO {
         this.username = username;
     }
 
-    public Long getRole() {
+    public String getRole() {
         return this.role;
     }
 
-    public void setRole(Long role) {
+    public void setRole(String role) {
         this.role = role;
     }
 
-    private int convertRoleToInt(String s){
-        switch (s) {
+    public List<FriendshipDTO> getFriendships() {
+        return friendships;
+    }
+
+    public void setFriendships(List<FriendshipDTO> friendships) {
+        this.friendships = friendships;
+    }
+
+    public Long convertRoleToLong(){
+        switch (this.role) {
             case "ROLE_USER":{
-                return 1;
+                return Long.valueOf(1);
             }
             case "ROLE_SYSTEM_ADMIN":{
-                return 2;
+                return Long.valueOf(2);
             }
             case "ROLE_AIRLINE_ADMIN":{
-                return 3;
+                return Long.valueOf(3);
             }
             case "ROLE_HOTEL_ADMIN":{
-                return 4;
+                return Long.valueOf(4);
             }
             case "ROLE_RAC_ADMIN":{
-                return 5;
+                return Long.valueOf(5);
             }
         }
-        return 0; // error
+        return Long.valueOf(0); // error
     }
 
     public String convertRoleToString(Long l){

@@ -61,6 +61,10 @@ public class AirplaneDTO {
         this.numOfColumns = numOfColumns;
     }
 
+    public int getNumOfSeats() {
+        return numOfColumns * numOfRows;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
