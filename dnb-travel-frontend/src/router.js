@@ -19,6 +19,7 @@ import RentACarCompanySettings from './components/RentACarCompanySettings.vue';
 import UserRegistration from './components/UserRegistration.vue';
 import Logout from './components/Logout.vue';
 import Login from './components/Login.vue';
+import CarSearch from './components/CarSearch.vue';
 
 Vue.use(Router)
 
@@ -170,6 +171,11 @@ export default new Router({
         path: '/login',
         name: 'Login',
         component: Login
+    },
+    {
+        path: '/carSearch',
+        name: 'CarSearch',
+        component: CarSearch
     },
   ]
 })

@@ -83,9 +83,8 @@ export default {
 			],
 
 			defaultUser:[
-			
+			{icon: 'directions_car', text: 'Car search', route: '/carSearch'},
 			],
-			
 		}
 	},
 	created(){
@@ -107,14 +106,14 @@ export default {
 				this.lista = this.userDrawer;
 			}
 			else{
-				this.lista = this.defaultUser
+				this.lista = this.defaultUser;
 			}
 
 		});
 		bus.$on('logout', (data) =>{
 			if(data ==='logout'){
 				this.role = null;
-				this.lista = null;
+				this.lista = this.defaultUser;
 			}
 		})
 	},
