@@ -1,14 +1,17 @@
 package ftn.dnb.dnbtravel.model;
 
 
+import ftn.dnb.dnbtravel.dto.HotelDTO;
+
 import javax.persistence.*;
+import java.util.HashSet;
 import java.util.Set;
 
 @Entity
 public class Hotel {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column(name = "name", nullable = false)
@@ -42,6 +45,13 @@ public class Hotel {
         this.hotelPriceLists = hotelPriceLists;
     }
 
+    public Hotel(HotelDTO hotelDTO) {
+        this.name = hotelDTO.getName();
+        this.description = hotelDTO.getDescription();
+        this.rating = hotelDTO.getRating();
+        this.address = hotelDTO.getAddress();
+    }
+
     public Long getId() {
         return id;
     }
@@ -67,6 +77,9 @@ public class Hotel {
     }
 
     public Set<Room> getRooms() {
+        if (this.rooms == null) {
+            this.rooms = new HashSet<>();
+        }
         return rooms;
     }
 

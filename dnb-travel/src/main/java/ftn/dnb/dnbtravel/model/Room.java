@@ -1,6 +1,7 @@
 package ftn.dnb.dnbtravel.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import ftn.dnb.dnbtravel.dto.RoomDTO;
 
 import javax.persistence.*;
 import java.util.Set;
@@ -42,6 +43,13 @@ public class Room {
         this.capacity = capacity;
         this.hotel = hotel;
         this.hotelPriceListItems = hotelPriceListItems;
+    }
+
+    public Room(RoomDTO roomDTO) {
+        this.roomNumber = roomDTO.getRoomNumber();
+        this.floor = roomDTO.getFloor();
+        this.rating = roomDTO.getRating();
+        this.capacity = roomDTO.getCapacity();
     }
 
     public Long getId() {
