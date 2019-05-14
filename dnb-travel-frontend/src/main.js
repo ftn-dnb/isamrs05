@@ -6,11 +6,13 @@ import VueKonva from 'vue-konva'
 import Toasted from 'vue-toasted';
 import Datetime from 'vue-datetime'
 import 'vue-datetime/dist/vue-datetime.css'
+import VueGoogleCharts from 'vue-google-charts'
 
 Vue.config.productionTip = false
 Vue.use(VueKonva)
 Vue.use(Toasted)
 Vue.use(Datetime)
+Vue.use(VueGoogleCharts)
 
 export const bus = new Vue();
 

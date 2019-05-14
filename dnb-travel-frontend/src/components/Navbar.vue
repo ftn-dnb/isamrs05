@@ -43,6 +43,7 @@ export default {
 			airlineAdminDrawer: [
 				{ icon: 'flight_takeoff', text: 'Flights', route: '/flights' },
 				{ icon: 'airplanemode_active', text: 'Add flight', route: '/add-flight' },
+				{ icon: 'assessment', text: 'Statistics', route: '/airline-statistics' },
 				{ icon: 'work_outline', text: 'Company settings', route: '/airline-settings' },
 				{ icon: 'perm_identity', text: 'Profile settings', route: '/user-settings' },
 			],

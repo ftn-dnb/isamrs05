@@ -17,6 +17,7 @@
     "stompjs": "^2.3.3",
     "vue": "^2.6.6",
     "vue-datetime": "^1.0.0-beta.10",
+    "vue-google-charts": "^0.3.2",
     "vue-konva": "^2.0.4",
     "vue-router": "^3.0.1",
     "vue-toasted": "^1.1.26",
