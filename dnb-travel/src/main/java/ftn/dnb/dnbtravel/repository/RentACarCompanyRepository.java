@@ -1,5 +1,6 @@
 package ftn.dnb.dnbtravel.repository;
 
+import ftn.dnb.dnbtravel.model.RACPriceListItem;
 import ftn.dnb.dnbtravel.model.RentACarCompany;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -13,4 +14,5 @@ public interface RentACarCompanyRepository extends JpaRepository<RentACarCompany
     Page<RentACarCompany> findAll(Pageable pageable);
 
     RentACarCompany findOneById(Long id);
+
 }

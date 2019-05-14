@@ -18,11 +18,11 @@ INSERT INTO `user_authority` (user_id, authority_id) VALUES (5, 3);
 INSERT INTO `user_authority` (user_id, authority_id) VALUES (6, 4);
 INSERT INTO `user_authority` (user_id, authority_id) VALUES (7, 5);
 
---INSERT INTO `friendship` VALUES (1, 0, 2);
---INSERT INTO `friendship` VALUES (2, 0, 3);
+INSERT INTO `friendship` VALUES (1, 0, 2);
+INSERT INTO `friendship` VALUES (2, 0, 3);
 
---INSERT INTO `users_friendships` VALUES (3, 1);
---INSERT INTO `users_friendships` VALUES (2, 2);
+INSERT INTO `users_friendships` VALUES (3, 1);
+INSERT INTO `users_friendships` VALUES (2, 2);
 
 -- Destinations
 INSERT INTO `destination` VALUES (11, 'JFK', 'John. F. Kennedy. International Airport', 'New York', 'US', 123.23, 132.23);
@@ -72,4 +72,48 @@ INSERT INTO `flight_reservation` VALUES (72, 1500, 0, '2017-12-01 01:00:00', 6, 
 INSERT INTO `flight_reservations` VALUES (50, 71);
 INSERT INTO `flight_reservations` VALUES (50, 72);
 
-INSERT INTO `rentacar_company` (`id`,`name`,`description`) VALUES (1,'Pegaz','acab')
+-- Hotels
+INSERT INTO `hotel` (`id`, `name`, `description`, `rating`, `address_id`) VALUES (1, 'Hotel1', 'Ovo je Hotel1', 5.0, 32)
+INSERT INTO `hotel` (`id`, `name`, `description`, `rating`, `address_id`) VALUES (2, 'Hotel2', 'Ovo je Hotel2', 5.0, 33)
+
+-- Rooms
+INSERT INTO `room` (`id`, `room_number`, `floor`, `rating`, `capacity`, `hotel_id`) VALUES (1, 21, 2, 4.0, 3, 1);
+INSERT INTO `room` (`id`, `room_number`, `floor`, `rating`, `capacity`, `hotel_id`) VALUES (2, 22, 2, 5.0, 2, 2);
+INSERT INTO `room` (`id`, `room_number`, `floor`, `rating`, `capacity`, `hotel_id`) VALUES (3, 25, 2, 5.0, 2, 1);
+
+INSERT INTO `hotel_rooms` (`hotel_id`, `rooms_id`) VALUES (1, 1)
+INSERT INTO `hotel_rooms` (`hotel_id`, `rooms_id`) VALUES (2, 2)
+INSERT INTO `hotel_rooms` (`hotel_id`, `rooms_id`) VALUES (1, 3)
+-- Price List
+INSERT INTO `hotel_price_list` (`id`, `hotel_id`) VALUES (1, 1);
+INSERT INTO `hotel_price_list` (`id`, `hotel_id`) VALUES (2, 2);
+
+INSERT INTO `hotel_hotel_price_lists` (`hotel_id`, `hotel_price_lists_id`) VALUES (1,1)
+INSERT INTO `hotel_hotel_price_lists` (`hotel_id`, `hotel_price_lists_id`) VALUES (2,2)
+-- Price List Item
+INSERT INTO `hotel_price_list_item` (`id`, `active_discount`, `start_date`, `end_date`, `price_per_day`, `room_id`, `hotel_price_list_id`) VALUES (1, 0.5, '2019-10-01 22:00:00', '2019-10-01 22:30:00', 40, 1, 1);
+
+-- list <-> list_item
+INSERT INTO `hotel_price_list_hotel_price_list_items` (`hotel_price_list_id`, `hotel_price_list_items_id`) VALUES (1, 1);
+
+-- room <-> list_item
+INSERT INTO `room_hotel_price_list_items` (`room_id`, `hotel_price_list_items_id`) VALUES (1, 1)
+
+INSERT INTO `rac` (`id`,`name`,`description`,rating) VALUES (1,'Pegaz','acab',1.0);
+INSERT INTO `rac` (`id`,`name`,`description`,rating) VALUES (2,'Pegaz2','acab',1.5);
+
+INSERT INTO `cars` (`id`,`name`,`brand`,`manuf_year`,`seats_number`,`rating`,`type`,`company_id`) VALUES (1,'stojdza','zastava',2059,5,5,0,1);
+INSERT INTO `cars` (`id`,`name`,`brand`,`manuf_year`,`seats_number`,`rating`,`type`,`company_id`) VALUES (2,'jugic','zastava',2059,5,5,0,2);
+
+INSERT INTO `cars` (`id`,`name`,`brand`,`manuf_year`,`seats_number`,`rating`,`type`,`company_id`) VALUES (3,'vozilo','mercedes',2059,2,5,3,1);
+INSERT INTO `cars` (`id`,`name`,`brand`,`manuf_year`,`seats_number`,`rating`,`type`,`company_id`) VALUES (4,'kombi','mercedes',2059,10,5,2,2);
+
+INSERT  INTO `racpricelistitem` (`id`,`active_discount`,`start_date`,`end_date`,`price_day`,`car_id`) VALUES (1,0,'2017-10-01 21:58:58','2017-10-10 21:58:58',100,1);
+INSERT  INTO `racpricelistitem` (`id`,`active_discount`,`start_date`,`end_date`,`price_day`,`car_id`) VALUES (2,0.3,'2017-10-11 21:58:58','2017-10-21 21:58:58',50,1);
+INSERT  INTO `racpricelistitem` (`id`,`active_discount`,`start_date`,`end_date`,`price_day`,`car_id`) VALUES (3,0.1,'2017-10-01 21:58:58','2017-10-10 21:58:58',100,2);
+INSERT  INTO `racpricelistitem` (`id`,`active_discount`,`start_date`,`end_date`,`price_day`,`car_id`) VALUES (4,0.2,'2017-10-11 21:58:58','2017-10-21 21:58:58',50,2);
+
+
+INSERT  INTO `racpricelistitem` (`id`,`active_discount`,`start_date`,`end_date`,`price_day`,`car_id`) VALUES (5,0,'2017-10-01 21:58:58','2017-10-10 21:58:58',100,3);
+INSERT  INTO `racpricelistitem` (`id`,`active_discount`,`start_date`,`end_date`,`price_day`,`car_id`) VALUES (6,0,'2017-10-01 21:58:58','2017-10-10 21:58:58',100,4);
+

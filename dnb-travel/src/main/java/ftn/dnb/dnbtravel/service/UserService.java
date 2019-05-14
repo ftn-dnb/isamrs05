@@ -8,6 +8,7 @@ import ftn.dnb.dnbtravel.model.FriendshipStatus;
 import ftn.dnb.dnbtravel.model.User;
 import ftn.dnb.dnbtravel.repository.AuthorityRepository;
 import ftn.dnb.dnbtravel.repository.UserRepository;
+import ftn.dnb.dnbtravel.service.EmailService;
 import ftn.dnb.dnbtravel.security.TokenUtils;
 import io.jsonwebtoken.Jwt;
 import io.jsonwebtoken.JwtParser;
@@ -19,6 +20,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import javax.validation.constraints.Email;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Date;
@@ -28,6 +30,8 @@ import java.util.stream.Collectors;
 @Service
 public class UserService {
 
+
+
     @Autowired
     private UserRepository userRepository;
 
@@ -36,6 +40,9 @@ public class UserService {
 
     @Autowired
     private PasswordEncoder passwordEncoder;
+
+    @Autowired
+    private EmailService emailService;
 
 
     public List<UserDTO> getAllUsers() {
@@ -59,6 +66,12 @@ public class UserService {
         userProba.setAuthorityList(new ArrayList<Authority>());
         userProba.getAuthorityList().add(authorityRepository.findOneById(user.convertRoleToLong()));
         User savedUser = userRepository.save(userProba);
+
+        try {
+            emailService.sendNotificationAsync(savedUser);
+        } catch (Exception e) {
+            System.out.println("E-Mail failed to send. " + e.getMessage());
+        }
 
         //List<Authority> lista = authorityRepository.findAll();
 

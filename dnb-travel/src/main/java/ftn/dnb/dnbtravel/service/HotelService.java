@@ -1,5 +1,6 @@
 package ftn.dnb.dnbtravel.service;
 
+import ftn.dnb.dnbtravel.dto.HotelDTO;
 import ftn.dnb.dnbtravel.model.Hotel;
 import ftn.dnb.dnbtravel.repository.HotelRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,5 +19,14 @@ public class HotelService {
     public List<Hotel> findAll() { return hotelRepository.findAll(); }
 
     public Hotel save(Hotel hotel) { return hotelRepository.save(hotel); }
+
+    public HotelDTO addHotel(HotelDTO hotelDTO) {
+        Hotel savedHotel = hotelRepository.save(new Hotel(hotelDTO));
+        if (savedHotel == null) {
+            return null;
+        }
+
+        return new HotelDTO(savedHotel);
+    }
 
 }
