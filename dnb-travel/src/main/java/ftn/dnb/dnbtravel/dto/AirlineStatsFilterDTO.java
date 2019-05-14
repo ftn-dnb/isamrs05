@@ -7,14 +7,18 @@ public class AirlineStatsFilterDTO {
     private Long airlineId;
     private Date dateFrom;
     private Date dateTo;
+    private Date dateReservations;
+    private String reservationsCriteria;
 
     public AirlineStatsFilterDTO() {
     }
 
-    public AirlineStatsFilterDTO(Long airlineId, Date dateFrom, Date dateTo) {
+    public AirlineStatsFilterDTO(Long airlineId, Date dateFrom, Date dateTo, Date dateReservations, String reservationsCriteria) {
         this.airlineId = airlineId;
         this.dateFrom = dateFrom;
         this.dateTo = dateTo;
+        this.dateReservations = dateReservations;
+        this.reservationsCriteria = reservationsCriteria;
     }
 
     public Long getAirlineId() {
@@ -39,5 +43,21 @@ public class AirlineStatsFilterDTO {
 
     public void setDateTo(Date dateTo) {
         this.dateTo = dateTo;
+    }
+
+    public Date getDateReservations() {
+        return dateReservations;
+    }
+
+    public void setDateReservations(Date dateReservations) {
+        this.dateReservations = dateReservations;
+    }
+
+    public String getReservationsCriteria() {
+        return reservationsCriteria;
+    }
+
+    public void setReservationsCriteria(String reservationsCriteria) {
+        this.reservationsCriteria = reservationsCriteria;
     }
 }

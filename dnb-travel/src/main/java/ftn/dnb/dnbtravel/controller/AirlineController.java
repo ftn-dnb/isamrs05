@@ -1,9 +1,6 @@
 package ftn.dnb.dnbtravel.controller;
 
-import ftn.dnb.dnbtravel.dto.AirlineDTO;
-import ftn.dnb.dnbtravel.dto.AirlineStatsDTO;
-import ftn.dnb.dnbtravel.dto.AirlineStatsFilterDTO;
-import ftn.dnb.dnbtravel.dto.FlightDTO;
+import ftn.dnb.dnbtravel.dto.*;
 import ftn.dnb.dnbtravel.service.AirlineService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -66,7 +63,14 @@ public class AirlineController {
     @PostMapping(path = "/stats")
     @PreAuthorize("hasRole('AIRLINE_ADMIN')")
     public ResponseEntity<AirlineStatsDTO> getStatsForCompany(@RequestBody AirlineStatsFilterDTO filter) {
-        AirlineStatsDTO stats = airlineService.getStatsFroCompany(filter);
+        AirlineStatsDTO stats = airlineService.getStatsForCompany(filter);
+        return new ResponseEntity<>(stats, (stats == null) ? HttpStatus.BAD_REQUEST : HttpStatus.OK);
+    }
+
+    @PostMapping(path = "/stats/reservations")
+    @PreAuthorize("hasRole('AIRLINE_ADMIN')")
+    public ResponseEntity<List<ReservationStatsDTO>> getStatsForCompanyReservations(@RequestBody AirlineStatsFilterDTO filter) {
+        List<ReservationStatsDTO> stats = airlineService.getStatsForCompanyReservations(filter);
         return new ResponseEntity<>(stats, (stats == null) ? HttpStatus.BAD_REQUEST : HttpStatus.OK);
     }
 }
