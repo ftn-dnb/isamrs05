@@ -184,7 +184,9 @@ export default {
 
     methods: {
         searchFlights() {
-            this.filterSearch.airlineId = this.airline.id;
+            if (this.airline !== null) {
+                this.filterSearch.airlineId = this.airline.id;
+            }
 
             axios.post('http://localhost:8080/api/flights', this.filterSearch)
             .then(response => {this.flights = response.data; })
