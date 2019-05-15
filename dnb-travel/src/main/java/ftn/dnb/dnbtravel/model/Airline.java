@@ -23,6 +23,9 @@ public class Airline {
     @Column(name = "description", nullable = false)
     private String description;
 
+    @Column(name = "rating", nullable = false)
+    private float rating;
+
     @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private Set<Destination> destinations = new HashSet<Destination>();
 
@@ -41,13 +44,14 @@ public class Airline {
     }
 
     public Airline(Long id, String name, Address address, String description,
-                   Set<Destination> destinations, Set<Flight> flights) {
+                   Set<Destination> destinations, Set<Flight> flights, float rating) {
         this.id = id;
         this.name = name;
         this.address = address;
         this.description = description;
         this.destinations = destinations;
         this.flights = flights;
+        this.rating = rating;
     }
 
     public Airline(AirlineDTO airlineDTO) {
@@ -55,6 +59,7 @@ public class Airline {
         this.name = airlineDTO.getName();
         this.address = airlineDTO.getAddress();
         this.description = airlineDTO.getDescription();
+        this.rating = airlineDTO.getRating();
     }
 
     public Long getId() {
@@ -103,6 +108,14 @@ public class Airline {
 
     public void setFlights(Set<Flight> flights) {
         this.flights = flights;
+    }
+
+    public float getRating() {
+        return rating;
+    }
+
+    public void setRating(float rating) {
+        this.rating = rating;
     }
 
     @Override
