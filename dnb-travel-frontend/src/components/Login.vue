@@ -1,16 +1,15 @@
 <template>
-    <div>
-        <h3>Login</h3>
-        <table>
-            <tr>
-                 <td><input type="text" placeholder="username" v-model="user.username" /></td>
-                 <td><input type="text" placeholder="password" v-model="user.password"/></td>
-            </tr>
-            <tr>
-                <th colspan="2"><input type="submit" value="Log in" @click="login()"></th>
-            </tr>
-        </table>
-    </div>
+    <v-container>
+        <v-layout align-center>
+            <v-form ref="loginForm">
+                <v-text-field type="text" placeholder="username" v-model="user.username" prepend-icon="person" :rules="inputRules" ></v-text-field>
+                <v-text-field type="password" placeholder="password" v-model="user.password" prepend-icon="lock" :rules="inputRules"></v-text-field>
+                <v-btn @click="login()">
+                        Login
+                </v-btn>
+             </v-form>
+        </v-layout>
+    </v-container>
 </template>
 
 <script>
@@ -24,6 +23,9 @@ export default{
 
     data(){
         return{
+            inputRules: [
+                v => (v && v.length > 0) || 'Please fill out this field'
+            ],
             user:{
                 username: null,
                 password: null,
@@ -32,20 +34,9 @@ export default{
     },
 
     methods:{
-        checkForm(){
-            if(!this.user.username){
-                alert('Please enter username');
-                return false;
-            } else if(!this.user.password){
-                alert('Please enter password');
-                return false;
-            }
-            return true;
-        },
-
         login(){
             
-            if(!this.checkForm()){
+            if(!this.$refs.loginForm.validate()){
                 return;
             }
 
@@ -55,7 +46,7 @@ export default{
                     return;
                 }
 
-                alert('Successful login');
+                this.$toasted.success('Successful login', {duration:5000});
                 localStorage.setItem('user-token',response.data.accessToken);
                 localStorage.setItem('role', response.data.role);
                 localStorage.setItem('username', this.user.username);
@@ -67,15 +58,14 @@ export default{
                 	case 'ROLE_AIRLINE_ADMIN': this.$router.push({path : '/adminAirline'}); break;
                 	case 'ROLE_HOTEL_ADMIN':  this.$router.push({path : '/adminHotel'}); break;
                 	case 'ROLE_RAC_ADMIN': this.$router.push({path : '/adminRentACar'}); break;
-                	default: alert('User not recognized');
+                	default: this.$toasted.error('User not recognized', {duration:5000});
                 }
                 
                 
             })
             .catch(error =>{
             	if(error.response.status === 401){
-            	console.log(error.response);
-            		alert(error.response.data);
+                    this.$toasted.error(error.response.data, {duration:5000});
             		return;
             	}
             });
