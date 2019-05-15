@@ -1,55 +1,49 @@
 <template>
     <div>
-        <table border="1">
-            <caption>Informations about company</caption>
-            <tr>
-                <td colspan="2">{{airline.name}}</td>                
-            </tr>
-            <tr>
-                <td>HQ address:</td>
-                <td>{{airline.address.streetName}} {{airline.address.streetNumber}} {{airline.address.city}}, {{airline.address.country}}</td>
-            </tr>
-            <tr>
-                <td>Description:</td>
-                <td>{{airline.description}}</td>
-            </tr>
-            <tr>
-                <td>Number of destinations we work on:</td>
-                <td>{{airline.destinations.length}}</td>
-            </tr>
-            <tr>
-                <td>Number of available flights:</td>
-                <td>{{airline.flights.length}}</td>
-            </tr>
-        </table>        
+        <h1 class="heading text-md-center">{{airline.name}}</h1>
+        <h2 class="subheading text-md-center">{{airline.address.streetName}} {{airline.address.streetNumber}} {{airline.address.city}}, {{airline.address.country}}</h2>
 
-        <br />
-        <div v-if="airline.destinations.length != 0">
-            <table border="1">
-                <caption>Destinations where we work:</caption>
-                <tr>
-                    <th>City</th>
-                    <th>Country</th>
-                    <th>Airport name</th>
-                    <th>Airport code</th>
-                </tr>
-                <tr v-for="dest in airline.destinations">
-                    <td>{{dest.city}}</td>
-                    <td>{{dest.country}}</td>
-                    <td>{{dest.airportName}}</td>
-                    <td>{{dest.airportCode}}</td>
-                </tr>
-            </table>
+        <h3 class="subheading grey--text text-md-center">
+            {{airline.description}}
+        </h3>
+
+        <br /><br />
+        <p class="text-md-center">
+            Currently we work on {{airline.destinations.length}} destinations and we have {{airline.flights.length}} flights
+        </p>
+
+        <div class="text-md-center" v-if="airline.destinations.length != 0">
+            <h3 class="subheading grey--text">Destinations where we work</h3>
+
+            <v-layout row wrap>
+                <v-flex xs12 sm6 md4 lg3 v-for="dest in airline.destinations" :key="dest.id">
+                    <v-card flat class="text-xs-center ma-3">
+                        <v-responsive class="pt-4">
+                            <v-icon size="40">map</v-icon>
+                        </v-responsive>
+                        <v-card-text>
+                            <div class="subheading">{{dest.city}}, {{dest.country}}</div>
+                            <div>
+                                {{airline.address.streetName}} {{airline.address.streetNumber}} {{airline.address.city}}, {{airline.address.country}}
+                            </div>
+                            <div class="grey--text">
+                                {{dest.airportName}}, {{dest.airportCode}}
+                            </div>                        
+                        </v-card-text>
+                    </v-card>
+                </v-flex>
+            </v-layout>
         </div>
         <div v-else>
-            <p>Currently we do not work anywhere</p>
+            <p class="text-md-center">Currently we do not work anywhere</p>
         </div>
 
-        <div v-if="airline.flights.length != 0">
+        <div class="text-md-center" v-if="airline.flights.length != 0">
+            <h3 class="subheading grey--text">Our flights</h3>
             <FlightList :airlineId=airline.id></FlightList>
         </div>
         <div v-else>
-            <p>Currently this airline doesn't have any flights</p>
+            <p class="text-md-center">Currently this airline doesn't have any flights</p>
         </div>
     </div>
 </template>

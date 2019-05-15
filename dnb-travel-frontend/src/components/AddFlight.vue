@@ -7,6 +7,7 @@
                 v-model="flightToAdd.startDestination" 
                 :items="airline.destinations" 
                 item-text="airportName" 
+                :rules="inputRule"
                 return-object
                 prepend-icon="flight_takeoff"
             ></v-combobox>
@@ -14,7 +15,8 @@
             <v-combobox label="Select end destination" 
                 v-model="flightToAdd.endDestination" 
                 :items="airline.destinations" 
-                item-text="airportName" 
+                item-text="airportName"
+                :rules="inputRule"
                 return-object
                 prepend-icon="flight_land"
             ></v-combobox>
@@ -22,10 +24,11 @@
             <v-menu>
                 <v-text-field label="Departure date" 
                     slot="activator" 
-                    :value="formattedDate(flightToAdd.startDateTime)"
+                    :value="startDate"
                     prepend-icon="event"
+                    :rules="flightRuleStartDate"
                 ></v-text-field>
-                <v-date-picker v-model="flightToAdd.startDateTime">
+                <v-date-picker v-model="startDate">
                 </v-date-picker>
             </v-menu>
             <v-menu>
@@ -33,6 +36,7 @@
                     slot="activator" 
                     :value="startTime"
                     prepend-icon="schedule"
+                    :rules="inputRule"
                     ></v-text-field>
                 <v-time-picker v-model="startTime">
                 </v-time-picker>
@@ -41,10 +45,11 @@
             <v-menu>
                 <v-text-field label="Return date" 
                     slot="activator" 
-                    :value="formattedDate(flightToAdd.endDateTime)"
+                    :value="endDate"
                     prepend-icon="event"
+                    :rules="flightRuleEndDate"
                     ></v-text-field>
-                <v-date-picker v-model="flightToAdd.endDateTime">
+                <v-date-picker v-model="endDate">
                 </v-date-picker>
             </v-menu>
             <v-menu>
@@ -52,6 +57,7 @@
                     slot="activator" 
                     :value="endTime"
                     prepend-icon="schedule"
+                    :rules="inputRule"
                     ></v-text-field>
                 <v-time-picker v-model="endTime">
                 </v-time-picker>
@@ -74,6 +80,7 @@
                 item-text="name" 
                 return-object
                 prepend-icon="local_airport"
+                :rules="inputRule"
             ></v-combobox>
 
             <v-text-field type="number"
@@ -81,14 +88,15 @@
                 v-model="flightToAdd.travelLength" 
                 min="0" 
                 prepend-icon="directions_walk"
+                :rules="travelLengthRule"
             ></v-text-field>
 
             <v-checkbox label="One-way" v-model="flightToAdd.isOneWay"></v-checkbox>
 
             <v-data-table :headers="priceListHeaders" :items="flightToAdd.prices">
                 <template v-slot:items="props">
-                    <td>{{ formattedDate(props.item.startDate) }}</td>
-                    <td>{{ formattedDate(props.item.endDate) }}</td>
+                    <td>{{ props.item.startDate }}</td>
+                    <td>{{ props.item.endDate }}</td>
                     <td>{{ props.item.price }}</td>
                     <td>{{ props.item.activeDiscount }}</td>
                 </template>
@@ -113,7 +121,7 @@
                                         <v-menu>
                                             <v-text-field label="Start date" 
                                                 slot="activator" 
-                                                :value="formattedDate(priceItem.startDate)"
+                                                :value="priceItem.startDate"
                                                 :rules="priceItemStartDate"
                                                 prepend-icon="event"
                                                 ></v-text-field>
@@ -124,7 +132,7 @@
                                         <v-menu>
                                             <v-text-field label="End date" 
                                                 slot="activator" 
-                                                :value="formattedDate(priceItem.endDate)"
+                                                :value="priceItem.endDate"
                                                 :rules="priceItemEndDate"
                                                 prepend-icon="event"
                                             ></v-text-field>
@@ -170,17 +178,6 @@
             </v-btn>
         </v-form>        
 
-        <table>
-            <tr>
-                <td>Take off date & time</td>
-                <td><input type="datetime-local" v-model="flightToAdd.startDateTime" :min="minDateTime" /></td>
-            </tr>
-            <tr>
-                <td>Landing date & time</td>
-                <td><input type="datetime-local" v-model="flightToAdd.endDateTime" :min="minDateTime" /></td>
-            </tr>
-
-        </table>
     </div>
 </template>
 
@@ -219,11 +216,28 @@ export default {
                 v => (v && v.length > 0) || 'Please fill out this field',
                 v => (v && v >= 0 && v <= 100) || 'Discount must be between 0 and 100 %'
             ],
+            inputRule: [
+                v => (v !== null) || 'Please fill out this field',
+            ],
+            flightRuleStartDate: [
+                v => (v && v.length > 0) || 'Please select start date',
+                v => (v && this.isDateGreaterThan(this.endDate, this.startDate)) || 'Start date must be before end date'
+            ],
+            flightRuleEndDate: [
+                v => (v && v.length > 0) || 'Please select end date',
+                v => (v && this.isDateGreaterThan(this.endDate, this.startDate)) || 'End date must be after start date'
+            ],
+            travelLengthRule: [
+                v => (v !== null) || 'Please fill out this field',
+                v => (v && v >= 0) || 'Travel length can\'t be negative number'
+            ],
 
             minDate: null,
             minDateTime: null,
             startTime: null,
             endTime: null,
+            startDate: null,
+            endDate: null,
             airline: {
                 id: null,
                 name: null,
@@ -277,12 +291,27 @@ export default {
         },
 
         addFlight() {
-            if (!this.checkAddFlightForm()) {
+            if (!this.$refs.addNewFlightForm.validate()) {
                 return;
             }
 
             this.flightToAdd.travelTime = this.getHoursDifference(this.flightToAdd.startDateTime, this.flightToAdd.endDateTime);
             this.flightToAdd.airlineId = 22; // @TODO promeniti
+
+            let startDateTime = new Date(this.startDate);
+            startDateTime.setHours(this.startTime.split(':')[0]);
+            startDateTime.setMinutes(this.startTime.split(':')[1])
+
+            let endDateTime = new Date(this.endDate);
+            endDateTime.setHours(this.endTime.split(':')[0]);
+            endDateTime.setMinutes(this.endTime.split(':')[1]);
+
+            this.flightToAdd.startDateTime = startDateTime;
+            this.flightToAdd.endDateTime = endDateTime;
+
+            if (!this.checkAddFlightForm()) {
+                return;
+            }
 
             axios.post('http://localhost:8080/api/airlines/' + this.airline.id + '/flights', this.flightToAdd, { headers: {"Authorization" : `Bearer ${localStorage.getItem('user-token')}`} })
             .then(response => {
@@ -294,26 +323,8 @@ export default {
         },
 
         checkAddFlightForm() {
-            if (this.flightToAdd.startDestination == null) {
-                this.$toasted.info('You must choose start destination.', {duration:5000});
-                return false;
-            } else if (this.flightToAdd.endDestination == null) {
-                this.$toasted.info('You must choose end destination.', {duration:5000});
-                return false;
-            } else if (this.flightToAdd.startDateTime == null) {
-                this.$toasted.info('You must pick take off date and time.', {duration:5000});
-                return false;
-            } else if (this.flightToAdd.endDateTime == null) {
-                this.$toasted.info('You must pick landing date and time.', {duration:5000});
-                return false;
-            } else if (this.flightToAdd.airplane == null) {
-                this.$toasted.info('You must choose airplane for this flight.', {duration:5000});
-                return false;
-            } else if (this.flightToAdd.prices.length === 0) {
+            if (this.flightToAdd.prices.length === 0) {
                 this.$toasted.info('You must enter at least one price list item.', {duration:5000});
-                return false;
-            } else if (this.flightToAdd.travelLength === '' || this.flightToAdd.travelLength == null) {
-                this.$toasted.info('You must enter travel length.', {duration:5000});
                 return false;
             } else if (this.isDateGreaterThan(this.flightToAdd.startDateTime, this.flightToAdd.endDateTime)) {
                 this.$toasted.info('Takeoff date and time must be before landing date and time', {duration:5000});

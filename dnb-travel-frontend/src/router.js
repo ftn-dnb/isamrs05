@@ -16,10 +16,14 @@ import AirlineSettings from './components/AirlineSettings.vue';
 import LoggedInStartPage from './components/LoggedInStartPage.vue';
 import UserSettings from './components/UserSettings.vue';
 import RentACarCompanySettings from './components/RentACarCompanySettings.vue';
+import UserRegistration from './components/UserRegistration.vue';
+import Logout from './components/Logout.vue';
+import Login from './components/Login.vue';
+import CarSearch from './components/CarSearch.vue';
+import Friends from './components/Friends.vue';
 import AddHotel from './components/AddHotel';
 import AddRentACar from './components/AddRentACar';
 import AirlineStats from './components/AirlineStats.vue';
-
 
 Vue.use(Router)
 
@@ -168,9 +172,36 @@ export default new Router({
         component: RentACarCompanySettings
     },
     {
+        path: '/registration',
+        name: 'Registration',
+        component: UserRegistration
+    },
+    {
+        path: '/logout',
+        name: 'Logout',
+        component: Logout
+    },
+    {
+        path: '/login',
+        name: 'Login',
+        component: Login
+    },
+    {
+        path: '/carSearch',
+        name: 'CarSearch',
+        component: CarSearch
+    },
+    {
+        path: '/friends',
+        name: 'Friends',
+        component: Friends
+    },
+    {
         path: '/airline-statistics',
         name: 'AirlineStats',
         component: AirlineStats
+
     },
+    
   ]
 })
