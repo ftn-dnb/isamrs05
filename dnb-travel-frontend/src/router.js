@@ -22,6 +22,7 @@ import Login from './components/Login.vue';
 import CarSearch from './components/CarSearch.vue';
 import Friends from './components/Friends.vue';
 import AddHotel from './components/AddHotel';
+import AddRentACar from './components/AddRentACar';
 import AirlineStats from './components/AirlineStats.vue';
 
 Vue.use(Router)
@@ -149,6 +150,11 @@ export default new Router({
         path: '/add-hotel',
         name: 'AddHotel',
         component: AddHotel
+    },
+    {
+        path: '/add-rent-a-car',
+        name: 'AddRentACar',
+        component: AddRentACar
     },
     {
         path: '/airline-settings',

@@ -5,8 +5,10 @@ import ftn.dnb.dnbtravel.dto.RACListItemDTO;
 import ftn.dnb.dnbtravel.dto.RentACarCompanyDTO;
 import ftn.dnb.dnbtravel.model.RACPriceListItem;
 import ftn.dnb.dnbtravel.model.RentACarCompany;
+import ftn.dnb.dnbtravel.model.User;
 import ftn.dnb.dnbtravel.repository.RentACarCompanyRepository;
 import ftn.dnb.dnbtravel.repository.RentACarPriceListItem;
+import ftn.dnb.dnbtravel.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -19,6 +21,9 @@ public class RentACarCompanyService {
 
     @Autowired
     private RentACarCompanyRepository racRepository;
+
+    @Autowired
+    private UserRepository userRepository;
 
     @Autowired
     private RentACarPriceListItem priceListItemRepository;
@@ -41,10 +46,12 @@ public class RentACarCompanyService {
 
     public RentACarCompanyDTO addRentACarCompany(RentACarCompanyDTO rentACarCompany){
         RentACarCompany savedRentACarCompany = racRepository.save(new RentACarCompany(rentACarCompany));
-
-        if (savedRentACarCompany == null)
+        if (savedRentACarCompany == null) {
             return null;
-
+        }
+        User admin = userRepository.findByUsername(rentACarCompany.getAdministrator().getUsername());
+        savedRentACarCompany.setAdministrator(admin);
+        racRepository.save(savedRentACarCompany);
         return new RentACarCompanyDTO(savedRentACarCompany);
     }
 
