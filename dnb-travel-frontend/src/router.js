@@ -189,8 +189,6 @@ export default new Router({
         path: '/friends',
         name: 'Friends',
         component: Friends
-    },
-    {
         path: '/airline-statistics',
         name: 'AirlineStats',
         component: AirlineStats
