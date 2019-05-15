@@ -32,20 +32,25 @@ public class Hotel {
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private Set<HotelPriceList> hotelPriceLists;
 
+    @OneToOne(cascade = CascadeType.ALL)
+    private User administrator;
+
     public Hotel() {
         super();
     }
 
-    public Hotel(String name, String description, double rating, Address address, Set<Room> rooms, Set<HotelPriceList> hotelPriceLists) {
+    public Hotel(String name, String description, double rating, Address address, Set<Room> rooms, Set<HotelPriceList> hotelPriceLists, User administrator) {
         this.name = name;
         this.description = description;
         this.rating = rating;
         this.address = address;
         this.rooms = rooms;
         this.hotelPriceLists = hotelPriceLists;
+        this.administrator = administrator;
     }
 
     public Hotel(HotelDTO hotelDTO) {
+        this.id = hotelDTO.getId();
         this.name = hotelDTO.getName();
         this.description = hotelDTO.getDescription();
         this.rating = hotelDTO.getRating();
@@ -109,5 +114,13 @@ public class Hotel {
 
     public void setRating(double rating) {
         this.rating = rating;
+    }
+
+    public User getAdministrator() {
+        return administrator;
+    }
+
+    public void setAdministrator(User administrator) {
+        this.administrator = administrator;
     }
 }

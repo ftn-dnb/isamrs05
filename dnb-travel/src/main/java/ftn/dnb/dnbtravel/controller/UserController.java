@@ -37,6 +37,13 @@ public class UserController {
         return new ResponseEntity<>(userService.getAllUsers(), HttpStatus.OK);
     }
 
+    @GetMapping(path = "/hotelAdmins")
+    //@PreAuthorize("hasRole('SYSTEM_ADMIN') or hasRole('AIRLINE_ADMIN') or hasRole('RAC_ADMIN') or hasRole('HOTEL_ADMIN') or hasRole('USER')")
+    public ResponseEntity<List<UserDTO>> getAllHotelAdmins() {
+        List<UserDTO> hotelAdmins = userService.findAllHotelAdmins();
+        return new ResponseEntity<>(hotelAdmins, HttpStatus.OK);
+    }
+
     @GetMapping(path = "/{id}")
     @PreAuthorize("hasRole('SYSTEM_ADMIN') or hasRole('AIRLINE_ADMIN') or hasRole('RAC_ADMIN') or hasRole('HOTEL_ADMIN') or hasRole('USER')")
     public ResponseEntity<UserDTO> getUserById(@PathVariable("id") Long id) {

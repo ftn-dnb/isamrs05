@@ -69,6 +69,7 @@ export default {
 			airlineAdminDrawer: [
 				{ icon: 'flight_takeoff', text: 'Flights', route: '/flights' },
 				{ icon: 'airplanemode_active', text: 'Add flight', route: '/add-flight' },
+				{ icon: 'assessment', text: 'Statistics', route: '/airline-statistics' },
 				{ icon: 'work_outline', text: 'Company settings', route: '/airline-settings' },
 				{ icon: 'perm_identity', text: 'Profile settings', route: '/user-settings' },
 			],
@@ -88,6 +89,12 @@ export default {
 			defaultUser:[
 			{icon: 'flight_takeoff', text: 'Flights search', route:'/flights'},
 			{icon: 'directions_car', text: 'Car search', route: '/carSearch'},
+      
+			sysAdminDrawer: [
+				{icon: 'perm_identity', text: 'Profile settings', route: '/user-settings'},
+				{icon: 'add_circle', text: 'Add Admin', route: '/adminSystem'},
+				{icon: 'add_circle', text: 'Add Hotel', route: '/add-hotel'}
+
 			],
 		}
 	},

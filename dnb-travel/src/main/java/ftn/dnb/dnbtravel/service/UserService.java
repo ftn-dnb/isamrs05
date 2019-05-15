@@ -23,6 +23,7 @@ import org.springframework.stereotype.Service;
 import javax.validation.constraints.Email;
 import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -59,6 +60,14 @@ public class UserService {
             return null;
 
         return new UserDTO(user);
+    }
+
+    public ArrayList<UserDTO> findAllHotelAdmins() {
+        ArrayList<UserDTO> userList = new ArrayList<UserDTO>();
+        for (User user : new ArrayList<>(userRepository.findAllHotelAdmins())) {
+            userList.add(new UserDTO(user));
+        }
+        return userList;
     }
 
     public UserDTO addUser(UserDTO user) {
