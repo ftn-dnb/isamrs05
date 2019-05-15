@@ -20,6 +20,7 @@ import UserRegistration from './components/UserRegistration.vue';
 import Logout from './components/Logout.vue';
 import Login from './components/Login.vue';
 import CarSearch from './components/CarSearch.vue';
+import Friends from './components/Friends.vue';
 
 Vue.use(Router)
 
@@ -176,6 +177,11 @@ export default new Router({
         path: '/carSearch',
         name: 'CarSearch',
         component: CarSearch
+    },
+    {
+        path: '/friends',
+        name: 'Friends',
+        component: Friends
     },
   ]
 })

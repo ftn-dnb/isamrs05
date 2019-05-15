@@ -79,10 +79,14 @@ export default {
 			],
 
 			userDrawer:[
+			{ icon: 'flight_takeoff', text: 'Flights search', route: '/flights'},
+			{ icon: 'directions_car', text: 'Car search', route: '/carSearch'},
+			{ icon: 'people', text:'Friends', route:'/friends'},
 			{ icon: 'perm_identity', text: 'Profile settings', route: '/user-settings'},
 			],
 
 			defaultUser:[
+			{icon: 'flight_takeoff', text: 'Flights search', route:'/flights'},
 			{icon: 'directions_car', text: 'Car search', route: '/carSearch'},
 			],
 		}
@@ -124,7 +128,7 @@ export default {
 	},
 
 	mounted() {
-		
+		this.lista = this.defaultUser;
 	}
 }	
 </script>
