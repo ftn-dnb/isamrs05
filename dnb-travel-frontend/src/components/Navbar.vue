@@ -54,7 +54,8 @@ export default {
 
 			sysAdminDrawer: [
 				{icon: 'perm_identity', text: 'Profile settings', route: '/user-settings'},
-				{icon: 'add_circle', text: 'Add admins', route: '/adminSystem'},
+				{icon: 'add_circle', text: 'Add Admin', route: '/adminSystem'},
+				{icon: 'add_circle', text: 'Add Hotel', route: '/add-hotel'}
 			],
 			
 		}
