@@ -24,12 +24,12 @@
 
         <h3 class="subheading grey--text text--darken-3 text-md-center">
             <v-icon>flight_land</v-icon>
-            <b>Landing date & time:</b> {{flight.startDateTime}}
+            <b>Landing date & time:</b> {{flight.endDateTime}}
         </h3>
 
         <h3 class="subheading grey--text text--darken-3 text-md-center">
             <v-icon>access_time</v-icon>
-            <b>Travel time:</b> {{getHoursDifference()}} h
+            <b>Travel time:</b> {{parseInt(getHoursDifference())}} h
         </h3>
 
         <h3 class="subheading grey--text text--darken-3 text-md-center">
