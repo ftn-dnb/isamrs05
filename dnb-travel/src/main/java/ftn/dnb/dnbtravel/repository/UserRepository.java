@@ -23,7 +23,9 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     User findByEmail(String email);
 
-    @Query("SELECT u FROM User u JOIN u.authorityList a WHERE a.name LIKE 'ROLE_SYSTEM_ADMIN'")
+    @Query("SELECT u FROM User u JOIN u.authorityList a WHERE a.name LIKE 'ROLE_HOTEL_ADMIN'")
     Collection<User> findAllHotelAdmins();
 
+    @Query("SELECT u FROM User u JOIN u.authorityList a WHERE a.name LIKE 'ROLE_RAC_ADMIN'")
+    Collection<User> findAllRACAdmins();
 }

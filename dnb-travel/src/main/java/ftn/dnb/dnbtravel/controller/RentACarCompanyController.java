@@ -4,7 +4,9 @@ import com.sun.mail.iap.Response;
 import ftn.dnb.dnbtravel.dto.CarFilterDTO;
 import ftn.dnb.dnbtravel.dto.RACListItemDTO;
 import ftn.dnb.dnbtravel.dto.RentACarCompanyDTO;
+import ftn.dnb.dnbtravel.model.RentACarCompany;
 import ftn.dnb.dnbtravel.service.RentACarCompanyService;
+import ftn.dnb.dnbtravel.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.*;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -20,11 +22,14 @@ public class RentACarCompanyController {
     private RentACarCompanyService rentACarCompanyService;
 
     @Autowired
+    private UserService userService;
+
+    @Autowired
     public RentACarCompanyController(RentACarCompanyService rentACarCompanyService){
         this.rentACarCompanyService = rentACarCompanyService;
     }
 
-    @PostMapping(path = "", consumes = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(path = "/add", consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<RentACarCompanyDTO> addRentACarCompany(@RequestBody RentACarCompanyDTO racToInsert){
         RentACarCompanyDTO savedRentACarCompany = rentACarCompanyService.addRentACarCompany(racToInsert);
         return new ResponseEntity<RentACarCompanyDTO>(savedRentACarCompany, HttpStatus.OK);

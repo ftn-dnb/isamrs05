@@ -10,7 +10,7 @@ import java.util.Set;
 @Entity(name = "rac")
 public class RentACarCompany {
     @Id
-    @GeneratedValue(strategy =  GenerationType.AUTO)
+    @GeneratedValue(strategy =  GenerationType.IDENTITY)
     private Long id;
 
     @Column(name = "name", nullable = false)
@@ -46,13 +46,16 @@ public class RentACarCompany {
     @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private BranchOffice mainOffice;
 
+    @OneToOne(cascade = CascadeType.ALL)
+    private User administrator;
+
     public RentACarCompany() {
         super();
     }
 
     public RentACarCompany(Long id, String name, String description,
                            double rating, Set<Car> cars, Set<RACPriceList> priceList,
-                           Set<BranchOffice> offices, BranchOffice mainOffice) {
+                           Set<BranchOffice> offices, BranchOffice mainOffice, User administrator) {
         this.id = id;
         this.name = name;
         this.description = description;
@@ -61,6 +64,7 @@ public class RentACarCompany {
         this.priceList = priceList;
         this.offices = offices;
         this.mainOffice = mainOffice;
+        this.administrator = administrator;
     }
 
     public RentACarCompany(RentACarCompanyDTO rentACarCompanyDTO){
@@ -132,5 +136,13 @@ public class RentACarCompany {
 
     public void setMainOffice(BranchOffice mainOffice) {
         this.mainOffice = mainOffice;
+    }
+
+    public User getAdministrator() {
+        return administrator;
+    }
+
+    public void setAdministrator(User administrator) {
+        this.administrator = administrator;
     }
 }
