@@ -53,6 +53,13 @@ public class AirlineController {
         return new ResponseEntity<>(flights, HttpStatus.OK);
     }
 
+    @PostMapping(path ="/{id}/addDestination")
+    @PreAuthorize("hasRole('AIRLINE_ADMIN')")
+    public ResponseEntity<AirlineDTO> addDestinationToAirline(@PathVariable Long id, @RequestBody DestinationDTO destination) {
+        AirlineDTO airline = airlineService.addDestination(id, destination);
+        return new ResponseEntity<>(airline, (airline == null) ? HttpStatus.BAD_REQUEST : HttpStatus.OK);
+    }
+
     @PreAuthorize("hasRole('AIRLINE_ADMIN')")
     @PostMapping(path = "/{id}/flights")
     public ResponseEntity<FlightDTO> addFlight(@PathVariable Long id, @RequestBody FlightDTO flightToAdd) {
