@@ -15,8 +15,10 @@ import AddFlight from './components/AddFlight.vue';
 import AirlineSettings from './components/AirlineSettings.vue';
 import LoggedInStartPage from './components/LoggedInStartPage.vue';
 import UserSettings from './components/UserSettings.vue';
-import RentACarCompanySettings from './components/RentACarCompanySettings.vue'
+import RentACarCompanySettings from './components/RentACarCompanySettings.vue';
+import AddHotel from './components/AddHotel';
 import AirlineStats from './components/AirlineStats.vue';
+
 
 Vue.use(Router)
 
@@ -138,6 +140,11 @@ export default new Router({
         path: '/add-flight',
         name: 'AddFlight',
         component: AddFlight
+    },
+    {
+        path: '/add-hotel',
+        name: 'AddHotel',
+        component: AddHotel
     },
     {
         path: '/airline-settings',
