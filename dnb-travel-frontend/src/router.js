@@ -196,5 +196,6 @@ export default new Router({
         component: AirlineStats
 
     },
+    
   ]
 })
