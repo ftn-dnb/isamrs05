@@ -79,17 +79,18 @@ export default {
 			{icon: 'perm_identity', text: 'Profile settings', route: '/user-settings'},
 			],
 
-			userDrawer:[
+			userDrawer: [
 			{ icon: 'flight_takeoff', text: 'Flights search', route: '/flights'},
 			{ icon: 'directions_car', text: 'Car search', route: '/carSearch'},
 			{ icon: 'people', text:'Friends', route:'/friends'},
 			{ icon: 'perm_identity', text: 'Profile settings', route: '/user-settings'},
 			],
 
-			defaultUser:[
+			defaultUser: [
 			{icon: 'flight_takeoff', text: 'Flights search', route:'/flights'},
 			{icon: 'directions_car', text: 'Car search', route: '/carSearch'},
-      
+      		],
+
 			sysAdminDrawer: [
 				{icon: 'perm_identity', text: 'Profile settings', route: '/user-settings'},
 				{icon: 'add_circle', text: 'Add Admin', route: '/adminSystem'},
