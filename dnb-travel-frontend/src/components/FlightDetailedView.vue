@@ -1,100 +1,104 @@
 <template>
     <div v-if="!flightExists">
-        <h2>Sorry, this flight does not exist in our database.</h2>
+        <h2 class="subheading">Sorry, this flight does not exist in our database.</h2>
     </div>
     <div v-else-if="flightExists">
         
-        <table border="1">
-            <caption>Flight informations</caption>
-
-            <tr>
-                <td>Start destination:</td>
-                <td>{{flight.startDestination.city}}, {{flight.startDestination.country}}</td>
-            </tr>
-            <tr>
-                <td>&nbsp;</td>
-                <td>{{flight.startDestination.airportName}}, {{flight.startDestination.airportCode}}</td>
-            </tr>
-            <tr>
-                <td>End destination:</td>
-                <td>{{flight.endDestination.city}}, {{flight.endDestination.country}}</td>
-            </tr>
-            <tr>
-                <td>&nbsp;</td>
-                <td>{{flight.endDestination.airportName}}, {{flight.endDestination.airportCode}}</td>
-            </tr>
-            <tr>
-                <td>Take-off date & time:</td>
-                <td>{{flight.startDateTime}}</td>
-            </tr>
-            <tr>
-                <td>Landing date & time:</td>
-                <td>{{flight.endDateTime}}</td>
-            </tr>
-            <tr>
-                <td>Travel time:</td>
-                <td>{{getHoursDifference()}} h</td>
-            </tr>
-            <tr>
-                <td>Travel length:</td>
-                <td>{{flight.travelLength}} km</td>
-            </tr>
-            <tr>
-                <td>Number of transits:</td>
-                <td>{{flight.transits.length}}</td>
-            </tr>
-            <tr>
-                <td>Rating:</td>
-                <td>{{'*'.repeat(flight.rating)}}</td>
-            </tr>
-        </table>
+        <h1 class="headline text-md-center">
+            {{flight.startDestination.city}}, {{flight.startDestination.country}}
+            <v-icon>arrow_forward</v-icon>
+            {{flight.endDestination.city}}, {{flight.endDestination.country}}
+        </h1>
+        <h3 class="subheading grey--text text--darken-3 text-md-center">
+            {{flight.startDestination.airportName}}, {{flight.startDestination.airportCode}}
+            <v-icon>arrow_forward</v-icon>
+            {{flight.endDestination.airportName}}, {{flight.endDestination.airportCode}}
+        </h3>
 
         <br />
-        <table v-if="flight.transits.length != 0" border="1">
-            <caption>Transit destinations</caption>
+
+        <h3 class="subheading grey--text text--darken-3 text-md-center">
+            <v-icon>flight_takeoff</v-icon>
+            <b>Take-off date & time:</b> {{flight.startDateTime}}
+        </h3>
+
+        <h3 class="subheading grey--text text--darken-3 text-md-center">
+            <v-icon>flight_land</v-icon>
+            <b>Landing date & time:</b> {{flight.endDateTime}}
+        </h3>
+
+        <h3 class="subheading grey--text text--darken-3 text-md-center">
+            <v-icon>access_time</v-icon>
+            <b>Travel time:</b> {{parseInt(getHoursDifference())}} h
+        </h3>
+
+        <h3 class="subheading grey--text text--darken-3 text-md-center">
+            <v-icon>directions_walk</v-icon>
+            <b>Travel length:</b> {{flight.travelLength}} km
+        </h3>
+
+        <h3 class="subheading grey--text text--darken-3 text-md-center">
+            <v-icon>directions_walk</v-icon>
+            <b>Travel length:</b> {{flight.travelLength}} km
+        </h3>
+
+        <h3 class="subheading grey--text text--darken-3 text-md-center">
+            <v-icon>flight</v-icon>
+            <b>Number of transits:</b> {{flight.transits.length}}
+        </h3>
+
+        <h3 class="subheading grey--text text--darken-3 text-md-center">
+            <v-icon>star</v-icon>
+            <b>Rating:</b> {{flight.rating}} / 5
+        </h3>
+
+        <br />
+        <div v-if="flight.transits.length != 0">
+            <h1 class="headline text-md-center">Transit destinations</h1>
             
-            <tr v-for="transit in flight.transits">
-                <td>{{transit.city}}, {{transit.country}}</td>
-            </tr>
-        </table>
+            <v-list>
+                <v-list-tile v-for="transit in flight.transits">
+                    <v-list-tile-content>
+                        <v-list-tile-title>{{transit.city}}, {{transit.country}}</v-list-tile-title>
+                        <v-list-tile-sub-title>{{transit.airportName}}, {{transit.airportCode}}</v-list-tile-sub-title>
+                    </v-list-tile-content>
+                </v-list-tile>
+            </v-list>
+        </div>
 
         <br />
-        <table border="1">
-            <caption>Price list</caption>
+        <h1 class="headline text-md-center">Price list</h1>
 
-            <tr>
-                <td>From</td>
-                <td>To</td>
-                <td>Price</td>
-                <td>Discount</td>
-            </tr>
-            <tr v-for="price in flight.prices">
-                <td>{{price.startDate}}</td>
-                <td>{{price.endDate}}</td>
-                <td>{{price.price}}</td>
-                <td>{{price.activeDiscount}}%</td>
-            </tr>
-        </table>   
-
-        <br /> 
-        <table border="1">
-            <caption>Airplane informations</caption>
-
-            <tr>
-                <td>Name:</td>
-                <td>{{flight.airplane.name}}</td>
-            </tr>
-            <tr>
-                <td>Number of seats:</td>
-                <td>{{flight.airplane.numOfRows * flight.airplane.numOfColumns}}</td>
-            </tr>
-            <tr>
-                <td>Available seats:</td>
-                <td>{{flight.airplane.numOfRows * flight.airplane.numOfColumns - flight.reservations.length}}</td>
-            </tr>
-        </table>  
+        <v-data-table :headers="priceListTableHeaders" :items="flight.prices">
+            <template v-slot:items="props">
+                <td>{{ props.item.startDate }}</td>
+                <td>{{ props.item.endDate }}</td>
+                <td>{{ props.item.price }}</td>
+                <td>{{ props.item.activeDiscount }}</td>
+            </template>
+        </v-data-table>
 
         <br />
+        <h1 class="headline text-md-center">Airplane information</h1>
+
+        <h3 class="subheading grey--text text--darken-3 text-md-center">
+            <v-icon>flight</v-icon>
+            <b>Airplane model:</b> {{flight.airplane.name}}
+        </h3>
+
+        <h3 class="subheading grey--text text--darken-3 text-md-center">
+            <v-icon>airline_seat_recline_extra</v-icon>
+            <b>Number of seats:</b> {{flight.airplane.numOfRows * flight.airplane.numOfColumns}}
+        </h3>
+
+        <h3 class="subheading grey--text text--darken-3 text-md-center">
+            <v-icon>airline_seat_recline_extra</v-icon>
+            <b>Available seats:</b> {{flight.airplane.numOfRows * flight.airplane.numOfColumns - flight.reservations.length}}
+        </h3>
+
+        <br />
+        <h3 class="subheading">Seats configuration</h3>
+
         <div>
             <v-stage ref="stage" :config="configKonva">
                 <v-layer ref="layer">
@@ -121,6 +125,12 @@ export default{
 
     data() {
         return{
+            priceListTableHeaders: [
+                { text: 'From', value: 'startDate' },
+                { text: 'To', value: 'endDate' },
+                { text: 'Price $', value: 'price' },
+                { text: 'Discount %', value: 'activeDiscount' }
+            ],
             flightExists: true,
             flight: {
                 id: null,
