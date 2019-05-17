@@ -24,6 +24,7 @@ import Friends from './components/Friends.vue';
 import AddHotel from './components/AddHotel';
 import AddRentACar from './components/AddRentACar';
 import AirlineStats from './components/AirlineStats.vue';
+import AddCompanyDestination from './components/AddCompanyDestination.vue';
 
 Vue.use(Router)
 
@@ -202,6 +203,10 @@ export default new Router({
         component: AirlineStats
 
     },
-    
+    {
+        path: '/add-company-destination',
+        name: 'AddCompanyDestination',
+        component: AddCompanyDestination
+    },
   ]
 })
