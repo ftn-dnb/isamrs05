@@ -3,6 +3,7 @@ package ftn.dnb.dnbtravel.service;
 import ftn.dnb.dnbtravel.dto.CarFilterDTO;
 import ftn.dnb.dnbtravel.dto.RACListItemDTO;
 import ftn.dnb.dnbtravel.dto.RentACarCompanyDTO;
+import ftn.dnb.dnbtravel.dto.UserDTO;
 import ftn.dnb.dnbtravel.model.RACPriceListItem;
 import ftn.dnb.dnbtravel.model.RentACarCompany;
 import ftn.dnb.dnbtravel.model.User;
@@ -115,5 +116,16 @@ public class RentACarCompanyService {
             }).collect(Collectors.toList());
 
         return list;
+    }
+
+    public RentACarCompanyDTO getRentACarCompanyByAdministrator(String username){
+
+
+        UserDTO user = new UserDTO(userRepository.findByUsername(username));
+        RentACarCompany rentACarCompany = racRepository.findOneByAdministrator(user);
+
+        // ubaci ako je null
+
+        return  new RentACarCompanyDTO(rentACarCompany);
     }
 }

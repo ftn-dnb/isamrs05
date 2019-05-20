@@ -30,6 +30,16 @@ export default{
                 name: null,
                 description: null,
             },
+            user:{
+                id: null,
+                username: null,
+                password: null,
+                firstName: null,
+                lastName: null,
+                email: null,
+
+                role: null,
+            },
         };
     },
 
@@ -38,23 +48,22 @@ export default{
             const header = {headers : {"Authorization": `Bearer ${localStorage.getItem('user-token')} `} };
             axios.put('http://localhost:8080/api/rentACarCompanies', this.rentACarCompany, header)
             .then(response => this.$toasted.success('Company successfully updated', {duration:5000}))
-            .catch(error => this.$toasted.error('Error while updating compnay profile'));
+            .catch(error => this.$toasted.error('Error while updating company profile', {duration:5000}));
         },
     },
 
     mounted(){
 
-        if(localStorage.getItem('role') === 'ROLE_RAC_ADMIN'){
-        axios.get("http://localhost:8080/api/rentACarCompanies/1",{ headers: {"Authorization" : `Bearer ${localStorage.getItem('user-token')}`} })
-        .then(response => this.rentACarCompany = response.data);
-        console.log(localStorage.getItem('user-token'));
-        }
-        else{
-            this.$router.push({path : '/'});
-            alert('Invalid user');
-        }
+       	const header = {headers : {"Authorization": `Bearer ${localStorage.getItem('user-token')} `} };
+        this.user.username = localStorage.getItem('username');
 
-    }
+        axios.get("http://localhost:8080/api/rentACarCompanies/company",this.user,header)
+        .then(response => {
+        	this.rentACarCompany = response.data;
+        })
+        .catch(error => console.log('mucak'));
+
+    },
 
 
 
