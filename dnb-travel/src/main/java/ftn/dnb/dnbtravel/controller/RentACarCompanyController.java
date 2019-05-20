@@ -48,11 +48,11 @@ public class RentACarCompanyController {
         return new ResponseEntity<>(rentACarCompany,(rentACarCompany == null) ? HttpStatus.NOT_FOUND : HttpStatus.OK);
     }
 
-    @RequestMapping(path = "/company", method = RequestMethod.GET,consumes = MediaType.APPLICATION_JSON_VALUE)
+    @RequestMapping(path = "/company", method = RequestMethod.POST,consumes = MediaType.APPLICATION_JSON_VALUE)
     @PreAuthorize("hasRole('RAC_ADMIN')")
     public ResponseEntity<?> getCompanyForAdmin(@RequestBody UserDTO user){
         RentACarCompanyDTO rentACarCompanyDTO = rentACarCompanyService.getRentACarCompanyByAdministrator(user.getUsername());
-        return new ResponseEntity<String>("a",HttpStatus.OK);
+        return new ResponseEntity<>(rentACarCompanyDTO, HttpStatus.OK);
     }
 
     @PutMapping(path = "", consumes = MediaType.APPLICATION_JSON_VALUE)

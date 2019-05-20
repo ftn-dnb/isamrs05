@@ -57,10 +57,16 @@ public class RentACarCompanyService {
     }
 
     public RentACarCompanyDTO updateRentACarCompany(RentACarCompanyDTO rentACarCompany){
-        RentACarCompany savedRentACarCompany = racRepository.save(new RentACarCompany(rentACarCompany));
+        RentACarCompany savedRentACarCompany = racRepository.findOneById(rentACarCompany.getId());
 
         if(savedRentACarCompany == null)
             return null;
+
+        savedRentACarCompany.setDescription(rentACarCompany.getDescription());
+        savedRentACarCompany.setName(rentACarCompany.getName());
+
+        racRepository.save(savedRentACarCompany);
+
 
         return new RentACarCompanyDTO(savedRentACarCompany);
     }
@@ -121,7 +127,8 @@ public class RentACarCompanyService {
     public RentACarCompanyDTO getRentACarCompanyByAdministrator(String username){
 
 
-        UserDTO user = new UserDTO(userRepository.findByUsername(username));
+        User user = userRepository.findByUsername(username);
+
         RentACarCompany rentACarCompany = racRepository.findOneByAdministrator(user);
 
         // ubaci ako je null

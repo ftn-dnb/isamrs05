@@ -29,16 +29,11 @@ export default{
                 id: null,
                 name: null,
                 description: null,
+                administrator: null,
             },
             user:{
-                id: null,
+            	id: null,
                 username: null,
-                password: null,
-                firstName: null,
-                lastName: null,
-                email: null,
-
-                role: null,
             },
         };
     },
@@ -54,10 +49,10 @@ export default{
 
     mounted(){
 
-       	const header = {headers : {"Authorization": `Bearer ${localStorage.getItem('user-token')} `} };
+       	const header = {headers: {"Authorization": `Bearer ${localStorage.getItem('user-token')}`}};
         this.user.username = localStorage.getItem('username');
 
-        axios.get("http://localhost:8080/api/rentACarCompanies/company",this.user,header)
+        axios.post("http://localhost:8080/api/rentACarCompanies/company",this.user,header)
         .then(response => {
         	this.rentACarCompany = response.data;
         })
