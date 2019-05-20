@@ -37,8 +37,8 @@
 	        <div>
 	            <v-stage ref="stage" :config="configKonva">
 	                <v-layer ref="layer">
-	                    <v-rect v-for="item in seats" :config="item" :key="item.id"></v-rect>
-	                    <v-text v-for="item in seatsText" :config="item" :key="item.id"></v-text>
+	                    <v-rect v-for="item in seats" :config="item" @click="seatClick(item)"></v-rect>
+	                    <v-text v-for="item in seatsText" :config="item" :key="item.id" @click="seatClick(item)"></v-text>
 	                </v-layer>
 	            </v-stage>
 	        </div>
@@ -49,7 +49,25 @@
         	</v-btn>
         </div>
         <div v-else-if="reservationFriends">
-        	pozivanje prijatelja
+        	<v-layout row wrap>
+            <v-flex xs12 sm6 md4 lg3 v-for="friend in friendships" :key="friend.friendUsername">
+                <v-card flat class="text-xs-center ma-3" v-if="friend.status == 'ACCEPTED'">
+                    <v-responsive class="pt-4">
+                        <v-icon size="50">person</v-icon>
+                    </v-responsive>
+                    <v-card-text>
+                        <div class="subheading">{{friend.friendFirstName}} {{friend.friendLastName}}</div>
+                        <div class="grey--text">{{friend.friendUsername}}</div>
+                    </v-card-text>
+                    <v-card-actions>
+                        <v-btn flat small @click="inviteFriend(friend.friendUsername)">
+                            <v-icon left>person_add</v-icon>
+                            <span>Invite</span>
+                        </v-btn>
+                    </v-card-actions>
+                </v-card>
+            </v-flex>
+        </v-layout>
 
         	<v-btn @click="backFromReservationFriends">
         		<v-icon left>arrow_back</v-icon>
@@ -70,7 +88,6 @@
         		<span>Back</span>
         	</v-btn>
         </div>
-
 	</div>
 </template>
 
@@ -86,9 +103,7 @@ export default {
 		flightId: null,
 	},
 
-	components: {
-		FlightReservationSeats
-	},
+	components: {},
 
 	data() {
 		return {
@@ -118,10 +133,11 @@ export default {
                 prices: [], 
                 reservations: []      
             },
+            friendships: [],
             selectedSeats: [],
+            invitedFriends: [],
             seats: [],
             seatsText: [],
-
             configKonva: {
                 width: 700,
                 height: 700,
@@ -139,12 +155,16 @@ export default {
 		backFromReservationUserInfo() {
 			this.reservationUserInfo = false;
 
-			// proveriti ako je korisnik pozvao prijatelje na koju stranicu da ga vrati
-			this.reservationFriends = true;
+			if (this.selectedSeats.length === 1) {
+				this.reservationSeats = true;
+				this.reservationFriends = false;
+			} else {
+				this.reservationSeats = false;
+				this.reservationFriends = true;
+			}
 		},
 
 		nextFromReservationSeats() {
-
 			if (this.selectedSeats.length === 0) {
 				this.$toasted.info('Please choose at least 1 seat', {duration: 5000});
 			} else if (this.selectedSeats.length === 1) {
@@ -159,6 +179,12 @@ export default {
 		},
 
 		nextFromReservationFriends() {
+			if (this.selectedSeats.length - 1 !== this.invitedFriends.length) {
+				
+				this.$toasted.error(`You need to invite ${this.selectedSeats.length - this.invitedFriends.length - 1} more friends`, {duration:5000});
+				return;
+			}
+
 			this.reservationFriends = false;
 			this.reservationUserInfo = true;
 		},
@@ -176,21 +202,27 @@ export default {
 
             for (let i = 0; i < this.flight.airplane.numOfColumns; ++i) {
                 for (let j = 0; j < this.flight.airplane.numOfRows; ++j) {
-                    this.seats.push({
+                    let seat =  {
+                    	seatX: j + 1,
+                    	seatY: i + 1,
+                    	taken: false,
                         x: i * (rectSize + margin),
                         y: j * (rectSize + margin),
                         width: rectSize,
                         height: rectSize,
-                        fill: 'green',
+                        fill: 'green	',
                         stroke: 'black',
-                    });
+                    };
+
+                    this.seats.push(seat);
 
                     this.seatsText.push({
                         x: i * (rectSize + margin) + 3,
-                        y: j * (rectSize + margin) + 12,
+                        y: j * (rectSize + margin) + 3,
                         text: `${j + 1}/${i + 1}`,
                         fontSize: 12,
-                        fill: 'white'
+                        fill: 'white',
+                        isText: true
                     })
                 }
             }
@@ -202,10 +234,47 @@ export default {
                     width: rectSize,
                     height: rectSize,
                     fill: 'red',
-                    stroke: 'black'
+                    stroke: 'black',
+                    reserved: true
                 });
             }
         },
+
+        seatClick(item) {
+        	if (item.reserved) {
+        		this.$toasted.error('This seat is already taken');
+        		return;
+        	}
+
+        	if (item.isText) {
+        		return;
+        	}
+
+        	const seatX = item.seatX;
+        	const seatY = item.seatY;
+
+        	if (item.taken) {
+	       		item.fill = 'green';
+	       		
+	       		for (let i = 0; i < this.selectedSeats.length; ++i) {
+	       			if (this.selectedSeats[i].x === seatX && this.selectedSeats[i].y === seatY) {
+	       				this.selectedSeats.splice(i, 1);
+	       				break;
+	       			}
+	       		}
+
+	       		item.taken = false;
+	       	} else {
+	       		this.selectedSeats.push({x: seatX, y: seatY});
+	       		item.fill = 'blue'
+	       		item.taken = true;
+	        }
+        },
+
+        inviteFriend(friendUsername) {
+        	// neka provera da ne moze 2x nekog da pozove
+        	this.invitedFriends.push(friendUsername);
+        }
 	},
 
 	mounted() {
@@ -213,9 +282,16 @@ export default {
         .then(response => {
             this.flight = response.data;
             this.createSeatsView();
-        }).catch(error => {
-        	this.$toasted.error("There was an error while getting the information about the flight", {duration: 5000});
-        });
+        })
+        // .catch(error => {
+        // 	this.$toasted.error("There was an error while getting the information about the flight", {duration: 5000});
+        // });
+
+        const header = {headers: {"Authorization": `Bearer ${localStorage.getItem('user-token')}`}};
+
+        axios.get(`http://localhost:8080/api/users/info/${localStorage.getItem('username')}`, header)
+        .then(response => this.friendships = response.data.friendships)
+        .catch(error => this.$toasted.error('Error while loading data about friends.',{duration:5000}));
 	}
 }
 
