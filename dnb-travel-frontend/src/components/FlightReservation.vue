@@ -60,7 +60,7 @@
                         <div class="grey--text">{{friend.friendUsername}}</div>
                     </v-card-text>
                     <v-card-actions>
-                        <v-btn flat small @click="inviteFriend(friend.friendUsername)">
+                        <v-btn flat small @click="inviteFriend(friend)">
                             <v-icon left>person_add</v-icon>
                             <span>Invite</span>
                         </v-btn>
@@ -81,11 +81,39 @@
 
         </div>
         <div v-else-if="reservationUserInfo">
-        	unosenje podataka
+        	<v-form>
+				<h3 class="subheading grey--text">My information</h3>
+				<v-text-field label="First name" v-model="user.firstName">
+				</v-text-field>
+
+				<v-text-field label="Last name" v-model="user.lastName">
+				</v-text-field>
+
+				<v-text-field label="Passport number">
+				</v-text-field>
+        	</v-form>
+
+        	<br />
+
+        	<v-form v-for="friend in invitedFriends">
+        		<h3 class="subheading grey--text">Data for {{friend.friendUsername}}</h3>
+				<v-text-field label="First name" v-model="friend.friendFirstName">
+				</v-text-field>
+
+				<v-text-field label="Last name" v-model="friend.friendLastName">
+				</v-text-field>
+
+				<v-text-field label="Passport number">
+				</v-text-field>
+        	</v-form>
 
         	<v-btn @click="backFromReservationUserInfo">
         		<v-icon left>arrow_back</v-icon>
         		<span>Back</span>
+        	</v-btn>
+        	<v-btn @click="buyTickets">
+        		<v-icon left>attach_money</v-icon>
+        		<span>Buy tickets</span>
         	</v-btn>
         </div>
 	</div>
@@ -142,6 +170,11 @@ export default {
                 width: 700,
                 height: 700,
             },
+            user: {
+            	firstName: null,
+            	lastName: null,
+            	passport: null,
+            }
 		}
 	},
 
@@ -271,9 +304,14 @@ export default {
 	        }
         },
 
-        inviteFriend(friendUsername) {
+        inviteFriend(friend) {
         	// neka provera da ne moze 2x nekog da pozove
-        	this.invitedFriends.push(friendUsername);
+        	this.invitedFriends.push(friend);
+        	this.$toasted.show('You invited ' + friend.friendFirstName + ' ' + friend.friendLastName, {duration:5000});
+        },
+
+        buyTickets() {
+        	this.$toasted.success('Flight reservation finished', {duration:5000});
         }
 	},
 
@@ -290,8 +328,12 @@ export default {
         const header = {headers: {"Authorization": `Bearer ${localStorage.getItem('user-token')}`}};
 
         axios.get(`http://localhost:8080/api/users/info/${localStorage.getItem('username')}`, header)
-        .then(response => this.friendships = response.data.friendships)
+        .then(response => {
+        	this.friendships = response.data.friendships;
+        	this.user = response.data;
+        })
         .catch(error => this.$toasted.error('Error while loading data about friends.',{duration:5000}));
+	
 	}
 }
 

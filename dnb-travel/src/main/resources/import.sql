@@ -30,7 +30,7 @@ INSERT INTO `destination` VALUES (12, 'BGD', 'Nikola Tesla International Airport
 INSERT INTO `destination` VALUES (13, 'ATH', 'Athens Airport', 'Athens', 'Greece', 123.22, 423.22);
 
 -- Airplanes
-INSERT INTO `airplane` VALUES(20, 'Boeing 747', 10, 20);
+INSERT INTO `airplane` VALUES(20, 'Boeing 747', 10, 10);
 INSERT INTO `airplane` VALUES(21, 'Boeing 567', 15, 15);
 INSERT INTO `airplane` VALUES(22, 'Boeing 900', 8, 18);
 

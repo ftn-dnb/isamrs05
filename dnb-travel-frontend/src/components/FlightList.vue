@@ -136,11 +136,11 @@
                     <v-card-actions>
                         <v-btn flat small router :to="{ name: 'FlightDetailedView', params: { flightId: flight.id} }">
                             <v-icon left>info</v-icon>
-                            <span>See details</span>
+                            <span>Details</span>
                         </v-btn>
                         <v-btn v-if="userLoggedIn" flat small router :to="{ name: 'FlightReservation', params: { flightId: flight.id} }">
                             <v-icon left>attach_money</v-icon>
-                            <span>Buy ticket</span>
+                            <span>Buy</span>
                         </v-btn>
                     </v-card-actions>
                 </v-card>
