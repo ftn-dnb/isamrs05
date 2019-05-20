@@ -25,6 +25,7 @@ import AddHotel from './components/AddHotel';
 import AddRentACar from './components/AddRentACar';
 import AirlineStats from './components/AirlineStats.vue';
 import AddCompanyDestination from './components/AddCompanyDestination.vue';
+import FlightReservation from './components/FlightReservation.vue';
 
 Vue.use(Router)
 
@@ -207,6 +208,12 @@ export default new Router({
         path: '/add-company-destination',
         name: 'AddCompanyDestination',
         component: AddCompanyDestination
+    },
+    {
+        path: '/flight-reservation',
+        name: 'FlightReservation',
+        props: true,
+        component: FlightReservation
     },
   ]
 })

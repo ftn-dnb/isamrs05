@@ -78,6 +78,11 @@
             </template>
         </v-data-table>
 
+        <v-btn v-if="userLoggedIn" router :to="{ name: 'FlightReservation', params: { flightId: flight.id} }">
+            <v-icon left>attach_money</v-icon>
+            <span>Buy ticket</span>
+        </v-btn>
+
         <br />
         <h1 class="headline text-md-center">Airplane information</h1>
 
@@ -125,6 +130,7 @@ export default{
 
     data() {
         return{
+            userLoggedIn: false,
             priceListTableHeaders: [
                 { text: 'From', value: 'startDate' },
                 { text: 'To', value: 'endDate' },
@@ -231,6 +237,8 @@ export default{
         }).catch(error => {
             this.flightExists = false;
         });
+
+        this.userLoggedIn = localStorage.getItem("role") === "ROLE_USER";
     }
 }
 
