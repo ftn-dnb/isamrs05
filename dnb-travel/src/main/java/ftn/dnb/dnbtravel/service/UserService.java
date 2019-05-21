@@ -78,6 +78,15 @@ public class UserService {
         return userList;
     }
 
+    public ArrayList<UserDTO> findAllAirlineAdmins() {
+        ArrayList<UserDTO> userList = new ArrayList<UserDTO>();
+        for (User user : new ArrayList<>(userRepository.findAllAirlineAdmins())) {
+            userList.add(new UserDTO(user));
+        }
+        return userList;
+    }
+
+
     public UserDTO addUser(UserDTO user) {
         User userProba = new User(user);
         userProba.setAuthorityList(new ArrayList<Authority>());

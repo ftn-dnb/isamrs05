@@ -96,6 +96,7 @@ export default {
 				{icon: 'add_circle', text: 'Add Admin', route: '/adminSystem'},
 				{icon: 'add_circle', text: 'Add Hotel', route: '/add-hotel'},
 				{icon: 'add_circle', text: 'Add Rent A Car Company', route: '/add-rent-a-car'},
+				{icon: 'add_circle', text: 'Add Airline', route: '/add-airline'}
 			],
 		}
 	},
@@ -109,7 +110,7 @@ export default {
 				this.lista = this.airlineAdminDrawer;
 			}
 			else if(data ==='ROLE_SYSTEM_ADMIN'){
-				//dodati
+				this.lista = this.sysAdminDrawer;
 			}
 			else if(data === 'ROLE_HOTEL_ADMIN'){
 				//dodati
