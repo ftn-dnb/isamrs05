@@ -1,12 +1,14 @@
 package ftn.dnb.dnbtravel.model;
 
+import ftn.dnb.dnbtravel.dto.CarDTO;
+
 import javax.persistence.*;
 
 @Entity
 @Table(name = "CARS")
 public class Car {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column(name = "name", nullable = false)
@@ -42,6 +44,14 @@ public class Car {
         this.rating = rating;
         this.seatsNumber = seatsNumber;
         this.company = company;
+    }
+
+    public Car(CarDTO car){
+        this.name = car.getName();
+        this.brand = car.getBrand();
+        this.manufYear = car.getManufYear();
+        this.type = car.getType();
+        this.seatsNumber = car.getSeatsNumber();
     }
 
     public String getName() {

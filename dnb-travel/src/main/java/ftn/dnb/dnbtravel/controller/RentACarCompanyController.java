@@ -1,10 +1,7 @@
 package ftn.dnb.dnbtravel.controller;
 
 import com.sun.mail.iap.Response;
-import ftn.dnb.dnbtravel.dto.CarFilterDTO;
-import ftn.dnb.dnbtravel.dto.RACListItemDTO;
-import ftn.dnb.dnbtravel.dto.RentACarCompanyDTO;
-import ftn.dnb.dnbtravel.dto.UserDTO;
+import ftn.dnb.dnbtravel.dto.*;
 import ftn.dnb.dnbtravel.model.RentACarCompany;
 import ftn.dnb.dnbtravel.service.RentACarCompanyService;
 import ftn.dnb.dnbtravel.service.UserService;
@@ -68,4 +65,10 @@ public class RentACarCompanyController {
         return new ResponseEntity<>(items,HttpStatus.OK);
     }
 
+    @RequestMapping(path= "/addCar", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
+    @PreAuthorize("hasRole('RAC_ADMIN')")
+    public ResponseEntity<?> addCarToCompany(@RequestBody CarDTO car){
+        CarDTO response = rentACarCompanyService.addNewCar(car);
+        return  new ResponseEntity<>(response,HttpStatus.OK);
+    }
 }
