@@ -49,25 +49,54 @@
         	</v-btn>
         </div>
         <div v-else-if="reservationFriends">
+
+        	<h3 class="subheading grey--text">Invite friends</h3>
+
         	<v-layout row wrap>
-            <v-flex xs12 sm6 md4 lg3 v-for="friend in friendships" :key="friend.friendUsername">
-                <v-card flat class="text-xs-center ma-3" v-if="friend.status == 'ACCEPTED'">
-                    <v-responsive class="pt-4">
-                        <v-icon size="50">person</v-icon>
-                    </v-responsive>
-                    <v-card-text>
-                        <div class="subheading">{{friend.friendFirstName}} {{friend.friendLastName}}</div>
-                        <div class="grey--text">{{friend.friendUsername}}</div>
-                    </v-card-text>
-                    <v-card-actions>
-                        <v-btn flat small @click="inviteFriend(friend)">
-                            <v-icon left>person_add</v-icon>
-                            <span>Invite</span>
-                        </v-btn>
-                    </v-card-actions>
-                </v-card>
-            </v-flex>
-        </v-layout>
+	            <v-flex xs12 sm6 md4 lg3 v-for="friend in friendships" :key="friend.friendUsername">
+	                <v-card flat class="text-xs-center ma-3" v-if="friend.status == 'ACCEPTED'">
+	                    <v-responsive class="pt-4">
+	                        <v-icon size="70">person</v-icon>
+	                    </v-responsive>
+	                    <v-card-text>
+	                        <div class="subheading">{{friend.friendFirstName}} {{friend.friendLastName}}</div>
+	                        <div class="grey--text">{{friend.friendUsername}}</div>
+	                    </v-card-text>
+	                    <v-card-actions>
+	                        <v-btn flat small @click="inviteFriend(friend)">
+	                            <v-icon left>person_add</v-icon>
+	                            <span>Invite</span>
+	                        </v-btn>
+	                    </v-card-actions>
+	                </v-card>
+	            </v-flex>
+	        </v-layout>
+
+	        <div v-if="invitedFriends.length !== 0">
+        		
+	        	<br />
+	        	<h3 class="subheading grey--text">You invited</h3>
+
+	        	<v-layout row wrap>
+		            <v-flex xs12 sm6 md4 lg3 v-for="friend in invitedFriends" :key="friend.friendUsername">
+		                <v-card flat class="text-xs-center ma-3">
+		                    <v-responsive class="pt-4">
+		                        <v-icon size="70">person</v-icon>
+		                    </v-responsive>
+		                    <v-card-text>
+		                        <div class="subheading">{{friend.friendFirstName}} {{friend.friendLastName}}</div>
+		                        <div class="grey--text">{{friend.friendUsername}}</div>
+		                    </v-card-text>
+		                    <v-card-actions>
+		                        <v-btn flat small @click="uninviteFriend(friend)">
+		                            <v-icon left>person_add_disabled</v-icon>
+		                            <span>Uninvite</span>
+		                        </v-btn>
+		                    </v-card-actions>
+		                </v-card>
+		            </v-flex>
+		        </v-layout>
+        	</div>
 
         	<v-btn @click="backFromReservationFriends">
         		<v-icon left>arrow_back</v-icon>
@@ -81,30 +110,49 @@
 
         </div>
         <div v-else-if="reservationUserInfo">
-        	<v-form>
-				<h3 class="subheading grey--text">My information</h3>
-				<v-text-field label="First name" v-model="user.firstName">
-				</v-text-field>
+        	<v-form ref="usersDataForm">
+        		<div>
+        			<h3 class="subheading grey--text">My information</h3>
+					<v-text-field label="First name" v-model="user.firstName" :rules="inputRule">
+					</v-text-field>
 
-				<v-text-field label="Last name" v-model="user.lastName">
-				</v-text-field>
+					<v-text-field label="Last name" v-model="user.lastName" :rules="inputRule">
+					</v-text-field>
 
-				<v-text-field label="Passport number">
-				</v-text-field>
-        	</v-form>
+					<v-text-field label="Passport number" v-model="user.passport" :rules="inputRule">
+					</v-text-field>
+        		</div>
+        		<br />
 
-        	<br />
+        		<div v-for="friend in invitedFriends">
+        			<h3 class="subheading grey--text">Data for {{friend.friendUsername}}</h3>
 
-        	<v-form v-for="friend in invitedFriends">
-        		<h3 class="subheading grey--text">Data for {{friend.friendUsername}}</h3>
-				<v-text-field label="First name" v-model="friend.friendFirstName">
-				</v-text-field>
+					<v-text-field label="First name" v-model="friend.friendFirstName" :rules="inputRule">
+					</v-text-field>
 
-				<v-text-field label="Last name" v-model="friend.friendLastName">
-				</v-text-field>
+					<v-text-field label="Last name" v-model="friend.friendLastName" :rules="inputRule">
+					</v-text-field>
 
-				<v-text-field label="Passport number">
-				</v-text-field>
+					<v-text-field label="Passport number" :rules="inputRule">
+					</v-text-field>
+
+					<br />
+        		</div>
+
+        		<div v-for="(friend, index) in invitedNonRegistered">
+        			<h3 class="subheading grey--text">Friend #{{index + 1}}</h3>
+
+					<v-text-field label="First name" v-model="friend.firstName" :rules="inputRule">
+					</v-text-field>
+
+					<v-text-field label="Last name" v-model="friend.lastName" :rules="inputRule">
+					</v-text-field>
+
+					<v-text-field label="Passport number" v-model="friend.passport" :rules="inputRule">
+					</v-text-field>
+
+					<br />
+        		</div>
         	</v-form>
 
         	<v-btn @click="backFromReservationUserInfo">
@@ -122,7 +170,6 @@
 <script>
 
 import axios from 'axios';
-import FlightReservationSeats from './FlightReservationSeats.vue';
 
 export default {
 	name: 'FlightReservation',
@@ -135,6 +182,9 @@ export default {
 
 	data() {
 		return {
+			inputRule: [
+				v => (v && v.length !== 0) || 'Please fill out this field'
+			],
 			reservationSeats: true,
 			reservationFriends: false,
 			reservationUserInfo: false,
@@ -164,6 +214,7 @@ export default {
             friendships: [],
             selectedSeats: [],
             invitedFriends: [],
+            invitedNonRegistered: [],
             seats: [],
             seatsText: [],
             configKonva: {
@@ -186,6 +237,7 @@ export default {
 		},
 
 		backFromReservationUserInfo() {
+			this.invitedNonRegistered = [];
 			this.reservationUserInfo = false;
 
 			if (this.selectedSeats.length === 1) {
@@ -212,10 +264,11 @@ export default {
 		},
 
 		nextFromReservationFriends() {
-			if (this.selectedSeats.length - 1 !== this.invitedFriends.length) {
-				
-				this.$toasted.error(`You need to invite ${this.selectedSeats.length - this.invitedFriends.length - 1} more friends`, {duration:5000});
-				return;
+			// add users that are not registered on this app
+			const numOfNonReg = this.selectedSeats.length - this.invitedFriends.length - this.invitedNonRegistered.length - 1;
+
+			for (let i = 0; i < numOfNonReg; i++) {
+				this.invitedNonRegistered.push({firstName: null, lastName: null, passport: null});
 			}
 
 			this.reservationFriends = false;
@@ -305,12 +358,22 @@ export default {
         },
 
         inviteFriend(friend) {
-        	// neka provera da ne moze 2x nekog da pozove
+        	const index = this.friendships.findIndex(e => e.friendUsername === friend.friendUsername);
+        	this.friendships.splice(index, 1);
         	this.invitedFriends.push(friend);
-        	this.$toasted.show('You invited ' + friend.friendFirstName + ' ' + friend.friendLastName, {duration:5000});
+        },
+
+        uninviteFriend(friend) {
+        	const index = this.invitedFriends.findIndex(e => e.friendUsername === friend.friendUsername);
+        	this.invitedFriends.splice(index, 1);
+        	this.friendships.push(friend);
         },
 
         buyTickets() {
+        	if (!this.$refs.usersDataForm.validate()) {
+        		return;
+        	}
+
         	this.$toasted.success('Flight reservation finished', {duration:5000});
         }
 	},
@@ -321,9 +384,9 @@ export default {
             this.flight = response.data;
             this.createSeatsView();
         })
-        // .catch(error => {
-        // 	this.$toasted.error("There was an error while getting the information about the flight", {duration: 5000});
-        // });
+        .catch(error => {
+        	this.$toasted.error("There was an error while getting the information about the flight", {duration: 5000});
+        });
 
         const header = {headers: {"Authorization": `Bearer ${localStorage.getItem('user-token')}`}};
 
