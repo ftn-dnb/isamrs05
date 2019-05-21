@@ -24,7 +24,7 @@ public class TokenUtils {
     @Value("thisisoursupersecretcode")
     public String SECRET;
 
-    @Value("300")
+    @Value("3600000")//1h
     private int EXPIRES_IN;
 
     @Value("600")

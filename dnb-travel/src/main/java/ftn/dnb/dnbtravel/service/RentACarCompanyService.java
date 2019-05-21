@@ -3,6 +3,7 @@ package ftn.dnb.dnbtravel.service;
 import ftn.dnb.dnbtravel.dto.CarFilterDTO;
 import ftn.dnb.dnbtravel.dto.RACListItemDTO;
 import ftn.dnb.dnbtravel.dto.RentACarCompanyDTO;
+import ftn.dnb.dnbtravel.dto.UserDTO;
 import ftn.dnb.dnbtravel.model.RACPriceListItem;
 import ftn.dnb.dnbtravel.model.RentACarCompany;
 import ftn.dnb.dnbtravel.model.User;
@@ -56,10 +57,16 @@ public class RentACarCompanyService {
     }
 
     public RentACarCompanyDTO updateRentACarCompany(RentACarCompanyDTO rentACarCompany){
-        RentACarCompany savedRentACarCompany = racRepository.save(new RentACarCompany(rentACarCompany));
+        RentACarCompany savedRentACarCompany = racRepository.findOneById(rentACarCompany.getId());
 
         if(savedRentACarCompany == null)
             return null;
+
+        savedRentACarCompany.setDescription(rentACarCompany.getDescription());
+        savedRentACarCompany.setName(rentACarCompany.getName());
+
+        racRepository.save(savedRentACarCompany);
+
 
         return new RentACarCompanyDTO(savedRentACarCompany);
     }
@@ -115,5 +122,17 @@ public class RentACarCompanyService {
             }).collect(Collectors.toList());
 
         return list;
+    }
+
+    public RentACarCompanyDTO getRentACarCompanyByAdministrator(String username){
+
+
+        User user = userRepository.findByUsername(username);
+
+        RentACarCompany rentACarCompany = racRepository.findOneByAdministrator(user);
+
+        // ubaci ako je null
+
+        return  new RentACarCompanyDTO(rentACarCompany);
     }
 }

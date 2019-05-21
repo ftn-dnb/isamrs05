@@ -4,6 +4,7 @@ import com.sun.mail.iap.Response;
 import ftn.dnb.dnbtravel.dto.CarFilterDTO;
 import ftn.dnb.dnbtravel.dto.RACListItemDTO;
 import ftn.dnb.dnbtravel.dto.RentACarCompanyDTO;
+import ftn.dnb.dnbtravel.dto.UserDTO;
 import ftn.dnb.dnbtravel.model.RentACarCompany;
 import ftn.dnb.dnbtravel.service.RentACarCompanyService;
 import ftn.dnb.dnbtravel.service.UserService;
@@ -45,6 +46,13 @@ public class RentACarCompanyController {
     public ResponseEntity<RentACarCompanyDTO> getRentACarCompanyById(@PathVariable("id") Long id){
         RentACarCompanyDTO rentACarCompany = rentACarCompanyService.getRentACarCompanyById(id);
         return new ResponseEntity<>(rentACarCompany,(rentACarCompany == null) ? HttpStatus.NOT_FOUND : HttpStatus.OK);
+    }
+
+    @RequestMapping(path = "/company", method = RequestMethod.POST,consumes = MediaType.APPLICATION_JSON_VALUE)
+    @PreAuthorize("hasRole('RAC_ADMIN')")
+    public ResponseEntity<?> getCompanyForAdmin(@RequestBody UserDTO user){
+        RentACarCompanyDTO rentACarCompanyDTO = rentACarCompanyService.getRentACarCompanyByAdministrator(user.getUsername());
+        return new ResponseEntity<>(rentACarCompanyDTO, HttpStatus.OK);
     }
 
     @PutMapping(path = "", consumes = MediaType.APPLICATION_JSON_VALUE)
