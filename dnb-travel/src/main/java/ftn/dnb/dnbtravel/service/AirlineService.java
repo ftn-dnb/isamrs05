@@ -258,6 +258,7 @@ public class AirlineService {
         return statsList;
     }
 
+
     public AirlineDTO addAirline(AirlineDTO airlineDTO) {
         Airline savedAirline = new Airline(airlineDTO);
         if (savedAirline == null) {
@@ -267,5 +268,21 @@ public class AirlineService {
         savedAirline.setAdministrator(admin);
         airlineRepository.save(savedAirline);
         return new AirlineDTO(savedAirline);
+    }
+
+    public AirlineDTO addDestination(Long airlineId, DestinationDTO destination) {
+        Destination dest = destinationRepository.findOneById(destination.getId());
+        Airline airline = airlineRepository.findOneById(airlineId);
+
+        if (dest == null || airline == null)
+            return null;
+
+        if (airline.getDestinations().contains(dest))
+            return null;
+
+        airline.getDestinations().add(dest);
+        airlineRepository.save(airline);
+
+        return new AirlineDTO(airline);
     }
 }
