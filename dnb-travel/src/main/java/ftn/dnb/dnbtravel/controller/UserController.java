@@ -49,6 +49,12 @@ public class UserController {
         return new ResponseEntity<>(racAdmins, HttpStatus.OK);
     }
 
+    @GetMapping(path = "/airlineAdmins")
+    public ResponseEntity<List<UserDTO>> getAllAirlineAdmins() {
+        List<UserDTO> airlineAdmins = userService.findAllAirlineAdmins();
+        return new ResponseEntity<>(airlineAdmins, HttpStatus.OK);
+    }
+
     @GetMapping(path = "/{id}")
     @PreAuthorize("hasRole('SYSTEM_ADMIN') or hasRole('AIRLINE_ADMIN') or hasRole('RAC_ADMIN') or hasRole('HOTEL_ADMIN') or hasRole('USER')")
     public ResponseEntity<UserDTO> getUserById(@PathVariable("id") Long id) {
