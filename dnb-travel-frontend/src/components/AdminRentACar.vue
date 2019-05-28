@@ -33,10 +33,10 @@ export default{
     },
 
     mounted(){
-       axios.post('http://localhost:8080/api/rentACarCompanies/carSearch', this.filter)
-            .then(response => {
-                this.items = response.data;
-                cosole.log(this.items) });
+       //axios.post('http://localhost:8080/api/rentACarCompanies/carSearch', this.filter)
+        //    .then(response => {
+       //         this.items = response.data;
+       //         cosole.log(this.items) });
     }
 }
 

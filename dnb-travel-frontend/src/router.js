@@ -24,8 +24,11 @@ import Friends from './components/Friends.vue';
 import AddHotel from './components/AddHotel';
 import AddRentACar from './components/AddRentACar';
 import AirlineStats from './components/AirlineStats.vue';
+import AddAirline from './components/AddAirline';
 import AddCompanyDestination from './components/AddCompanyDestination.vue';
 import FlightReservation from './components/FlightReservation.vue';
+import AddCar from './components/AddCar';
+
 
 Vue.use(Router)
 
@@ -159,6 +162,11 @@ export default new Router({
         component: AddRentACar
     },
     {
+        path: '/add-airline',
+        name: 'AddAirline',
+        component: AddAirline
+    },
+    {
         path: '/airline-settings',
         name: 'AirlineSettings',
         component: AirlineSettings
@@ -214,6 +222,11 @@ export default new Router({
         name: 'FlightReservation',
         props: true,
         component: FlightReservation
+    },
+    {
+        path: '/add-car',
+        name: 'AddCar',
+        component: AddCar
     },
   ]
 })

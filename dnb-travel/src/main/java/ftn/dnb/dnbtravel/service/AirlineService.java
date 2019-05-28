@@ -30,6 +30,9 @@ public class AirlineService {
     @Autowired
     private AirplaneRepository airplaneRepository;
 
+    @Autowired
+    private UserRepository userRepository;
+
     public List<AirlineDTO> getAllAirlines() {
         List<Airline> airlines = airlineRepository.findAll();
         List<AirlineDTO> dtos = new ArrayList<AirlineDTO>();
@@ -47,15 +50,15 @@ public class AirlineService {
         return airlineDto;
     }
 
-    public AirlineDTO addAirline(AirlineDTO airline) {
-        addressRepository.save(airline.getAddress());
-        Airline savedAirline = airlineRepository.save(new Airline(airline));
-
-        if (savedAirline == null)
-            return null;
-
-        return new AirlineDTO(savedAirline);
-    }
+    //public AirlineDTO addAirline(AirlineDTO airline) {
+    //    addressRepository.save(airline.getAddress());
+    //    Airline savedAirline = airlineRepository.save(new Airline(airline));
+    //
+    //    if (savedAirline == null)
+    //       return null;
+    //
+    //    return new AirlineDTO(savedAirline);
+    //}
 
     public AirlineDTO updateAirline(AirlineDTO airline) {
         addressRepository.save(airline.getAddress());
@@ -253,6 +256,18 @@ public class AirlineService {
         stats.forEach((key, value) -> statsList.add(new ReservationStatsDTO(key, value)));
 
         return statsList;
+    }
+
+
+    public AirlineDTO addAirline(AirlineDTO airlineDTO) {
+        Airline savedAirline = new Airline(airlineDTO);
+        if (savedAirline == null) {
+            return null;
+        }
+        User admin = userRepository.findByUsername(airlineDTO.getAdministrator().getUsername());
+        savedAirline.setAdministrator(admin);
+        airlineRepository.save(savedAirline);
+        return new AirlineDTO(savedAirline);
     }
 
     public AirlineDTO addDestination(Long airlineId, DestinationDTO destination) {
