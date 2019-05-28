@@ -133,7 +133,7 @@
 					<v-text-field label="Last name" v-model="friend.friendLastName" :rules="inputRule">
 					</v-text-field>
 
-					<v-text-field label="Passport number" :rules="inputRule">
+					<v-text-field label="Passport number" v-model="friend.passport" :rules="inputRule">
 					</v-text-field>
 
 					<br />
@@ -222,6 +222,7 @@ export default {
                 height: 700,
             },
             user: {
+            	username: null,
             	firstName: null,
             	lastName: null,
             	passport: null,
@@ -328,7 +329,7 @@ export default {
 
         seatClick(item) {
         	if (item.reserved) {
-        		this.$toasted.error('This seat is already taken');
+        		this.$toasted.error('This seat is already taken', {duration:5000});
         		return;
         	}
 
@@ -374,6 +375,38 @@ export default {
         		return;
         	}
 
+        	let reservations = {
+        		seats: this.selectedSeats,
+        		users: []
+        	};
+
+        	reservations.users.push({
+        		username: this.user.username,
+        		firstName: this.user.firstName,
+        		lastName: this.user.lastName,
+        		passport: this.user.passport
+        	});
+
+            for (let fr of this.invitedFriends) {
+            	reservations.users.push({
+            		username: fr.friendUsername,
+            		firstName: fr.friendFirstName,
+            		lastName: fr.friendLastName,
+            		passport: fr.passport
+            	})
+            }
+
+            for (let fr of this.invitedNonRegistered) {
+            	reservations.users.push({
+            		username: null,
+            		firstName: fr.firstName,
+            		lastName: fr.lastName,
+            		passport: fr.passport
+            	});
+            }
+
+            console.log(reservations);
+
         	this.$toasted.success('Flight reservation finished', {duration:5000});
         }
 	},
@@ -393,6 +426,7 @@ export default {
         axios.get(`http://localhost:8080/api/users/info/${localStorage.getItem('username')}`, header)
         .then(response => {
         	this.friendships = response.data.friendships;
+        	this.friendships.forEach(fr => fr.passport = null)
         	this.user = response.data;
         })
         .catch(error => this.$toasted.error('Error while loading data about friends.',{duration:5000}));

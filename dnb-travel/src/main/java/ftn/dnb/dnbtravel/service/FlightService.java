@@ -1,22 +1,31 @@
 package ftn.dnb.dnbtravel.service;
 
-import ftn.dnb.dnbtravel.dto.AirlinePriceListItemDTO;
-import ftn.dnb.dnbtravel.dto.FlightDTO;
-import ftn.dnb.dnbtravel.dto.FlightFilterDTO;
+import ftn.dnb.dnbtravel.dto.*;
+import ftn.dnb.dnbtravel.model.AirlinePriceListItem;
 import ftn.dnb.dnbtravel.model.Flight;
+import ftn.dnb.dnbtravel.model.FlightReservation;
+import ftn.dnb.dnbtravel.model.User;
 import ftn.dnb.dnbtravel.repository.FlightRepository;
+import ftn.dnb.dnbtravel.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
+@Transactional(readOnly = true)
 public class FlightService {
 
     @Autowired
     private FlightRepository flightRepository;
+
+    @Autowired
+    private UserRepository userRepository;
 
     public List<FlightDTO> getAllFlights() {
         List<Flight> flights = flightRepository.findAll();
@@ -30,6 +39,54 @@ public class FlightService {
 
         if (flight == null)
             return null;
+
+        return new FlightDTO(flight);
+    }
+
+    @Transactional(readOnly = false, propagation = Propagation.REQUIRES_NEW)
+    public FlightDTO reserveTickets(Long flightId, FlightReservationDataDTO data) {
+        Flight flight = flightRepository.findOneById(flightId);
+
+        if (data.getUsers().size() != data.getSeats().size())
+            return null;
+
+        Date today = new Date();
+        float ticketPrice = 0.0f;
+
+        for (AirlinePriceListItem price : flight.getPrices()) {
+            if (price.getStartDate().before(today) && price.getEndDate().after(today)) {
+                ticketPrice = price.getPrice() * price.getActiveDiscount() / 100;
+                break;
+            }
+        }
+
+        for (int i = 0; i < data.getUsers().size(); ++i) {
+            FlightReservation reservation = new FlightReservation();
+            reservation.setReservationDate(today);
+            reservation.setSeatRow(data.getSeats().get(i).getX());
+            reservation.setSeatColumn(data.getSeats().get(i).getY());
+            reservation.setPrice(ticketPrice);
+            reservation.setApproved(false);
+            reservation.setPassport(data.getUsers().get(i).getPassport());
+            reservation.setFirstName(data.getUsers().get(i).getFirstName());
+            reservation.setLastName(data.getUsers().get(i).getLastName());
+
+            // First element is user that made the reservations, others are friends
+            if (i == 0) {
+                reservation.setApproved(true);
+            }
+
+            if (data.getUsers().get(i).getUsername() == null) {
+                User user = userRepository.findOneByUsername(data.getUsers().get(i).getUsername());
+                reservation.setUser(user);
+                user.getReservations().add(reservation);
+                userRepository.save(user);
+            } else {
+                flight.getReservations().add(reservation);
+                flightRepository.save(flight);
+            }
+
+        }
 
         return new FlightDTO(flight);
     }
