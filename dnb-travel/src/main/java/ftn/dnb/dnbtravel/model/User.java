@@ -184,6 +184,9 @@ public class User implements UserDetails {
     }
 
     public Set<FlightReservation> getReservations() {
+        if (reservations == null)
+            reservations = new HashSet<FlightReservation>();
+
         return reservations;
     }
 

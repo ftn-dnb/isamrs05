@@ -40,9 +40,9 @@ INSERT INTO `address` VALUES(32, 'Belgrade', 'Serbia', 11000, 'Bulevar', 213);
 INSERT INTO `address` VALUES(33, 'Athens', 'Greece', 5433, 'Alfa', 24);
 
 -- Airlines
-INSERT INTO `airline` VALUES(22, 'Best airline company in US', 'United', 4, 31);
-INSERT INTO `airline` VALUES(23, 'Najbolja aviokompanija', 'AirSerbia', 3, 32);
-INSERT INTO `airline` VALUES(24, 'Best company in Greece', 'AirGreece', 5, 33);
+INSERT INTO `airline` VALUES(22, 'Best airline company in US', 'United', 4, 31, 4);
+INSERT INTO `airline` VALUES(23, 'Najbolja aviokompanija', 'AirSerbia', 3, 32, 4);
+INSERT INTO `airline` VALUES(24, 'Best company in Greece', 'AirGreece', 5, 33, 4);
 
 -- Destinations where airlines work
 INSERT INTO `airline_destinations` VALUES(22, 11);
@@ -65,12 +65,20 @@ INSERT INTO `flight_prices` VALUES (50, 60);
 INSERT INTO `flight_prices` VALUES (50, 61);
 
 -- Flight reservation
-INSERT INTO `flight_reservation` VALUES (71, 1000, 0, '2019-01-01 00:00:00', 5, 6);
-INSERT INTO `flight_reservation` VALUES (72, 1000, 0, '2019-01-04 01:00:00', 6, 7);
-INSERT INTO `flight_reservation` VALUES (73, 1000, 0, '2019-02-01 00:00:00', 5, 7);
-INSERT INTO `flight_reservation` VALUES (74, 1400, 0, '2019-03-01 01:00:00', 6, 8);
-INSERT INTO `flight_reservation` VALUES (75, 1600, 0, '2019-03-01 00:00:00', 5, 9);
-INSERT INTO `flight_reservation` VALUES (76, 1500, 0, '2019-05-02 01:00:00', 1, 1);
+INSERT INTO `flight_reservation` VALUES (71, true, 'Marko', 'Markovic', '12345', 1000, 0, '2019-01-01 00:00:00', 5, 6, 2);
+INSERT INTO `flight_reservation` VALUES (72, true, 'Marko', 'Markovic', '12345', 1000, 0, '2019-01-04 01:00:00', 6, 7, 2);
+INSERT INTO `flight_reservation` VALUES (73, true, 'Marko', 'Markovic', '12345', 1000, 0, '2019-02-01 00:00:00', 5, 7, 2);
+INSERT INTO `flight_reservation` VALUES (74, true, 'Pera', 'Peric', '65432', 1400, 0, '2019-03-01 01:00:00', 6, 8, 3);
+INSERT INTO `flight_reservation` VALUES (75, true, 'Pera', 'Peric', '65432', 1600, 0, '2019-03-01 00:00:00', 5, 9, 3);
+INSERT INTO `flight_reservation` VALUES (76, true, 'Pera', 'Peric', '65432', 1500, 0, '2019-05-02 01:00:00', 1, 1, 3);
+
+-- Users and flight reservations
+INSERT INTO `users_reservations` VALUES (2, 71);
+INSERT INTO `users_reservations` VALUES (2, 72);
+INSERT INTO `users_reservations` VALUES (2, 73);
+INSERT INTO `users_reservations` VALUES (3, 74);
+INSERT INTO `users_reservations` VALUES (3, 75);
+INSERT INTO `users_reservations` VALUES (3, 76);
 
 -- Flight reservations
 INSERT INTO `flight_reservations` VALUES (50, 71);

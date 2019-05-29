@@ -405,9 +405,15 @@ export default {
             	});
             }
 
-            console.log(reservations);
+            const header = {headers: {"Authorization": `Bearer ${localStorage.getItem('user-token')}`}};
+            axios.post(`http://localhost:8080/api/flights/${this.flightId}/reserve`, reservations, header)
+            .then(response => {
+        		this.$toasted.success('Flight reservation finished', {duration:5000});
+            })
+            .catch(error => {
+            	this.$toasted.error('Error while reserving tickets for this flight', {duration:5000});
+            });
 
-        	this.$toasted.success('Flight reservation finished', {duration:5000});
         }
 	},
 

@@ -76,10 +76,12 @@ public class FlightService {
                 reservation.setApproved(true);
             }
 
-            if (data.getUsers().get(i).getUsername() == null) {
+            if (data.getUsers().get(i).getUsername() != null) {
                 User user = userRepository.findOneByUsername(data.getUsers().get(i).getUsername());
                 reservation.setUser(user);
                 user.getReservations().add(reservation);
+                flight.getReservations().add(reservation);
+                flightRepository.save(flight);
                 userRepository.save(user);
             } else {
                 flight.getReservations().add(reservation);
