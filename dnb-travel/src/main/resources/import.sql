@@ -82,7 +82,7 @@ INSERT INTO `flight_reservations` VALUES (50, 76);
 
 
 -- Hotels
-INSERT INTO `hotel` (`id`, `name`, `description`, `rating`, `address_id`) VALUES (1, 'Hotel1', 'Ovo je Hotel1', 5.0, 32)
+INSERT INTO `hotel` (`id`, `name`, `description`, `rating`, `address_id`, `administrator_id`) VALUES (1, 'Hotel1', 'Ovo je Hotel1', 5.0, 32, 6)
 INSERT INTO `hotel` (`id`, `name`, `description`, `rating`, `address_id`) VALUES (2, 'Hotel2', 'Ovo je Hotel2', 5.0, 33)
 
 -- Rooms
@@ -94,11 +94,11 @@ INSERT INTO `hotel_rooms` (`hotel_id`, `rooms_id`) VALUES (1, 1)
 INSERT INTO `hotel_rooms` (`hotel_id`, `rooms_id`) VALUES (2, 2)
 INSERT INTO `hotel_rooms` (`hotel_id`, `rooms_id`) VALUES (1, 3)
 -- Price List
-INSERT INTO `hotel_price_list` (`id`, `hotel_id`) VALUES (1, 1);
-INSERT INTO `hotel_price_list` (`id`, `hotel_id`) VALUES (2, 2);
+INSERT INTO `hotel_price_list` (`id`, `description`, `hotel_id`) VALUES (1, 'Majski cjenovnik', 1);
+INSERT INTO `hotel_price_list` (`id`, `description`, `hotel_id`) VALUES (2, 'Junski cjenovnik', 1);
 
 INSERT INTO `hotel_hotel_price_lists` (`hotel_id`, `hotel_price_lists_id`) VALUES (1,1)
-INSERT INTO `hotel_hotel_price_lists` (`hotel_id`, `hotel_price_lists_id`) VALUES (2,2)
+INSERT INTO `hotel_hotel_price_lists` (`hotel_id`, `hotel_price_lists_id`) VALUES (2,1)
 -- Price List Item
 INSERT INTO `hotel_price_list_item` (`id`, `active_discount`, `start_date`, `end_date`, `price_per_day`, `room_id`, `hotel_price_list_id`) VALUES (1, 0.5, '2019-10-01 22:00:00', '2019-10-01 22:30:00', 40, 1, 1);
 

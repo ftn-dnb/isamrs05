@@ -27,6 +27,8 @@ import AirlineStats from './components/AirlineStats.vue';
 import AddAirline from './components/AddAirline';
 import AddCompanyDestination from './components/AddCompanyDestination.vue';
 import AddCar from './components/AddCar';
+import HotelPriceListSettings from './components/HotelPriceListSettings.vue';
+import AddRoom from './components/AddRoom.vue';
 
 Vue.use(Router)
 
@@ -165,6 +167,11 @@ export default new Router({
         component: AddAirline
     },
     {
+        path: '/add-room',
+        name: 'AddRoom',
+        component: AddRoom
+    },
+    {
         path: '/airline-settings',
         name: 'AirlineSettings',
         component: AirlineSettings
@@ -178,6 +185,11 @@ export default new Router({
         path: '/rent-a-car-settings',
         name: 'RentACarCompanySettings',
         component: RentACarCompanySettings
+    },
+    {
+        path: '/hotel-price-list-settings',
+        name: 'HotelPriceListSettings',
+        component: HotelPriceListSettings
     },
     {
         path: '/registration',

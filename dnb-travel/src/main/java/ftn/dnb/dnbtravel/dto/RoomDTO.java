@@ -4,30 +4,40 @@ import ftn.dnb.dnbtravel.model.Room;
 
 public class RoomDTO {
 
+    private Long id;
     private int roomNumber;
     private int floor;
     private double rating;
     private int capacity;
-    private int hotelID;
+    private Long hotelID;
 
     public RoomDTO() {
         super();
     }
 
     public RoomDTO(Room room) {
+        this.id = room.getId();
         this.roomNumber = room.getRoomNumber();
         this.floor = room.getFloor();
         this.rating = room.getRating();
         this.capacity = room.getCapacity();
-        //this.hotelID = room.getHotel().getId();
+        this.hotelID = room.getHotel().getId();
     }
 
-    public RoomDTO(int roomNumber, int floor, double rating, int capacity, int hotelID) {
+    public RoomDTO(int roomNumber, int floor, double rating, int capacity, Long hotelID) {
         this.roomNumber = roomNumber;
         this.floor = floor;
         this.rating = rating;
         this.capacity = capacity;
         this.hotelID = hotelID;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public int getRoomNumber() {
@@ -62,11 +72,11 @@ public class RoomDTO {
         this.capacity = capacity;
     }
 
-    public int getHotelID() {
+    public Long getHotelID() {
         return hotelID;
     }
 
-    public void setHotelID(int hotelID) {
+    public void setHotelID(Long hotelID) {
         this.hotelID = hotelID;
     }
 }

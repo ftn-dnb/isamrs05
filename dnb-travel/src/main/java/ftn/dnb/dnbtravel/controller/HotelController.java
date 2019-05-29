@@ -52,4 +52,10 @@ public class HotelController {
         RoomDTO savedRoom = roomService.addRoom(roomDTO);
         return new ResponseEntity<>(savedRoom, HttpStatus.OK);
     }
+
+    @RequestMapping(value = "/findHotelByAdmin", method = RequestMethod.POST)
+    public ResponseEntity<Long> findHotelByAdmin(@RequestBody String username) {
+        Long hotelID = hotelService.findHotelIdByAdmin(username);
+        return new ResponseEntity<>(hotelID, HttpStatus.OK);
+    }
 }

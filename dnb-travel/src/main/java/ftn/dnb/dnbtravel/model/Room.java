@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import ftn.dnb.dnbtravel.dto.RoomDTO;
 
 import javax.persistence.*;
+import java.util.HashSet;
 import java.util.Set;
 
 @Entity
@@ -46,6 +47,7 @@ public class Room {
     }
 
     public Room(RoomDTO roomDTO) {
+        //this.id = roomDTO.getHotelID();
         this.roomNumber = roomDTO.getRoomNumber();
         this.floor = roomDTO.getFloor();
         this.rating = roomDTO.getRating();
@@ -101,6 +103,9 @@ public class Room {
     }
 
     public Set<HotelPriceListItem> getHotelPriceListItems() {
+        if (this.hotelPriceListItems == null) {
+            this.hotelPriceListItems = new HashSet<>();
+        }
         return hotelPriceListItems;
     }
 
