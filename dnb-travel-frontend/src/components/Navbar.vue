@@ -70,6 +70,7 @@ export default {
 				{ icon: 'flight_takeoff', text: 'Flights', route: '/flights' },
 				{ icon: 'airplanemode_active', text: 'Add flight', route: '/add-flight' },
 				{ icon: 'map', text: 'Add destination', route: '/add-company-destination' },
+				{ icon: '', text: 'Fast reservations', route: '/fast-reservation-seats' },
 				{ icon: 'assessment', text: 'Statistics', route: '/airline-statistics' },
 				{ icon: 'work_outline', text: 'Company settings', route: '/airline-settings' },
 				{ icon: 'perm_identity', text: 'Profile settings', route: '/user-settings' },
