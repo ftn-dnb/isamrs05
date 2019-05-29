@@ -48,6 +48,10 @@ public class User implements UserDetails {
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private Set<Friendship> friendships = new HashSet<Friendship>();
 
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    private Set<FlightReservation> reservations = new HashSet<FlightReservation>();
+
+
     public User() {
         super();
     }
@@ -177,6 +181,17 @@ public class User implements UserDetails {
 
     public void setFriendships(Set<Friendship> friendships) {
         this.friendships = friendships;
+    }
+
+    public Set<FlightReservation> getReservations() {
+        if (reservations == null)
+            reservations = new HashSet<FlightReservation>();
+
+        return reservations;
+    }
+
+    public void setReservations(Set<FlightReservation> reservations) {
+        this.reservations = reservations;
     }
 
     @Override
