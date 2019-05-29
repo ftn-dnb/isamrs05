@@ -3,6 +3,7 @@ package ftn.dnb.dnbtravel.model;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
+import java.util.HashSet;
 import java.util.Set;
 
 @Entity
@@ -11,6 +12,9 @@ public class HotelPriceList {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @Column(name = "description", nullable = false)
+    private String description;
 
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private Set<HotelPriceListItem> hotelPriceListItems;
@@ -23,7 +27,8 @@ public class HotelPriceList {
         super();
     }
 
-    public HotelPriceList(Set<HotelPriceListItem> hotelPriceListItems, Hotel hotel) {
+    public HotelPriceList(String description, Set<HotelPriceListItem> hotelPriceListItems, Hotel hotel) {
+        this.description = description;
         this.hotelPriceListItems = hotelPriceListItems;
         this.hotel = hotel;
     }
@@ -36,7 +41,19 @@ public class HotelPriceList {
         this.id = id;
     }
 
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
     public Set<HotelPriceListItem> getHotelPriceListItems() {
+
+        if (this.hotelPriceListItems == null) {
+            this.hotelPriceListItems = new HashSet<>();
+        }
         return hotelPriceListItems;
     }
 
