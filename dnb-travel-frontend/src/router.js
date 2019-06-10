@@ -24,8 +24,14 @@ import Friends from './components/Friends.vue';
 import AddHotel from './components/AddHotel';
 import AddRentACar from './components/AddRentACar';
 import AirlineStats from './components/AirlineStats.vue';
+import AddAirline from './components/AddAirline';
 import AddCompanyDestination from './components/AddCompanyDestination.vue';
 import FlightFastReservationForm from './components/FlightFastReservationForm.vue';
+import FlightReservation from './components/FlightReservation.vue';
+import AddCar from './components/AddCar';
+import HotelPriceListSettings from './components/HotelPriceListSettings.vue';
+import AddRoom from './components/AddRoom.vue';
+
 
 Vue.use(Router)
 
@@ -159,6 +165,16 @@ export default new Router({
         component: AddRentACar
     },
     {
+        path: '/add-airline',
+        name: 'AddAirline',
+        component: AddAirline
+    },
+    {
+        path: '/add-room',
+        name: 'AddRoom',
+        component: AddRoom
+    },
+    {
         path: '/airline-settings',
         name: 'AirlineSettings',
         component: AirlineSettings
@@ -172,6 +188,11 @@ export default new Router({
         path: '/rent-a-car-settings',
         name: 'RentACarCompanySettings',
         component: RentACarCompanySettings
+    },
+    {
+        path: '/hotel-price-list-settings',
+        name: 'HotelPriceListSettings',
+        component: HotelPriceListSettings
     },
     {
         path: '/registration',
@@ -213,6 +234,17 @@ export default new Router({
         path: '/fast-reservation-seats',
         name: 'FlightFastReservationForm',
         component: FlightFastReservationForm,
+    },
+    {
+        path: '/flight-reservation',
+        name: 'FlightReservation',
+        props: true,
+        component: FlightReservation
+    },
+    {
+        path: '/add-car',
+        name: 'AddCar',
+        component: AddCar
     },
   ]
 })

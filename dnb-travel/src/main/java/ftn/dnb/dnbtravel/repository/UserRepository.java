@@ -28,4 +28,7 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     @Query("SELECT u FROM User u JOIN u.authorityList a WHERE a.name LIKE 'ROLE_RAC_ADMIN'")
     Collection<User> findAllRACAdmins();
+
+    @Query("SELECT u FROM User u JOIN u.authorityList a WHERE a.name LIKE 'ROLE_AIRLINE_ADMIN'")
+    Collection<User> findAllAirlineAdmins();
 }

@@ -36,4 +36,11 @@ public class HotelService {
         return new HotelDTO(savedHotel);
     }
 
+    public Long findHotelIdByAdmin(String username) {
+        String adminUsername = username.substring(0, username.length()-1);
+        User admin = userRepository.findByUsername(adminUsername);
+        Hotel hotel = hotelRepository.findOneByAdminId(admin.getId());
+        return hotel.getId();
+    }
+
 }

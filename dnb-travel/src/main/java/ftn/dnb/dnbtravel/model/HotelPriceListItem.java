@@ -1,6 +1,8 @@
 package ftn.dnb.dnbtravel.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import ftn.dnb.dnbtravel.dto.HotelPriceListDTO;
+import ftn.dnb.dnbtravel.dto.HotelPriceListItemDTO;
 
 import javax.persistence.*;
 import java.util.Date;
@@ -43,6 +45,14 @@ public class HotelPriceListItem {
         this.pricePerDay = pricePerDay;
         this.room = room;
         this.hotelPriceList = hotelPriceList;
+    }
+
+    public HotelPriceListItem(HotelPriceListItemDTO dto) {
+        this.activeDiscount = dto.getActiveDiscount();
+        this.startDate = dto.getStartDate();
+        this.endDate = dto.getEndDate();
+        this.pricePerDay = dto.getPricePerDay();
+
     }
 
     public Long getId() {

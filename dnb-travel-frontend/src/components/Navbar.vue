@@ -79,6 +79,7 @@ export default {
 			rentACarAdminDrawer: [
 			{icon: 'work_outline', text: 'Company settings', route: '/rent-a-car-settings'},
 			{icon: 'perm_identity', text: 'Profile settings', route: '/user-settings'},
+			{icon: 'add_circle', text: 'Add new vehicle', route: '/add-car'},
 			],
 
 			userDrawer: [
@@ -98,7 +99,14 @@ export default {
 				{icon: 'add_circle', text: 'Add Admin', route: '/adminSystem'},
 				{icon: 'add_circle', text: 'Add Hotel', route: '/add-hotel'},
 				{icon: 'add_circle', text: 'Add Rent A Car Company', route: '/add-rent-a-car'},
+				{icon: 'add_circle', text: 'Add Airline', route: '/add-airline'}
 			],
+
+			hotelAdminDrawer: [
+				{icon: 'add_circle', text: 'Add Room', route: '/add-room'},
+				{icon: 'work_outline', text: 'Price List Settings', route: '/hotel-price-list-settings'}
+			],
+
 		}
 	},
 	created(){
@@ -111,10 +119,10 @@ export default {
 				this.lista = this.airlineAdminDrawer;
 			}
 			else if(data ==='ROLE_SYSTEM_ADMIN'){
-				//dodati
+				this.lista = this.sysAdminDrawer;
 			}
 			else if(data === 'ROLE_HOTEL_ADMIN'){
-				//dodati
+				this.lista = this.hotelAdminDrawer;
 			}
 			else if(data === 'ROLE_USER'){
 				this.lista = this.userDrawer;

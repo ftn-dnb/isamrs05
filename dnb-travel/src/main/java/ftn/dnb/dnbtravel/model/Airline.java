@@ -32,7 +32,8 @@ public class Airline {
     @OneToMany(mappedBy = "airline", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private Set<Flight> flights = new HashSet<Flight>();
 
-
+    @OneToOne(cascade = CascadeType.ALL)
+    private User administrator;
 
     // @TODO: dodati
     // Spisak karata sa popustima za brzu rezervaciju
@@ -44,7 +45,7 @@ public class Airline {
     }
 
     public Airline(Long id, String name, Address address, String description,
-                   Set<Destination> destinations, Set<Flight> flights, float rating) {
+                   Set<Destination> destinations, Set<Flight> flights, float rating, User administrator) {
         this.id = id;
         this.name = name;
         this.address = address;
@@ -52,6 +53,7 @@ public class Airline {
         this.destinations = destinations;
         this.flights = flights;
         this.rating = rating;
+        this.administrator = administrator;
     }
 
     public Airline(AirlineDTO airlineDTO) {
@@ -116,6 +118,14 @@ public class Airline {
 
     public void setRating(float rating) {
         this.rating = rating;
+    }
+
+    public User getAdministrator() {
+        return administrator;
+    }
+
+    public void setAdministrator(User administrator) {
+        this.administrator = administrator;
     }
 
     @Override

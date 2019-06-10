@@ -26,9 +26,26 @@ public class FlightReservation {
     @Column(name = "seatColumn", nullable = false)
     private int seatColumn;
 
-    public FlightReservation() {
-        super();
-    }
+    @Column(name = "approved", nullable = false)
+    private boolean approved;
+
+    @Column(name = "passport", nullable = false)
+    private String passport;
+
+    @Column(name = "firstName", nullable = false)
+    private String firstName;
+
+    @Column(name = "lastName", nullable = false)
+    private String lastName;
+
+    @Column(name = "fastReservation", nullable = false)
+    private boolean fastReservation;
+
+    @ManyToOne
+    private User user;
+
+
+    public FlightReservation() { super(); }
 
     public FlightReservation(Long id, Date reservationDate, float price, float rating, int seatRow, int seatColumn) {
         this.id = id;
@@ -85,6 +102,54 @@ public class FlightReservation {
 
     public void setSeatColumn(int seatColumn) {
         this.seatColumn = seatColumn;
+    }
+
+    public boolean isApproved() {
+        return approved;
+    }
+
+    public void setApproved(boolean approved) {
+        this.approved = approved;
+    }
+
+    public String getPassport() {
+        return passport;
+    }
+
+    public void setPassport(String passport) {
+        this.passport = passport;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+
+    public String getFirstName() {
+        return firstName;
+    }
+
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
+
+    public String getLastName() {
+        return lastName;
+    }
+
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
+    }
+
+    public boolean isFastReservation() {
+        return fastReservation;
+    }
+
+    public void setFastReservation(boolean fastReservation) {
+        this.fastReservation = fastReservation;
     }
 
     @Override

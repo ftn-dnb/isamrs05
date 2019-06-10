@@ -92,7 +92,17 @@ export default {
 				return;
 			}			
 
-			// uputiti zahtev
+			const header = {headers: {"Authorization": `Bearer ${localStorage.getItem('user-token')}`}};
+
+			axios.post(`http://localhost:8080/api/flights/${this.flightToEdit.id}/fastSeats`, this.selectedSeats, header)
+			.then(response => {
+				this.flightToEdit = response.data;
+
+				this.flightToEdit.textToShow = this.flightToEdit.startDestination.city + ", " + this.flightToEdit.startDestination.country + " -> " + this.flightToEdit.endDestination.city + ", " + this.flightToEdit.endDestination.country;
+
+				this.$toasted.success('Seats are successfully added to fast reservations', {duration:5000});
+			})
+			.catch(error => this.$toasted.error('Error while adding seats to fast reservations', {duration:5000}));
 		},
 
 		flightChange() {
@@ -191,7 +201,6 @@ export default {
 				f.textToShow = f.startDestination.city + ", " + f.startDestination.country + " -> " + f.endDestination.city + ", " + f.endDestination.country;
 			}
 		});
-
 	}
 }
 

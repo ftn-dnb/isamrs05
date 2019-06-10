@@ -1,12 +1,12 @@
 package ftn.dnb.dnbtravel.controller;
 
-import ftn.dnb.dnbtravel.dto.FlightDTO;
-import ftn.dnb.dnbtravel.dto.FlightFilterDTO;
+import ftn.dnb.dnbtravel.dto.*;
 import ftn.dnb.dnbtravel.service.FlightService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -35,5 +35,19 @@ public class FlightController {
     public ResponseEntity<List<FlightDTO>> searchAndFilterFlights(@RequestBody FlightFilterDTO filter) {
         List<FlightDTO> results = flightService.searchAndFilterFlights(filter);
         return new ResponseEntity<>(results, HttpStatus.OK);
+    }
+
+    @PostMapping(path = "/{flightId}/reserve")
+    @PreAuthorize("hasRole('USER')")
+    public ResponseEntity<?> reserveTickets(@PathVariable Long flightId, @RequestBody FlightReservationDataDTO data) {
+        flightService.reserveTickets(flightId, data);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @PostMapping(path = "/{flightId}/fastSeats")
+    @PreAuthorize("hasRole('AIRLINE_ADMIN')")
+    public ResponseEntity<FlightDTO> addSeatsToFastReservation(@PathVariable Long flightId, @RequestBody List<SeatDTO> seats) {
+        FlightDTO flight = flightService.addSeatsToFastReservation(flightId, seats);
+        return new ResponseEntity<>(flight, (flight == null) ? HttpStatus.BAD_REQUEST : HttpStatus.OK);
     }
 }

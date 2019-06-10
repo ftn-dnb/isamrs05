@@ -30,7 +30,7 @@ INSERT INTO `destination` VALUES (12, 'BGD', 'Nikola Tesla International Airport
 INSERT INTO `destination` VALUES (13, 'ATH', 'Athens Airport', 'Athens', 'Greece', 123.22, 423.22);
 
 -- Airplanes
-INSERT INTO `airplane` VALUES(20, 'Boeing 747', 10, 20);
+INSERT INTO `airplane` VALUES(20, 'Boeing 747', 10, 10);
 INSERT INTO `airplane` VALUES(21, 'Boeing 567', 15, 15);
 INSERT INTO `airplane` VALUES(22, 'Boeing 900', 8, 18);
 
@@ -40,9 +40,9 @@ INSERT INTO `address` VALUES(32, 'Belgrade', 'Serbia', 11000, 'Bulevar', 213);
 INSERT INTO `address` VALUES(33, 'Athens', 'Greece', 5433, 'Alfa', 24);
 
 -- Airlines
-INSERT INTO `airline` VALUES(22, 'Best airline company in US', 'United', 4, 31);
-INSERT INTO `airline` VALUES(23, 'Najbolja aviokompanija', 'AirSerbia', 3, 32);
-INSERT INTO `airline` VALUES(24, 'Best company in Greece', 'AirGreece', 5, 33);
+INSERT INTO `airline` VALUES(22, 'Best airline company in US', 'United', 4, 31, 4);
+INSERT INTO `airline` VALUES(23, 'Najbolja aviokompanija', 'AirSerbia', 3, 32, 4);
+INSERT INTO `airline` VALUES(24, 'Best company in Greece', 'AirGreece', 5, 33, 4);
 
 -- Destinations where airlines work
 INSERT INTO `airline_destinations` VALUES(22, 11);
@@ -65,12 +65,20 @@ INSERT INTO `flight_prices` VALUES (50, 60);
 INSERT INTO `flight_prices` VALUES (50, 61);
 
 -- Flight reservation
-INSERT INTO `flight_reservation` VALUES (71, 1000, 0, '2019-01-01 00:00:00', 5, 6);
-INSERT INTO `flight_reservation` VALUES (72, 1000, 0, '2019-01-04 01:00:00', 6, 7);
-INSERT INTO `flight_reservation` VALUES (73, 1000, 0, '2019-02-01 00:00:00', 5, 7);
-INSERT INTO `flight_reservation` VALUES (74, 1400, 0, '2019-03-01 01:00:00', 6, 8);
-INSERT INTO `flight_reservation` VALUES (75, 1600, 0, '2019-03-01 00:00:00', 5, 9);
-INSERT INTO `flight_reservation` VALUES (76, 1500, 0, '2019-05-02 01:00:00', 1, 1);
+INSERT INTO `flight_reservation` VALUES (71, true, false, 'Marko', 'Markovic', '12345', 1000, 0, '2019-01-01 00:00:00', 5, 6, 2);
+INSERT INTO `flight_reservation` VALUES (72, true, false, 'Marko', 'Markovic', '12345', 1000, 0, '2019-01-04 01:00:00', 6, 7, 2);
+INSERT INTO `flight_reservation` VALUES (73, true, false, 'Marko', 'Markovic', '12345', 1000, 0, '2019-02-01 00:00:00', 5, 7, 2);
+INSERT INTO `flight_reservation` VALUES (74, true, false, 'Pera', 'Peric', '65432', 1400, 0, '2019-03-01 01:00:00', 6, 8, 3);
+INSERT INTO `flight_reservation` VALUES (75, true, false, 'Pera', 'Peric', '65432', 1600, 0, '2019-03-01 00:00:00', 5, 9, 3);
+INSERT INTO `flight_reservation` VALUES (76, true, false, 'Pera', 'Peric', '65432', 1500, 0, '2019-05-02 01:00:00', 1, 1, 3);
+
+-- Users and flight reservations
+INSERT INTO `users_reservations` VALUES (2, 71);
+INSERT INTO `users_reservations` VALUES (2, 72);
+INSERT INTO `users_reservations` VALUES (2, 73);
+INSERT INTO `users_reservations` VALUES (3, 74);
+INSERT INTO `users_reservations` VALUES (3, 75);
+INSERT INTO `users_reservations` VALUES (3, 76);
 
 -- Flight reservations
 INSERT INTO `flight_reservations` VALUES (50, 71);
@@ -82,7 +90,7 @@ INSERT INTO `flight_reservations` VALUES (50, 76);
 
 
 -- Hotels
-INSERT INTO `hotel` (`id`, `name`, `description`, `rating`, `address_id`) VALUES (1, 'Hotel1', 'Ovo je Hotel1', 5.0, 32)
+INSERT INTO `hotel` (`id`, `name`, `description`, `rating`, `address_id`, `administrator_id`) VALUES (1, 'Hotel1', 'Ovo je Hotel1', 5.0, 32, 6)
 INSERT INTO `hotel` (`id`, `name`, `description`, `rating`, `address_id`) VALUES (2, 'Hotel2', 'Ovo je Hotel2', 5.0, 33)
 
 -- Rooms
@@ -94,11 +102,11 @@ INSERT INTO `hotel_rooms` (`hotel_id`, `rooms_id`) VALUES (1, 1)
 INSERT INTO `hotel_rooms` (`hotel_id`, `rooms_id`) VALUES (2, 2)
 INSERT INTO `hotel_rooms` (`hotel_id`, `rooms_id`) VALUES (1, 3)
 -- Price List
-INSERT INTO `hotel_price_list` (`id`, `hotel_id`) VALUES (1, 1);
-INSERT INTO `hotel_price_list` (`id`, `hotel_id`) VALUES (2, 2);
+INSERT INTO `hotel_price_list` (`id`, `description`, `hotel_id`) VALUES (1, 'Majski cjenovnik', 1);
+INSERT INTO `hotel_price_list` (`id`, `description`, `hotel_id`) VALUES (2, 'Junski cjenovnik', 1);
 
 INSERT INTO `hotel_hotel_price_lists` (`hotel_id`, `hotel_price_lists_id`) VALUES (1,1)
-INSERT INTO `hotel_hotel_price_lists` (`hotel_id`, `hotel_price_lists_id`) VALUES (2,2)
+INSERT INTO `hotel_hotel_price_lists` (`hotel_id`, `hotel_price_lists_id`) VALUES (2,1)
 -- Price List Item
 INSERT INTO `hotel_price_list_item` (`id`, `active_discount`, `start_date`, `end_date`, `price_per_day`, `room_id`, `hotel_price_list_id`) VALUES (1, 0.5, '2019-10-01 22:00:00', '2019-10-01 22:30:00', 40, 1, 1);
 

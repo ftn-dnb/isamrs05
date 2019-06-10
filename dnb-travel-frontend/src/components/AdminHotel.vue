@@ -1,6 +1,5 @@
 <template>
     <div>
-        ADMIN HOTEL
 
     </div>
 </template>
