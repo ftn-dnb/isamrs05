@@ -38,13 +38,14 @@ public class FlightReservation {
     @Column(name = "lastName", nullable = false)
     private String lastName;
 
+    @Column(name = "fastReservation", nullable = false)
+    private boolean fastReservation;
+
     @ManyToOne
     private User user;
 
 
-    public FlightReservation() {
-        super();
-    }
+    public FlightReservation() { super(); }
 
     public FlightReservation(Long id, Date reservationDate, float price, float rating, int seatRow, int seatColumn) {
         this.id = id;
@@ -141,6 +142,14 @@ public class FlightReservation {
 
     public void setLastName(String lastName) {
         this.lastName = lastName;
+    }
+
+    public boolean isFastReservation() {
+        return fastReservation;
+    }
+
+    public void setFastReservation(boolean fastReservation) {
+        this.fastReservation = fastReservation;
     }
 
     @Override

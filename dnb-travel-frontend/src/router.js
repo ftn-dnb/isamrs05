@@ -26,6 +26,7 @@ import AddRentACar from './components/AddRentACar';
 import AirlineStats from './components/AirlineStats.vue';
 import AddAirline from './components/AddAirline';
 import AddCompanyDestination from './components/AddCompanyDestination.vue';
+import FlightFastReservationForm from './components/FlightFastReservationForm.vue';
 import FlightReservation from './components/FlightReservation.vue';
 import AddCar from './components/AddCar';
 import HotelPriceListSettings from './components/HotelPriceListSettings.vue';
@@ -228,6 +229,11 @@ export default new Router({
         path: '/add-company-destination',
         name: 'AddCompanyDestination',
         component: AddCompanyDestination
+    },
+    {
+        path: '/fast-reservation-seats',
+        name: 'FlightFastReservationForm',
+        component: FlightFastReservationForm,
     },
     {
         path: '/flight-reservation',

@@ -67,6 +67,7 @@ public class FlightService {
             reservation.setSeatColumn(data.getSeats().get(i).getY());
             reservation.setPrice(ticketPrice);
             reservation.setApproved(false);
+            reservation.setFastReservation(false);
             reservation.setPassport(data.getUsers().get(i).getPassport());
             reservation.setFirstName(data.getUsers().get(i).getFirstName());
             reservation.setLastName(data.getUsers().get(i).getLastName());
@@ -91,6 +92,42 @@ public class FlightService {
         }
 
         return new FlightDTO(flight);
+    }
+
+    @Transactional(readOnly = false)
+    public FlightDTO addSeatsToFastReservation(Long flightId, List<SeatDTO> seats) {
+        Flight flight = flightRepository.findOneById(flightId);
+
+        for (SeatDTO seat : seats) {
+            if (!checkIfSeatIsFree(seat, flight))
+                return null;
+
+            FlightReservation reservation = new FlightReservation();
+            reservation.setReservationDate(new Date());
+            reservation.setPrice(0);
+            reservation.setApproved(false);
+            reservation.setPassport("fast");
+            reservation.setFirstName("fast");
+            reservation.setLastName("fast");
+            reservation.setSeatRow(seat.getX());
+            reservation.setSeatColumn(seat.getY());
+            reservation.setFastReservation(true);
+
+            flight.getReservations().add(reservation);
+            flightRepository.save(flight);
+        }
+
+        return new FlightDTO(flight);
+    }
+
+    private boolean checkIfSeatIsFree(SeatDTO seat, Flight flight) {
+        for (FlightReservation res : flight.getReservations()) {
+            if (res.getSeatRow() == seat.getX() && res.getSeatColumn() == seat.getY()) {
+                return false;
+            }
+        }
+
+        return true;
     }
 
     public List<FlightDTO> searchAndFilterFlights(FlightFilterDTO filter) {

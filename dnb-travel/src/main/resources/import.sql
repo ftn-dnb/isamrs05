@@ -65,12 +65,12 @@ INSERT INTO `flight_prices` VALUES (50, 60);
 INSERT INTO `flight_prices` VALUES (50, 61);
 
 -- Flight reservation
-INSERT INTO `flight_reservation` VALUES (71, true, 'Marko', 'Markovic', '12345', 1000, 0, '2019-01-01 00:00:00', 5, 6, 2);
-INSERT INTO `flight_reservation` VALUES (72, true, 'Marko', 'Markovic', '12345', 1000, 0, '2019-01-04 01:00:00', 6, 7, 2);
-INSERT INTO `flight_reservation` VALUES (73, true, 'Marko', 'Markovic', '12345', 1000, 0, '2019-02-01 00:00:00', 5, 7, 2);
-INSERT INTO `flight_reservation` VALUES (74, true, 'Pera', 'Peric', '65432', 1400, 0, '2019-03-01 01:00:00', 6, 8, 3);
-INSERT INTO `flight_reservation` VALUES (75, true, 'Pera', 'Peric', '65432', 1600, 0, '2019-03-01 00:00:00', 5, 9, 3);
-INSERT INTO `flight_reservation` VALUES (76, true, 'Pera', 'Peric', '65432', 1500, 0, '2019-05-02 01:00:00', 1, 1, 3);
+INSERT INTO `flight_reservation` VALUES (71, true, false, 'Marko', 'Markovic', '12345', 1000, 0, '2019-01-01 00:00:00', 5, 6, 2);
+INSERT INTO `flight_reservation` VALUES (72, true, false, 'Marko', 'Markovic', '12345', 1000, 0, '2019-01-04 01:00:00', 6, 7, 2);
+INSERT INTO `flight_reservation` VALUES (73, true, false, 'Marko', 'Markovic', '12345', 1000, 0, '2019-02-01 00:00:00', 5, 7, 2);
+INSERT INTO `flight_reservation` VALUES (74, true, false, 'Pera', 'Peric', '65432', 1400, 0, '2019-03-01 01:00:00', 6, 8, 3);
+INSERT INTO `flight_reservation` VALUES (75, true, false, 'Pera', 'Peric', '65432', 1600, 0, '2019-03-01 00:00:00', 5, 9, 3);
+INSERT INTO `flight_reservation` VALUES (76, true, false, 'Pera', 'Peric', '65432', 1500, 0, '2019-05-02 01:00:00', 1, 1, 3);
 
 -- Users and flight reservations
 INSERT INTO `users_reservations` VALUES (2, 71);

@@ -1,9 +1,6 @@
 package ftn.dnb.dnbtravel.controller;
 
-import ftn.dnb.dnbtravel.dto.FlightDTO;
-import ftn.dnb.dnbtravel.dto.FlightFilterDTO;
-import ftn.dnb.dnbtravel.dto.FlightReservationDTO;
-import ftn.dnb.dnbtravel.dto.FlightReservationDataDTO;
+import ftn.dnb.dnbtravel.dto.*;
 import ftn.dnb.dnbtravel.service.FlightService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -45,5 +42,12 @@ public class FlightController {
     public ResponseEntity<?> reserveTickets(@PathVariable Long flightId, @RequestBody FlightReservationDataDTO data) {
         flightService.reserveTickets(flightId, data);
         return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @PostMapping(path = "/{flightId}/fastSeats")
+    @PreAuthorize("hasRole('AIRLINE_ADMIN')")
+    public ResponseEntity<FlightDTO> addSeatsToFastReservation(@PathVariable Long flightId, @RequestBody List<SeatDTO> seats) {
+        FlightDTO flight = flightService.addSeatsToFastReservation(flightId, seats);
+        return new ResponseEntity<>(flight, (flight == null) ? HttpStatus.BAD_REQUEST : HttpStatus.OK);
     }
 }
