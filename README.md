@@ -1,5 +1,5 @@
 # DNB Travel - Tim 05
-[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=ftn-dnb_isamrs05&metric=alert_status)](https://sonarcloud.io/dashboard?id=ftn-dnb_isamrs05)
+[![Quality gate](https://sonarcloud.io/api/project_badges/quality_gate?project=ftn-dnb_isamrs05)](https://sonarcloud.io/dashboard?id=ftn-dnb_isamrs05)
 
 Projekat iz predmeta internet softverske arhitekture i metodologije razvoja softvera.
 
