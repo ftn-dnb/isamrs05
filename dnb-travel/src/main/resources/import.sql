@@ -90,8 +90,9 @@ INSERT INTO `flight_reservations` VALUES (50, 76);
 
 
 -- Hotels
-INSERT INTO `hotel` (`id`, `name`, `description`, `rating`, `address_id`, `administrator_id`) VALUES (1, 'Hotel1', 'Ovo je Hotel1', 5.0, 32, 6)
-INSERT INTO `hotel` (`id`, `name`, `description`, `rating`, `address_id`) VALUES (2, 'Hotel2', 'Ovo je Hotel2', 5.0, 33)
+INSERT INTO `hotel` (`id`, `name`, `description`, `rating`, `address_id`, `administrator_id`) VALUES (1, 'Hotel Plaza', 'Ovo je jedan jako dobar hotel sa prijatnim osobljem', 4.0, 32, 6)
+INSERT INTO `hotel` (`id`, `name`, `description`, `rating`, `address_id`, `administrator_id`) VALUES (2, 'Hotel Continental', 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.', 5.0, 33, 6)
+INSERT INTO `hotel` (`id`, `name`, `description`, `rating`, `address_id`, `administrator_id`) VALUES (3, 'Hotel Bosna', 'Ovo je jedan jako dobar hotel sa prijatnim osobljem', 3.0, 32, 6)
 
 -- Rooms
 INSERT INTO `room` (`id`, `room_number`, `floor`, `rating`, `capacity`, `hotel_id`) VALUES (1, 21, 2, 4.0, 3, 1);

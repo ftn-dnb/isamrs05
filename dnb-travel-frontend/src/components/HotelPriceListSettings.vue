@@ -109,7 +109,7 @@ export default {
         return {
             hotelID: null,
             priceLists: [],
-            priceList: null,
+            priceList: {},
             priceListItem: {
                 id: null,
                 activeDiscount: null,

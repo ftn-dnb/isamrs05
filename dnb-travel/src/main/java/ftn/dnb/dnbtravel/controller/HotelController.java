@@ -2,7 +2,9 @@ package ftn.dnb.dnbtravel.controller;
 
 import com.sun.mail.iap.Response;
 import ftn.dnb.dnbtravel.dto.HotelDTO;
+import ftn.dnb.dnbtravel.dto.HotelFilterDTO;
 import ftn.dnb.dnbtravel.dto.RoomDTO;
+import ftn.dnb.dnbtravel.model.Address;
 import ftn.dnb.dnbtravel.model.Hotel;
 import ftn.dnb.dnbtravel.service.HotelService;
 import ftn.dnb.dnbtravel.service.RoomService;
@@ -11,6 +13,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -26,8 +29,13 @@ public class HotelController {
     private RoomService roomService;
 
     @RequestMapping(value = "/all", method = RequestMethod.GET)
-    public List<Hotel> getAllHotels() {
+    public List<HotelDTO> getAllHotels() {
         return hotelService.findAll();
+    }
+
+    @RequestMapping(value = "/addresses", method = RequestMethod.GET)
+    public List<Address> getAllAddressses() {
+        return hotelService.getAddresses();
     }
 
     //@RequestMapping(method = RequestMethod.POST, consumes = "application/json")
@@ -57,5 +65,11 @@ public class HotelController {
     public ResponseEntity<Long> findHotelByAdmin(@RequestBody String username) {
         Long hotelID = hotelService.findHotelIdByAdmin(username);
         return new ResponseEntity<>(hotelID, HttpStatus.OK);
+    }
+
+    @RequestMapping(value = "/searchHotels", method = RequestMethod.POST, consumes = "application/json")
+    public ResponseEntity<List<HotelDTO>> searchHotels(@RequestBody HotelFilterDTO hotelFilterDTO) {
+        ArrayList<HotelDTO> searchResult = hotelService.hotelSearch(hotelFilterDTO);
+        return new ResponseEntity<>(searchResult, HttpStatus.OK);
     }
 }

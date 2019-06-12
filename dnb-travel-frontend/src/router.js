@@ -30,7 +30,8 @@ import FlightFastReservationForm from './components/FlightFastReservationForm.vu
 import FlightReservation from './components/FlightReservation.vue';
 import AddCar from './components/AddCar';
 import HotelPriceListSettings from './components/HotelPriceListSettings.vue';
-import AddRoom from './components/AddRoom.vue';
+import AddRoom from './components/AddRoom';
+import HotelSearch from './components/HotelSearch';
 
 
 Vue.use(Router)
@@ -188,6 +189,11 @@ export default new Router({
         path: '/rent-a-car-settings',
         name: 'RentACarCompanySettings',
         component: RentACarCompanySettings
+    },
+    {
+        path: '/hotels',
+        name: 'HotelSearch',
+        component: HotelSearch
     },
     {
         path: '/hotel-price-list-settings',
