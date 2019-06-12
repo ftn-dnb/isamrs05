@@ -35,7 +35,7 @@ cd dnb-travel-frontend
 npm install
 ```
 
-Pokrenuti aolikaciju (biće pokrenuta na portu 8000):
+Pokrenuti aplikaciju (biće pokrenuta na portu 8000):
 ```
 npm run serve
 ```
