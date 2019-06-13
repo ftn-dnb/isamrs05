@@ -285,4 +285,19 @@ public class AirlineService {
 
         return new AirlineDTO(airline);
     }
+
+    public List<FlightReservationDTO> getFastReservations(Long airlineId) {
+        Airline airline = airlineRepository.findOneById(airlineId);
+        List<FlightReservationDTO> reservations = new ArrayList<>();
+
+        for (Flight flight : airline.getFlights()) {
+            for (FlightReservation reservation : flight.getReservations()) {
+                if (reservation.isFastReservation()) {
+                    reservations.add(new FlightReservationDTO(reservation));
+                }
+            }
+        }
+
+        return reservations;
+    }
 }

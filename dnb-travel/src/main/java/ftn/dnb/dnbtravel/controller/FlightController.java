@@ -50,4 +50,11 @@ public class FlightController {
         FlightDTO flight = flightService.addSeatsToFastReservation(flightId, seats);
         return new ResponseEntity<>(flight, (flight == null) ? HttpStatus.BAD_REQUEST : HttpStatus.OK);
     }
+
+    @PostMapping(path = "/{flightId}/reserveFast")
+    @PreAuthorize("hasRole('USER')")
+    public ResponseEntity<FlightDTO> reserveFastTicket(@PathVariable Long flightId, @RequestBody FlightFastReservationDataDTO info) {
+        FlightDTO flight = flightService.reserveFastTicket(flightId, info);
+        return new ResponseEntity<>(flight, (flight == null) ? HttpStatus.BAD_REQUEST : HttpStatus.OK);
+    }
 }

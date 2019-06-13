@@ -130,6 +130,33 @@ public class FlightService {
         return true;
     }
 
+    @Transactional(readOnly = false)
+    public FlightDTO reserveFastTicket(Long flightId, FlightFastReservationDataDTO reservationInfo) {
+        Flight flight = flightRepository.findOneById(flightId);
+        User user = userRepository.findOneByUsername(reservationInfo.getUsername());
+
+        FlightReservation reservation = flight.getReservations().stream()
+                .filter(flightReservation -> flightReservation.getId().equals(reservationInfo.getReservationId()))
+                .findFirst().get();
+
+        if (reservation == null)
+            return null;
+
+        reservation.setApproved(true);
+        reservation.setFastReservation(false);
+        reservation.setReservationDate(new Date());
+        reservation.setPassport(reservationInfo.getPassport());
+        reservation.setFirstName(user.getFirstName());
+        reservation.setLastName(user.getLastName());
+        reservation.setUser(user);
+
+        user.getReservations().add(reservation);
+        flightRepository.save(flight);
+        userRepository.save(user);
+
+        return new FlightDTO(flight);
+    }
+
     public List<FlightDTO> searchAndFilterFlights(FlightFilterDTO filter) {
         List<FlightDTO> flights = this.getAllFlights();
 
