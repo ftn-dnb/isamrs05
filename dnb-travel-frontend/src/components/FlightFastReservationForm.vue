@@ -50,11 +50,37 @@
 	            </v-stage>
 	        </div>
 
-			<v-btn @click="addSeats" small>
-				<v-icon left>add</v-icon>
-				<span>Add seats</span>
-			</v-btn>	        
+			<v-dialog v-model="dialog" width="500">
+				<template v-slot:activator="{ on }">
+					<v-btn v-on="on">
+						<v-icon left>add</v-icon>
+						<span>Add seats</span>
+					</v-btn>
+				</template>
 
+				<v-card>
+					<v-card-title class="headline grey lighten-2" primary-title>
+						Price for seats
+					</v-card-title>
+
+					<v-card-text>
+						<v-form ref="priceForm">
+							<v-text-field v-model="pricePerSeat" label="Price per seat" type="number" min="0" :rules="priceRule">
+							</v-text-field>
+						</v-form>
+					</v-card-text>
+
+					<v-divider></v-divider>
+
+					<v-card-actions>
+						<v-spacer></v-spacer>
+						<v-btn @click="addSeats" small>
+							<v-icon left>add</v-icon>
+							<span>Add seats</span>
+						</v-btn>
+					</v-card-actions>
+				</v-card>
+			</v-dialog>
         </div>
 	</div>	
 </template>
@@ -73,6 +99,12 @@ export default {
 
 	data() {
 		return {
+			priceRule: [
+				v => (v !== null) || 'Please fill out this field',
+                v => (v && v >= 0) || 'Price can\'t be negative number'
+			],
+			pricePerSeat: 0,
+			dialog: false,
 			flights: [],
 			flightToEdit: null,
 			selectedSeats: [],
@@ -90,9 +122,15 @@ export default {
 			if (this.selectedSeats.length === 0) {
 				this.$toasted.error("Please select at least one seat", {duration:5000});
 				return;
-			}			
+			}		
+			
+			if (!this.$refs.priceForm.validate()) {
+				return;
+			}
 
 			const header = {headers: {"Authorization": `Bearer ${localStorage.getItem('user-token')}`}};
+
+			this.selectedSeats.forEach(seat => seat.price = this.pricePerSeat);
 
 			axios.post(`http://localhost:8080/api/flights/${this.flightToEdit.id}/fastSeats`, this.selectedSeats, header)
 			.then(response => {
@@ -101,6 +139,9 @@ export default {
 				this.flightToEdit.textToShow = this.flightToEdit.startDestination.city + ", " + this.flightToEdit.startDestination.country + " -> " + this.flightToEdit.endDestination.city + ", " + this.flightToEdit.endDestination.country;
 
 				this.$toasted.success('Seats are successfully added to fast reservations', {duration:5000});
+				this.dialog = false;
+				this.selectedSeats = [];
+				this.pricePerSeat = 0;
 			})
 			.catch(error => this.$toasted.error('Error while adding seats to fast reservations', {duration:5000}));
 		},
