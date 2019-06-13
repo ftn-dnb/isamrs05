@@ -104,7 +104,7 @@ public class FlightService {
 
             FlightReservation reservation = new FlightReservation();
             reservation.setReservationDate(new Date());
-            reservation.setPrice(0);
+            reservation.setPrice(seat.getPrice());
             reservation.setApproved(false);
             reservation.setPassport("fast");
             reservation.setFirstName("fast");

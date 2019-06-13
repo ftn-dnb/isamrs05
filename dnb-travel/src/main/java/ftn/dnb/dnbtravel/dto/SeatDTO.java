@@ -4,6 +4,7 @@ public class SeatDTO {
 
     private int x;
     private int y;
+    private float price;
 
     public int getX() {
         return x;
@@ -21,4 +22,11 @@ public class SeatDTO {
         this.y = y;
     }
 
+    public float getPrice() {
+        return price;
+    }
+
+    public void setPrice(float price) {
+        this.price = price;
+    }
 }
