@@ -80,4 +80,10 @@ public class AirlineController {
         List<ReservationStatsDTO> stats = airlineService.getStatsForCompanyReservations(filter);
         return new ResponseEntity<>(stats, (stats == null) ? HttpStatus.BAD_REQUEST : HttpStatus.OK);
     }
+
+    @GetMapping(path = "/{id}/fastReservations")
+    public ResponseEntity<List<FlightReservationDTO>> getFastReservations(@PathVariable Long id) {
+        List<FlightReservationDTO> reservations = airlineService.getFastReservations(id);
+        return new ResponseEntity<>(reservations, HttpStatus.OK);
+    }
 }

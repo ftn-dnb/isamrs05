@@ -8,6 +8,33 @@
         </h3>
 
         <br /><br />
+        <div>
+            <h3 class="subheading grey--text text-md-center">Tickets for fast reservations</h3>
+
+            <v-list v-if="fastReservations.length != 0">
+                <v-list-tile class="my-1" v-for="res in fastReservations">
+                    <v-list-tile-avatar>
+                        <v-icon>flight</v-icon>
+                    </v-list-tile-avatar>
+                    <v-list-tile-content>
+                        <v-list-tile-title>{{res.startDestination.city}}, {{res.startDestination.country}}, {{res.startDateTime}}</v-list-tile-title>
+                        <v-list-tile-sub-title>{{res.endDestination.city}}, {{res.endDestination.country}}, {{res.endDateTime}}</v-list-tile-sub-title>
+                    </v-list-tile-content>
+                    <v-list-tile-action>
+                        <v-btn @click="buyFastTicket(res.flightId, res.reservationId)">
+                            <v-icon left>attach_money</v-icon>
+                            <span>Buy</span>
+                        </v-btn>
+                    </v-list-tile-action>
+                </v-list-tile>
+            </v-list>
+
+            <div v-else>
+                <p class="text-md-center">Currently we do not have any tickets for fast reservations</p>
+            </div>
+        </div>
+
+        <br /><br />
         <p class="text-md-center">
             Currently we work on {{airline.destinations.length}} destinations and we have {{airline.flights.length}} flights
         </p>
@@ -80,17 +107,49 @@ export default {
                 destinations: [],
                 flights: [],
             },
+            fastReservations: [],
         };
     },
 
     methods: {
+        buyFastTicket(flightId, reservationId) {
+            console.log(flightId);
+            console.log(reservationId);
+        },
 
+        getFastReservations() {
+            this.airline.flights.forEach(flight => {
+                flight.reservations.forEach(reservation => {
+                    if (reservation.fastReservation) {
+                        this.fastReservations.push({
+                            flightId: flight.id,
+                            reservationId: reservation.id,
+                            startDestination: flight.startDestination,
+                            endDestination: flight.endDestination,
+                            startDateTime: flight.startDateTime,
+                            endDateTime: flight.endDateTime,
+                            price: reservation.price,
+                            row: reservation.seatRow,
+                            column: reservation.seatColumn,
+                        });
+                    }
+                });
+            });
+        },
     },
 
     mounted() {
          axios.get('http://localhost:8080/api/airlines/' + this.airlineId)
-         .then(response => this.airline = response.data)
+         .then(response => {
+            this.airline = response.data;
+            this.getFastReservations();
+         })
          .catch(error => this.$toasted.error('Error while loading data.', {duration:5000}));
+
+        //  axios.get(`http://localhost:8080/api/airlines/${this.airlineId}/fastReservations`)
+        //  .then(response => this.fastReservations = response.data)
+        //  .catch(error => this.$toasted.error('Error while loading data.', {duration:5000}));
+        
     }
 }
 </script>
