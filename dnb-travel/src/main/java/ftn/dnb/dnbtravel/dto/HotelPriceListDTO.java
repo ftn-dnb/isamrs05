@@ -7,6 +7,7 @@ import java.util.ArrayList;
 
 public class HotelPriceListDTO {
 
+    private Long id;
     private String description;
     private ArrayList<HotelPriceListItemDTO> hotelPriceListItems;
     private Long hotelID;
@@ -14,6 +15,7 @@ public class HotelPriceListDTO {
     public HotelPriceListDTO() { super(); }
 
     public HotelPriceListDTO(HotelPriceList hotelPriceList) {
+        this.id = hotelPriceList.getId();
         this.description = hotelPriceList.getDescription();
         this.hotelPriceListItems = new ArrayList<>();
         for (HotelPriceListItem item : hotelPriceList.getHotelPriceListItems()) {
@@ -22,10 +24,11 @@ public class HotelPriceListDTO {
         this.hotelID = hotelPriceList.getHotel().getId();
     }
 
-    public HotelPriceListDTO(String description, ArrayList<HotelPriceListItemDTO> hotelPriceListItems, Long hotelID) {
+    public HotelPriceListDTO(Long id, String description, ArrayList<HotelPriceListItemDTO> hotelPriceListItems, Long hotelID) {
         this.description = description;
         this.hotelPriceListItems = hotelPriceListItems;
         this.hotelID = hotelID;
+        this.id = id;
     }
 
     public String getDescription() {
@@ -50,5 +53,13 @@ public class HotelPriceListDTO {
 
     public void setHotelID(Long hotelID) {
         this.hotelID = hotelID;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 }

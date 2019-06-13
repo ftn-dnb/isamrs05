@@ -4,6 +4,7 @@ INSERT INTO `users` (`id`, `email`, `enabled`, `first_name`, `last_name`, `last_
 INSERT INTO `users` (`id`, `email`, `enabled`, `first_name`, `last_name`, `last_password_reset_date`, `password` ,`username`) VALUES (5,'d@s.com',true,'Djoka','Peric','2017-10-01 21:58:58','$2a$04$Vbug2lwwJGrvUXTj6z7ff.97IzVBkrJ1XfApfGNl.Z695zqcnPYra','djox');
 INSERT INTO `users` (`id`, `email`, `enabled`, `first_name`, `last_name`, `last_password_reset_date`, `password` ,`username`) VALUES (6,'m@s.com',true,'Mika','Peric','2017-10-01 21:58:58','$2a$04$Vbug2lwwJGrvUXTj6z7ff.97IzVBkrJ1XfApfGNl.Z695zqcnPYra','miki');
 INSERT INTO `users` (`id`, `email`, `enabled`, `first_name`, `last_name`, `last_password_reset_date`, `password` ,`username`) VALUES (7,'t@s.com',true,'Tarzan','Peric','2017-10-01 21:58:58','$2a$04$Vbug2lwwJGrvUXTj6z7ff.97IzVBkrJ1XfApfGNl.Z695zqcnPYra','tarzan');
+INSERT INTO `users` (`id`, `email`, `enabled`, `first_name`, `last_name`, `last_password_reset_date`, `password` ,`username`) VALUES (8,'ms@s.com',true,'Mika','Peric','2017-10-01 21:58:58','$2a$04$Vbug2lwwJGrvUXTj6z7ff.97IzVBkrJ1XfApfGNl.Z695zqcnPYra','miki2');
 
 INSERT INTO `authority` (id, name) VALUES (1, 'ROLE_USER');
 INSERT INTO `authority` (id, name) VALUES (2, 'ROLE_SYSTEM_ADMIN');
@@ -17,6 +18,7 @@ INSERT INTO `user_authority` (user_id, authority_id) VALUES (4, 2);
 INSERT INTO `user_authority` (user_id, authority_id) VALUES (5, 3);
 INSERT INTO `user_authority` (user_id, authority_id) VALUES (6, 4);
 INSERT INTO `user_authority` (user_id, authority_id) VALUES (7, 5);
+INSERT INTO `user_authority` (user_id, authority_id) VALUES (8, 4);
 
 INSERT INTO `friendship` VALUES (1, 0, 2);
 INSERT INTO `friendship` VALUES (2, 0, 3);
@@ -91,8 +93,8 @@ INSERT INTO `flight_reservations` VALUES (50, 76);
 
 -- Hotels
 INSERT INTO `hotel` (`id`, `name`, `description`, `rating`, `address_id`, `administrator_id`) VALUES (1, 'Hotel Plaza', 'Ovo je jedan jako dobar hotel sa prijatnim osobljem', 4.0, 32, 6)
-INSERT INTO `hotel` (`id`, `name`, `description`, `rating`, `address_id`, `administrator_id`) VALUES (2, 'Hotel Continental', 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.', 5.0, 33, 6)
-INSERT INTO `hotel` (`id`, `name`, `description`, `rating`, `address_id`, `administrator_id`) VALUES (3, 'Hotel Bosna', 'Ovo je jedan jako dobar hotel sa prijatnim osobljem', 3.0, 32, 6)
+INSERT INTO `hotel` (`id`, `name`, `description`, `rating`, `address_id`, `administrator_id`) VALUES (2, 'Hotel Continental', 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.', 5.0, 33, 8)
+INSERT INTO `hotel` (`id`, `name`, `description`, `rating`, `address_id`) VALUES (3, 'Hotel Bosna', 'Ovo je jedan jako dobar hotel sa prijatnim osobljem', 3.0, 32)
 
 -- Rooms
 INSERT INTO `room` (`id`, `room_number`, `floor`, `rating`, `capacity`, `hotel_id`) VALUES (1, 21, 2, 4.0, 3, 1);
@@ -107,7 +109,10 @@ INSERT INTO `hotel_price_list` (`id`, `description`, `hotel_id`) VALUES (1, 'Maj
 INSERT INTO `hotel_price_list` (`id`, `description`, `hotel_id`) VALUES (2, 'Junski cjenovnik', 1);
 
 INSERT INTO `hotel_hotel_price_lists` (`hotel_id`, `hotel_price_lists_id`) VALUES (1,1)
-INSERT INTO `hotel_hotel_price_lists` (`hotel_id`, `hotel_price_lists_id`) VALUES (2,1)
+INSERT INTO `hotel_hotel_price_lists` (`hotel_id`, `hotel_price_lists_id`) VALUES (2,2)
+
+UPDATE `hotel` SET `current_price_list_id` = 1 WHERE `id` = 1;
+
 -- Price List Item
 INSERT INTO `hotel_price_list_item` (`id`, `active_discount`, `start_date`, `end_date`, `price_per_day`, `room_id`, `hotel_price_list_id`) VALUES (1, 0.5, '2019-10-01 22:00:00', '2019-10-01 22:30:00', 40, 1, 1);
 

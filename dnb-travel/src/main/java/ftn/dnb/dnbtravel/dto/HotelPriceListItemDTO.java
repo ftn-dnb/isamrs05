@@ -12,6 +12,7 @@ public class HotelPriceListItemDTO {
     private Date endDate;
     private int pricePerDay;
     private Long roomID;
+    private int roomNumber;
     private Long hotelPriceListID;
 
     public HotelPriceListItemDTO() {
@@ -25,15 +26,17 @@ public class HotelPriceListItemDTO {
         this.pricePerDay = hotelPriceListItem.getPricePerDay();
         this.roomID = hotelPriceListItem.getRoom().getId();
         this.hotelPriceListID = hotelPriceListItem.getHotelPriceList().getId();
+        this.roomNumber = hotelPriceListItem.getRoom().getRoomNumber();
     }
 
-    public HotelPriceListItemDTO(double activeDiscount, Date startDate, Date endDate, int pricePerDay, Long roomID, Long hotelPriceListID) {
+    public HotelPriceListItemDTO(double activeDiscount, Date startDate, Date endDate, int pricePerDay, Long roomID, Long hotelPriceListID, int roomNumber) {
         this.activeDiscount = activeDiscount;
         this.startDate = startDate;
         this.endDate = endDate;
         this.pricePerDay = pricePerDay;
         this.roomID = roomID;
         this.hotelPriceListID = hotelPriceListID;
+        this.roomNumber = roomNumber;
     }
 
     public Long getId() {
@@ -90,6 +93,14 @@ public class HotelPriceListItemDTO {
 
     public void setHotelPriceListID(Long hotelPriceListID) {
         this.hotelPriceListID = hotelPriceListID;
+    }
+
+    public int getRoomNumber() {
+        return roomNumber;
+    }
+
+    public void setRoomNumber(int roomNumber) {
+        this.roomNumber = roomNumber;
     }
 }
 

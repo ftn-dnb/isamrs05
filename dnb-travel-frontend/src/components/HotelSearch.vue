@@ -47,7 +47,7 @@
                         </div>
                     </v-card-text>
                     <v-card-actions>
-                        <v-btn flat small router :to="{ name: 'FlightDetailedView', params: { hotelID: hotel.id} }">
+                        <v-btn flat small router :to="{ name: 'HotelDetailedView', params: { hotelID: hotel.id} }">
                             <v-icon left>info</v-icon>
                             <span>View Hotel Profile</span>
                         </v-btn>
@@ -67,7 +67,7 @@
 import axios from 'axios';
 
 export default {
-    name: 'FlightList',
+    name: 'HotelSearch',
     props: {},
     components: {},
 
