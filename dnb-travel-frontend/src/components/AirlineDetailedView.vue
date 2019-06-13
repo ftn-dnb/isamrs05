@@ -14,17 +14,42 @@
             <v-list v-if="fastReservations.length != 0">
                 <v-list-tile class="my-1" v-for="res in fastReservations">
                     <v-list-tile-avatar>
-                        <v-icon>flight</v-icon>
+                        {{res.price}} 
+                        <v-icon>euro_symbol</v-icon>
                     </v-list-tile-avatar>
+
                     <v-list-tile-content>
                         <v-list-tile-title>{{res.startDestination.city}}, {{res.startDestination.country}}, {{res.startDateTime}}</v-list-tile-title>
                         <v-list-tile-sub-title>{{res.endDestination.city}}, {{res.endDestination.country}}, {{res.endDateTime}}</v-list-tile-sub-title>
                     </v-list-tile-content>
+
                     <v-list-tile-action>
-                        <v-btn @click="buyFastTicket(res.flightId, res.reservationId)">
-                            <v-icon left>attach_money</v-icon>
-                            <span>Buy</span>
-                        </v-btn>
+                        <v-dialog width="500" v-model="dialog">
+                            <template v-slot:activator="{ on }">
+                                <v-btn v-on="on">
+                                    <v-icon left>attach_money</v-icon>
+                                    <span>Buy</span>
+                                </v-btn>
+                            </template>
+
+                            <v-card>
+                                <v-card-title class="headline grey lighten-2" primary-title>Input passport number</v-card-title>
+
+                                <v-card-text>
+                                    <v-text-field v-model="passportNumber" label="Passport number"></v-text-field>
+                                </v-card-text>
+
+                                <v-divider></v-divider>
+
+                                <v-card-actions>
+                                    <v-spacer></v-spacer>
+                                    <v-btn @click="buyFastTicket(res.flightId, res.reservationId)">
+                                        <v-icon left>attach_money</v-icon>
+                                        <span>Buy</span>
+                                    </v-btn>
+                                </v-card-actions>
+                            </v-card>
+                        </v-dialog>
                     </v-list-tile-action>
                 </v-list-tile>
             </v-list>
@@ -108,16 +133,39 @@ export default {
                 flights: [],
             },
             fastReservations: [],
+            dialog: false,
+            passportNumber: null,
         };
     },
 
     methods: {
         buyFastTicket(flightId, reservationId) {
-            console.log(flightId);
-            console.log(reservationId);
+            if (this.passportNumber == null) {
+                this.$toasted.error('Please enter your passport number', {duration:5000});
+                return;
+            }
+
+            const reservationInfo = {
+                reservationId: reservationId,
+                username: localStorage.getItem('username'),
+                passport: this.passportNumber
+            };
+
+            const header = { headers: {"Authorization" : `Bearer ${localStorage.getItem('user-token')}`} };
+
+            axios.post(`http://localhost:8080/api/flights/${flightId}/reserveFast`, reservationInfo, header)
+            .then(response => {
+                this.$toasted.success('Ticket successfully reserved', {duration:5000});
+                this.getInfo();
+            })
+            .catch(error => this.$toasted.error('There was an error while buying a ticket', {duration:5000}))
+
+            this.passportNumber = null;
         },
 
         getFastReservations() {
+            this.fastReservations = [];
+
             this.airline.flights.forEach(flight => {
                 flight.reservations.forEach(reservation => {
                     if (reservation.fastReservation) {
@@ -136,15 +184,19 @@ export default {
                 });
             });
         },
+
+        getInfo() {
+            axios.get('http://localhost:8080/api/airlines/' + this.airlineId)
+            .then(response => {
+                this.airline = response.data;
+                this.getFastReservations();
+            })
+            .catch(error => this.$toasted.error('Error while loading data.', {duration:5000}));
+        },
     },
 
     mounted() {
-         axios.get('http://localhost:8080/api/airlines/' + this.airlineId)
-         .then(response => {
-            this.airline = response.data;
-            this.getFastReservations();
-         })
-         .catch(error => this.$toasted.error('Error while loading data.', {duration:5000}));
+         this.getInfo();
 
         //  axios.get(`http://localhost:8080/api/airlines/${this.airlineId}/fastReservations`)
         //  .then(response => this.fastReservations = response.data)
