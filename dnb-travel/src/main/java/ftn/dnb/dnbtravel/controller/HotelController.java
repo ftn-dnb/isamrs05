@@ -33,6 +33,12 @@ public class HotelController {
         return hotelService.findAll();
     }
 
+    @GetMapping(path = "/{id}")
+    public ResponseEntity<HotelDTO> getHotelById(@PathVariable Long id) {
+        HotelDTO hotelDTO = hotelService.getHotelById(id);
+        return new ResponseEntity<HotelDTO>(hotelDTO, HttpStatus.OK);
+    }
+
     @RequestMapping(value = "/addresses", method = RequestMethod.GET)
     public List<Address> getAllAddressses() {
         return hotelService.getAddresses();
@@ -62,14 +68,23 @@ public class HotelController {
     }
 
     @RequestMapping(value = "/findHotelByAdmin", method = RequestMethod.POST)
-    public ResponseEntity<Long> findHotelByAdmin(@RequestBody String username) {
-        Long hotelID = hotelService.findHotelIdByAdmin(username);
-        return new ResponseEntity<>(hotelID, HttpStatus.OK);
+    public ResponseEntity<HotelDTO> findHotelByAdmin(@RequestBody String username) {
+        HotelDTO hotelDTO = hotelService.findHotelByAdmin(username);
+        return new ResponseEntity<>(hotelDTO, HttpStatus.OK);
     }
 
     @RequestMapping(value = "/searchHotels", method = RequestMethod.POST, consumes = "application/json")
     public ResponseEntity<List<HotelDTO>> searchHotels(@RequestBody HotelFilterDTO hotelFilterDTO) {
         ArrayList<HotelDTO> searchResult = hotelService.hotelSearch(hotelFilterDTO);
         return new ResponseEntity<>(searchResult, HttpStatus.OK);
+    }
+
+    @GetMapping(path = "setPriceList/{hotel_id}/{price_list_id}")
+    public ResponseEntity<Long> setCurrentPriceList(@PathVariable Long hotel_id, @PathVariable Long price_list_id) {
+        Long id = hotelService.setCurrentPriceList(hotel_id, price_list_id);
+        if (id == -1)
+            return new ResponseEntity<>(id, HttpStatus.BAD_REQUEST);
+        else
+            return new ResponseEntity<>(id, HttpStatus.OK);
     }
 }

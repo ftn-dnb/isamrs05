@@ -32,6 +32,7 @@ import AddCar from './components/AddCar';
 import HotelPriceListSettings from './components/HotelPriceListSettings.vue';
 import AddRoom from './components/AddRoom';
 import HotelSearch from './components/HotelSearch';
+import HotelDetailedView from './components/HotelDetailedView';
 
 
 Vue.use(Router)
@@ -138,6 +139,12 @@ export default new Router({
         props: true,
         name: 'FlightDetailedView',
         component: FlightDetailedView
+    },
+    {
+        path: '/hotels/:hotelID',
+        props: true,
+        name: 'HotelDetailedView',
+        component: HotelDetailedView
     },
     {
         path: '/airlines',

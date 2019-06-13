@@ -33,13 +33,16 @@ public class Hotel {
     private Set<HotelPriceList> hotelPriceLists;
 
     @OneToOne(cascade = CascadeType.ALL)
+    private HotelPriceList currentPriceList;
+
+    @OneToOne(cascade = CascadeType.ALL)
     private User administrator;
 
     public Hotel() {
         super();
     }
 
-    public Hotel(String name, String description, double rating, Address address, Set<Room> rooms, Set<HotelPriceList> hotelPriceLists, User administrator) {
+    public Hotel(String name, String description, double rating, Address address, Set<Room> rooms, Set<HotelPriceList> hotelPriceLists, User administrator, HotelPriceList currentPriceList) {
         this.name = name;
         this.description = description;
         this.rating = rating;
@@ -47,6 +50,7 @@ public class Hotel {
         this.rooms = rooms;
         this.hotelPriceLists = hotelPriceLists;
         this.administrator = administrator;
+        this.currentPriceList = currentPriceList;
     }
 
     public Hotel(HotelDTO hotelDTO) {
@@ -122,5 +126,13 @@ public class Hotel {
 
     public void setAdministrator(User administrator) {
         this.administrator = administrator;
+    }
+
+    public HotelPriceList getCurrentPriceList() {
+        return currentPriceList;
+    }
+
+    public void setCurrentPriceList(HotelPriceList currentPriceList) {
+        this.currentPriceList = currentPriceList;
     }
 }

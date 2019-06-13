@@ -11,18 +11,20 @@ public class HotelDTO {
     private double rating;
     private Address address;
     private UserDTO administrator;
+    private Long currentPriceListID;
 
     public HotelDTO() {
         super();
     }
 
-    public HotelDTO(Long id, String name, String description, double rating, Address address, UserDTO administrator) {
+    public HotelDTO(Long id, String name, String description, double rating, Address address, UserDTO administrator, Long currentPriceListID) {
         this.id = id;
         this.name = name;
         this.description = description;
         this.rating = rating;
         this.address = address;
         this.administrator = administrator;
+        this.currentPriceListID = currentPriceListID;
     }
 
     public HotelDTO(Hotel hotel) {
@@ -32,6 +34,7 @@ public class HotelDTO {
         this.rating = hotel.getRating();
         this.address = hotel.getAddress();
         this.administrator = new UserDTO(hotel.getAdministrator());
+        this.currentPriceListID = hotel.getCurrentPriceList().getId();
     }
 
     public Long getId() {
@@ -80,5 +83,13 @@ public class HotelDTO {
 
     public void setAdministrator(UserDTO administrator) {
         this.administrator = administrator;
+    }
+
+    public Long getCurrentPriceListID() {
+        return currentPriceListID;
+    }
+
+    public void setCurrentPriceListID(Long currentPriceListID) {
+        this.currentPriceListID = currentPriceListID;
     }
 }

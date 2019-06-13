@@ -34,6 +34,7 @@ public class UserDTO {
     }
 
     public UserDTO(User user) {
+        if (user == null) return;
         this.id = user.getId();
         this.firstName = user.getFirstName();
         this.lastName = user.getLastName();

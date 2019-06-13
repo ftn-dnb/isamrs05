@@ -9,10 +9,15 @@
                 item-text="description"
                 return-object>
             </v-combobox>
+            <v-btn @click="setAsCurrentList">
+                <v-icon left>add_circle</v-icon>
+                <span>Add item</span>
+            </v-btn>
         </v-form>
         <v-data-table :headers="priceListHeaders"
             :items="priceList.hotelPriceListItems">
             <template v-slot:items="props">
+                <td>{{ props.item.roomNumber }}</td>
                 <td>{{ props.item.startDate }}</td>
                 <td>{{ props.item.endDate }}</td>
                 <td>{{ props.item.pricePerDay }}</td>
@@ -107,7 +112,7 @@ export default {
 
     data() {
         return {
-            hotelID: null,
+            hotel: {},
             priceLists: [],
             priceList: {},
             priceListItem: {
@@ -117,9 +122,11 @@ export default {
                 endDate: null,
                 pricePerDay: null,
                 roomID: null,
-                hotelPriceListID: null
+                hotelPriceListID: null,
+                roomNumber: null
             },
             priceListHeaders: [
+                {text: 'Room', value: 'roomNumber'},
                 {text: 'From', value: 'startDate'},
                 {text: 'To', value: 'endDate'},
                 {text: 'Price', value: 'pricePerDay'},
@@ -138,7 +145,7 @@ export default {
             ],
             priceItemStartDate: [
                 v => (v && v.length > 0) || 'Please select start date',
-                v => (v && this.isDateGreaterThan(this.priceListItem.endDate, this.priceListItem.startDate)) || 'Start date must be before end date'
+                v => (v && this.isDateGreaterThan(this.priceListItem.endDate, this.priceListItem.startDate)) || 'Start date must be before end date',
             ],
             priceItemEndDate: [
                 v => (v && v.length > 0) || 'Please select end date',
@@ -148,15 +155,22 @@ export default {
     },
 
     methods: {
+        setAsCurrentList() {
+            const header = { headers: {"Authorization" : `Bearer ${localStorage.getItem('user-token')}`} };
+            axios.get('http://localhost:8080/api/hotels/setPriceList/' + this.hotel.id + '/' + this.priceList.id, header)
+            .then(response => this.$toasted.success('PriceList successfully set.', {duration:5000}))
+            .catch(error => this.$toasted.error('PriceList already set.', {duration:5000}));
+        },
         getRooms() {
             const header = { headers: {"Authorization" : `Bearer ${localStorage.getItem('user-token')}`} };
-            axios.get('http://localhost:8080/api/rooms/all/' + this.hotelID, header)
+            axios.get('http://localhost:8080/api/rooms/all/' + this.hotel.id, header)
             .then(response => this.rooms = response.data);
         },
         isDateGreaterThan(date1, date2) {
+            if (date1 == null || date2 == null) return true;
             const d1 = new Date(date1);
             const d2 = new Date(date2);
-            return d1.getTime() >= d2.getTime();
+            return d1.getTime() > d2.getTime();
         },
         addPriceListItem() {
             console.log(this.room);
@@ -164,22 +178,63 @@ export default {
                 return;
             }
             const header = { headers: {"Authorization" : `Bearer ${localStorage.getItem('user-token')}`} };
-            this.priceListItem.hotelPriceListID = this.priceList.hotelID;
+            this.priceListItem.hotelPriceListID = this.priceList.id;
             this.priceListItem.roomID = this.room.id;
+            this.priceListItem.roomNumber = this.room.roomNumber;
+
+            if (!this.checkPriceListItemIntegrity(this.priceListItem)) {
+                alert('PriceListItem constraint problem.');
+                return;
+            }
+            
             axios.post('http://localhost:8080/api/rooms/addPriceListItem/', this.priceListItem, header)
             .then(response => {
                 console.log(response.data);
+                this.formatDates(response.data);
                 this.priceList.hotelPriceListItems.push(response.data);
                 this.refreshPriceListItems();
             });
         },
         refreshPriceListItems() {
             const header = { headers: {"Authorization" : `Bearer ${localStorage.getItem('user-token')}`} };
-            axios.get('http://localhost:8080/api/rooms/prices/' + this.hotelID, header)
+            axios.get('http://localhost:8080/api/rooms/prices/' + this.hotel.id, header)
             .then(response => {
                 this.priceLists = response.data;
-                console.log(this.priceLists)
+                this.priceLists.forEach(element => {
+                    element.hotelPriceListItems.forEach(item => this.formatDates(item));
+                });
+                this.activeDiscount = null;
+                this.startDate = null;
+                this.endDate = null;
+                this.pricePerDay = null;
+                this.roomID = null;
+                this.roomNumber = null;
             });
+        },
+        formatDates(priceListItem) {
+            let date1 = priceListItem.startDate;
+            let date2 = priceListItem.endDate;
+            priceListItem.startDate = date1.split("T")[0]
+            priceListItem.endDate = date2.split("T")[0]
+        },
+        checkPriceListItemIntegrity(item) {
+            let sameRoomItems = []
+            let flag = true;
+            this.priceList.hotelPriceListItems.forEach(element => {
+                if (element.roomID == item.roomID) sameRoomItems.push(element);
+            });
+            if (sameRoomItems.length == 0) flag = true;
+            sameRoomItems.forEach(element => {
+                const date_start_element = new Date(element.startDate);
+                const date_end_element = new Date(element.endDate);
+                const date_start_item = new Date(item.startDate);
+                const date_end_item = new Date(item.endDate);
+                flag = true;
+                if (date_start_element <= date_start_item && date_start_item <= date_end_element) {flag = false; return;}
+                if (date_start_element <= date_end_item   && date_end_item   <= date_end_element) {flag = false; return;}
+                if (date_start_item <  date_start_element && date_end_element   <  date_end_item) {flag = false; return;}
+            });
+            return flag;
         }
     },
 
@@ -188,12 +243,15 @@ export default {
         const username = localStorage.getItem('username');
         axios.post('http://localhost:8080/api/hotels/findHotelByAdmin', username, header)
         .then(response => { 
-            this.hotelID = response.data;
-            axios.get('http://localhost:8080/api/rooms/prices/' + this.hotelID, header)
+            this.hotel = response.data;
+            console.log(this.hotel);
+            axios.get('http://localhost:8080/api/rooms/prices/' + this.hotel.id, header)
             .then(response => {
                 this.priceLists = response.data;
+                this.priceLists.forEach(element => {
+                    element.hotelPriceListItems.forEach(item => this.formatDates(item));
+                });
                 this.priceList = this.priceLists[0];
-                console.log(this.priceLists);
             });
         });
     }

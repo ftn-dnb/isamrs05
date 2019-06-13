@@ -4,8 +4,10 @@ import ftn.dnb.dnbtravel.dto.HotelDTO;
 import ftn.dnb.dnbtravel.dto.HotelFilterDTO;
 import ftn.dnb.dnbtravel.model.Address;
 import ftn.dnb.dnbtravel.model.Hotel;
+import ftn.dnb.dnbtravel.model.HotelPriceList;
 import ftn.dnb.dnbtravel.model.User;
 import ftn.dnb.dnbtravel.repository.AddressRepository;
+import ftn.dnb.dnbtravel.repository.HotelPriceListRepository;
 import ftn.dnb.dnbtravel.repository.HotelRepository;
 import ftn.dnb.dnbtravel.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,7 +28,15 @@ public class HotelService {
     @Autowired
     private AddressRepository addressRepository;
 
+    @Autowired
+    private HotelPriceListRepository hotelPriceListRepository;
+
     public Hotel findOne(Long id) { return hotelRepository.getOne(id); }
+
+    public HotelDTO getHotelById(Long id) {
+        Hotel hotel = hotelRepository.getOne(id);
+        return new HotelDTO(hotel);
+    }
 
     public List<Address> getAddresses() { return addressRepository.findAll(); }
 
@@ -65,11 +75,22 @@ public class HotelService {
         return new HotelDTO(savedHotel);
     }
 
-    public Long findHotelIdByAdmin(String username) {
+    public HotelDTO findHotelByAdmin(String username) {
         String adminUsername = username.substring(0, username.length()-1);
         User admin = userRepository.findByUsername(adminUsername);
         Hotel hotel = hotelRepository.findOneByAdminId(admin.getId());
-        return hotel.getId();
+        return new HotelDTO(hotel);
+    }
+
+    public Long setCurrentPriceList(Long hotel_id, Long price_list_id) {
+        HotelPriceList currentPriceList = hotelPriceListRepository.findOneById(price_list_id);
+        Hotel hotel = hotelRepository.findOneById(hotel_id);
+
+        if (hotel.getCurrentPriceList().getId() == price_list_id) return Long.valueOf(-1);
+
+        hotel.setCurrentPriceList(currentPriceList);
+        hotelRepository.save(hotel);
+        return currentPriceList.getId();
     }
 
 }
