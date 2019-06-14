@@ -163,4 +163,21 @@ public class UserController {
         headers.put("Location", Arrays.asList("http://localhost:8000/login"));
         return new ResponseEntity<>(userDTO, headers, HttpStatus.FOUND);
     }
+
+    @PostMapping(value = "/passwordChange", consumes = MediaType.APPLICATION_JSON_VALUE)
+    @PreAuthorize("hasRole('RAC_ADMIN')")
+    public ResponseEntity<UserDTO> changePassword(@RequestBody UserDTO userDTO){
+
+        HttpStatus status;
+        UserDTO responseUser = userService.changePasswordAdmin(userDTO);
+        if(responseUser != null){
+            status = HttpStatus.OK;
+        }
+
+        else{
+            status = HttpStatus.CONFLICT;
+        }
+
+        return new ResponseEntity<>(responseUser,status);
+    }
 }

@@ -274,4 +274,15 @@ public class UserService {
         return true;
     }
 
+    public UserDTO changePasswordAdmin(UserDTO userDTO) {
+        User user = userRepository.findByUsername(userDTO.getUsername());
+
+        user.setPassword(passwordEncoder.encode(userDTO.getPassword()));
+        user.setAdmin_password(false);
+
+        user = userRepository.save(user);
+        return new UserDTO(user);
+
+    }
+
 }
