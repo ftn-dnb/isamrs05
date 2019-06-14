@@ -28,7 +28,7 @@ export default{
             ],
             user:{
                 username: null,
-                password: null,
+                password: null, 
             },
         };
     },
@@ -50,14 +50,73 @@ export default{
                 localStorage.setItem('user-token',response.data.accessToken);
                 localStorage.setItem('role', response.data.role);
                 localStorage.setItem('username', this.user.username);
-                bus.$emit('roleChanged', localStorage.getItem('role'));
+                const header = { headers: {"Authorization" : `Bearer ${localStorage.getItem('user-token')}`} };
 
                 switch(response.data.role){
-                	case 'ROLE_USER': this.$router.push({path : '/home'}); break;
-                	case 'ROLE_SYSTEM_ADMIN': this.$router.push({path : '/adminSystem'}); break;
-                	case 'ROLE_AIRLINE_ADMIN': this.$router.push({path : '/adminAirline'}); break;
-                	case 'ROLE_HOTEL_ADMIN':  this.$router.push({path : '/adminHotel'}); break;
-                	case 'ROLE_RAC_ADMIN': this.$router.push({path : '/adminRentACar'}); break;
+                	case 'ROLE_USER':{
+                        bus.$emit('roleChanged', localStorage.getItem('role'));
+                        this.$router.push({path : '/home'});
+                        break;
+                     }
+
+
+                	case 'ROLE_SYSTEM_ADMIN': {
+                        axios.post('http://localhost:8080/api/users/getUser', this.user,header).then(response =>{
+                            if(response.data.admin_password == true){
+                                this.$router.push({path : '/admin-password-change'}); 
+                            }
+                            else{
+                                bus.$emit('roleChanged', localStorage.getItem('role'));
+                                this.$router.push({path : '/adminSystem'}); 
+                            }
+                            });
+
+
+                        break;
+                    }
+
+                	case 'ROLE_AIRLINE_ADMIN':{
+                        axios.post('http://localhost:8080/api/users/getUser', this.user,header).then(response =>{
+                            if(response.data.admin_password == true){
+                                this.$router.push({path : '/admin-password-change'}); 
+                            }
+                            else{
+                                bus.$emit('roleChanged', localStorage.getItem('role'));
+                                this.$router.push({path : '/adminAirline'});
+                            }
+                            });
+ 
+                        break;
+                    }
+
+                	case 'ROLE_HOTEL_ADMIN':{
+                        axios.post('http://localhost:8080/api/users/getUser', this.user,header).then(response =>{
+                            if(response.data.admin_password == true){
+                                this.$router.push({path : '/admin-password-change'}); 
+                            }
+                            else{
+                                bus.$emit('roleChanged', localStorage.getItem('role'));
+                                this.$router.push({path : '/adminHotel'});
+                            }
+                            });
+                        
+                        break;
+                    }
+
+                	case 'ROLE_RAC_ADMIN': {
+                        axios.post('http://localhost:8080/api/users/getUser', this.user,header).then(response =>{
+                            if(response.data.admin_password == true){
+                                this.$router.push({path : '/admin-password-change'}); 
+                            }
+                            else{
+                                bus.$emit('roleChanged', localStorage.getItem('role'));
+                                this.$router.push({path : '/adminRentACar'}); 
+                            }
+                            });
+
+
+                        break;
+                    }
                 	default: this.$toasted.error('User not recognized', {duration:5000});
                 }
                 

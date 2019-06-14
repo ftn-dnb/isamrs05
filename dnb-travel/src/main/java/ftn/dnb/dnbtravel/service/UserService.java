@@ -249,6 +249,7 @@ public class UserService {
         userRepository.save(me);
         userRepository.save(friend);
 
+
         return true;
     }
 
