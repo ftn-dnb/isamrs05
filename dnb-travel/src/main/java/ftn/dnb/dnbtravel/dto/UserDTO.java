@@ -18,6 +18,7 @@ public class UserDTO {
     private String username;
     private String role;
     private List<FriendshipDTO> friendships;
+    private boolean admin_password;
 
     public UserDTO() {
     }
@@ -42,6 +43,8 @@ public class UserDTO {
         this.password = user.getPassword();
         this.username = user.getUsername();
         this.role = user.getAuthorityList().get(0).getAuthority();
+
+        this.admin_password = user.isAdmin_password();
 
         this.friendships = new ArrayList<>();
         user.getFriendships().stream().forEach(f -> friendships.add(new FriendshipDTO(f)));
@@ -117,6 +120,14 @@ public class UserDTO {
 
     public void setFriendships(List<FriendshipDTO> friendships) {
         this.friendships = friendships;
+    }
+
+    public boolean isAdmin_password() {
+        return admin_password;
+    }
+
+    public void setAdmin_password(boolean admin_password) {
+        this.admin_password = admin_password;
     }
 
     public Long convertRoleToLong(){

@@ -36,6 +36,9 @@ public class User implements UserDetails {
     @Column(name = "enabled")
     private boolean enabled;
 
+    @Column(name = "admin_password")
+    private boolean admin_password;
+
     @Column(name = "last_password_reset_date")
     private Timestamp lastPasswordResetDate;
 
@@ -77,6 +80,7 @@ public class User implements UserDetails {
         this.username = dto.getUsername();
         this.enabled = false;
         this.lastPasswordResetDate = new Timestamp(new Date().getTime());
+        this.admin_password = dto.isAdmin_password(); //true until first change
     }
 
     public Long getId() {
@@ -188,6 +192,14 @@ public class User implements UserDetails {
             reservations = new HashSet<FlightReservation>();
 
         return reservations;
+    }
+
+    public boolean isAdmin_password() {
+        return admin_password;
+    }
+
+    public void setAdmin_password(boolean admin_password) {
+        this.admin_password = admin_password;
     }
 
     public void setReservations(Set<FlightReservation> reservations) {

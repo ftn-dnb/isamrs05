@@ -33,6 +33,7 @@ import HotelPriceListSettings from './components/HotelPriceListSettings.vue';
 import AddRoom from './components/AddRoom';
 import HotelSearch from './components/HotelSearch';
 import HotelDetailedView from './components/HotelDetailedView';
+import AdminPasswordChange from './components/AdminPasswordChange';
 
 
 Vue.use(Router)
@@ -259,5 +260,14 @@ export default new Router({
         name: 'AddCar',
         component: AddCar
     },
+
+    {
+        path:'/admin-password-change',
+        name:'AdminPasswordChange',
+        component: AdminPasswordChange
+
+    },
+
+
   ]
 })
