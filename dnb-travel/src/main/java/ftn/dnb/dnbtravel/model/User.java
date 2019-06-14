@@ -75,7 +75,7 @@ public class User implements UserDetails {
 
         this.password = encoder.encode(dto.getPassword());
         this.username = dto.getUsername();
-        this.enabled = true;
+        this.enabled = false;
         this.lastPasswordResetDate = new Timestamp(new Date().getTime());
     }
 

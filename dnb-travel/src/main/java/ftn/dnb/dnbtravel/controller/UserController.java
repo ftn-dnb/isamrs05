@@ -4,6 +4,7 @@ import ftn.dnb.dnbtravel.dto.UserDTO;
 import ftn.dnb.dnbtravel.messaging.Producer;
 import ftn.dnb.dnbtravel.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -14,6 +15,7 @@ import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.nio.charset.StandardCharsets;
 import java.security.Principal;
+import java.util.Arrays;
 import java.util.List;
 
 @RestController
@@ -152,5 +154,13 @@ public class UserController {
         }
 
         return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+    }
+
+    @GetMapping(value = "/confirmMail/{id}")
+    public ResponseEntity<UserDTO> confirmActivationLink(@PathVariable("id") Long id) {
+        UserDTO userDTO = userService.activateUser(id);
+        HttpHeaders headers = new HttpHeaders();
+        headers.put("Location", Arrays.asList("http://localhost:8000/login"));
+        return new ResponseEntity<>(userDTO, headers, HttpStatus.FOUND);
     }
 }

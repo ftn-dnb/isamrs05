@@ -107,6 +107,13 @@ public class UserService {
         return new UserDTO(savedUser);
     }
 
+    public UserDTO activateUser(Long id) {
+        User user = userRepository.findOneById(id);
+        user.setEnabled(true);
+        userRepository.save(user);
+        return new UserDTO(user);
+    }
+
     public UserDTO updateUser(UserDTO user) {
         User userToUpdate = userRepository.findOneById(user.getId());
 
