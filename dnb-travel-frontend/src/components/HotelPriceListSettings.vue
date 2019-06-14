@@ -10,8 +10,8 @@
                 return-object>
             </v-combobox>
             <v-btn @click="setAsCurrentList">
-                <v-icon left>add_circle</v-icon>
-                <span>Add item</span>
+                <v-icon left>done</v-icon>
+                <span>SET AS CURRENT LIST</span>
             </v-btn>
         </v-form>
         <v-data-table :headers="priceListHeaders"

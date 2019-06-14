@@ -22,8 +22,10 @@ public class EmailService {
         SimpleMailMessage mail = new SimpleMailMessage();
         mail.setTo(user.getEmail());
         mail.setFrom(env.getProperty("spring.mail.username"));
-        mail.setSubject("Primjer slanja maila preko asinhronog Spring taska.");
-        mail.setText("Pozdrav, " + user.getUsername() + ", \n\nkako ide.");
+        mail.setSubject("Aktivacioni link za prijavu na DNB-Travel.");
+        mail.setText("Ovde vam se nalazi aktivacioni link: \n\n" +
+                "http://localhost:8080/api/users/confirmMail/" + user.getId());
         javaMailSender.send(mail);
+
     }
 }

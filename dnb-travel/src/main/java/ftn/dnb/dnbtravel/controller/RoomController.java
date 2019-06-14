@@ -42,4 +42,10 @@ public class RoomController {
         HotelPriceListItemDTO savedPriceListItem = roomService.addPriceListItem(hotelPriceListItemDTO);
         return new ResponseEntity<>(savedPriceListItem, HttpStatus.OK);
     }
+
+    @GetMapping(path = "/priceList/{id}")
+    public ResponseEntity<HotelPriceListDTO> getHotelPriceList(@PathVariable("id") Long id) {
+        HotelPriceListDTO hotelPriceListDTO = roomService.getHotelPriceList(id);
+        return new ResponseEntity<>(hotelPriceListDTO, HttpStatus.OK);
+    }
 }

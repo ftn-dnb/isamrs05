@@ -75,4 +75,9 @@ public class RoomService {
         roomRepository.save(refRoom);
         return new HotelPriceListItemDTO(item);
     }
+
+    public HotelPriceListDTO getHotelPriceList(Long id) {
+        HotelPriceList hotelPriceList = priceListRepository.findOneById(id);
+        return new HotelPriceListDTO(hotelPriceList);
+    }
 }
