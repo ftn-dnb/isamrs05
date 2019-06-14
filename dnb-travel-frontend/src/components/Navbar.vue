@@ -136,6 +136,9 @@ export default {
 		});
 		bus.$on('logout', (data) =>{
 			if(data ==='logout'){
+				localStorage.setItem('role', null);
+				localStorage.setItem('username', null);
+				localStorage.setItem('user-token', null);
 				this.role = null;
 				this.lista = this.defaultUser;
 			}
@@ -148,6 +151,7 @@ export default {
 	},
 
 	mounted() {
+		this.role = localStorage.getItem('role');
 		this.lista = this.defaultUser;
 	}
 }	

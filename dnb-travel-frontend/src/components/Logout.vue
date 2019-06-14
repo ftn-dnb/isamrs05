@@ -11,7 +11,6 @@ import {bus} from '../main';
       }
     },
     created:function(){
-      console.log('logout');
       bus.$emit('logout', 'logout');
       this.$router.push('StartPage');
     }
