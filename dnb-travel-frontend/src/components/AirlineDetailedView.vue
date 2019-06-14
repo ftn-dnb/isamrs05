@@ -10,9 +10,14 @@
         <br /><br />
         <div>
             <h3 class="subheading grey--text text-md-center">Tickets for fast reservations</h3>
+            <br />
+
+            <div v-if="!userLoggedIn">
+                <p class="subheading">Sorry, You are not registered to this site so you can't buy any tickets</p>
+            </div> 
 
             <v-list v-if="fastReservations.length != 0">
-                <v-list-tile class="my-1" v-for="res in fastReservations">
+                <v-list-tile class="my-2" v-for="res in fastReservations">
                     <v-list-tile-avatar>
                         {{res.price}} 
                         <v-icon>euro_symbol</v-icon>
@@ -26,7 +31,7 @@
                     <v-list-tile-action>
                         <v-dialog width="500" v-model="dialog">
                             <template v-slot:activator="{ on }">
-                                <v-btn v-on="on">
+                                <v-btn v-on="on" v-if="userLoggedIn">
                                     <v-icon left>attach_money</v-icon>
                                     <span>Buy</span>
                                 </v-btn>
@@ -117,6 +122,7 @@ export default {
 
     data() {
         return {
+            userLoggedIn: false,
             airline: {
                 id: null,
                 name: null,
@@ -197,6 +203,7 @@ export default {
 
     mounted() {
          this.getInfo();
+         this.userLoggedIn = localStorage.getItem('role') === "ROLE_USER";
 
         //  axios.get(`http://localhost:8080/api/airlines/${this.airlineId}/fastReservations`)
         //  .then(response => this.fastReservations = response.data)

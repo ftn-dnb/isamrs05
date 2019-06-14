@@ -107,11 +107,18 @@ INSERT INTO `hotel_rooms` (`hotel_id`, `rooms_id`) VALUES (1, 3)
 -- Price List
 INSERT INTO `hotel_price_list` (`id`, `description`, `hotel_id`) VALUES (1, 'Majski cjenovnik', 1);
 INSERT INTO `hotel_price_list` (`id`, `description`, `hotel_id`) VALUES (2, 'Junski cjenovnik', 1);
+INSERT INTO `hotel_price_list` (`id`, `description`, `hotel_id`) VALUES (3, 'Julski cjenovnik', 2);
+INSERT INTO `hotel_price_list` (`id`, `description`, `hotel_id`) VALUES (4, 'Avgustovski cjenovnik', 3);
+
 
 INSERT INTO `hotel_hotel_price_lists` (`hotel_id`, `hotel_price_lists_id`) VALUES (1,1)
-INSERT INTO `hotel_hotel_price_lists` (`hotel_id`, `hotel_price_lists_id`) VALUES (2,2)
+INSERT INTO `hotel_hotel_price_lists` (`hotel_id`, `hotel_price_lists_id`) VALUES (1,2)
+INSERT INTO `hotel_hotel_price_lists` (`hotel_id`, `hotel_price_lists_id`) VALUES (2,3)
+INSERT INTO `hotel_hotel_price_lists` (`hotel_id`, `hotel_price_lists_id`) VALUES (3,4)
 
 UPDATE `hotel` SET `current_price_list_id` = 1 WHERE `id` = 1;
+UPDATE `hotel` SET `current_price_list_id` = 3 WHERE `id` = 2;
+UPDATE `hotel` SET `current_price_list_id` = 4 WHERE `id` = 3;
 
 -- Price List Item
 INSERT INTO `hotel_price_list_item` (`id`, `active_discount`, `start_date`, `end_date`, `price_per_day`, `room_id`, `hotel_price_list_id`) VALUES (1, 0.5, '2019-10-01 22:00:00', '2019-10-01 22:30:00', 40, 1, 1);
