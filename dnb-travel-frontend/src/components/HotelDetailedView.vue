@@ -16,7 +16,8 @@ export default {
     data() {
         return {
             userLoggedIn: false,
-            hotel: {}
+            hotel: {},
+            priceList: {}
         }
     },
 
@@ -27,7 +28,9 @@ export default {
         .then(response => this.hotel = response.data)
         .catch(error => this.$roasted.error('Error while getting hotel.', {duration: 5000}));
 
-        console.log(this.hotel);
+        axios.get('http://localhost:8080/api/rooms/priceList/' + this.hotel.currentPriceListID, header)
+        .then(response => this.priceList = response.data)
+        .catch(error => this.$roasted.error('Errpr while getting price list.', {duration: 5000}));
     }
 }
 </script>
