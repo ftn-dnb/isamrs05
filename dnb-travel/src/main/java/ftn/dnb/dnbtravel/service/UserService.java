@@ -2,36 +2,24 @@ package ftn.dnb.dnbtravel.service;
 
 import ftn.dnb.dnbtravel.dto.UserDTO;
 import ftn.dnb.dnbtravel.model.Authority;
-//import ftn.dnb.dnbtravel.model.Friendship;
 import ftn.dnb.dnbtravel.model.Friendship;
 import ftn.dnb.dnbtravel.model.FriendshipStatus;
 import ftn.dnb.dnbtravel.model.User;
 import ftn.dnb.dnbtravel.repository.AuthorityRepository;
 import ftn.dnb.dnbtravel.repository.UserRepository;
-import ftn.dnb.dnbtravel.service.EmailService;
-import ftn.dnb.dnbtravel.security.TokenUtils;
-import io.jsonwebtoken.Jwt;
-import io.jsonwebtoken.JwtParser;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.security.oauth2.resource.OAuth2ResourceServerProperties;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import javax.validation.constraints.Email;
 import java.sql.Timestamp;
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
 public class UserService {
-
-
 
     @Autowired
     private UserRepository userRepository;
@@ -48,7 +36,7 @@ public class UserService {
 
     public List<UserDTO> getAllUsers() {
         List<User> users = userRepository.findAll();
-        List<UserDTO> dtos = new ArrayList<UserDTO>();
+        List<UserDTO> dtos = new ArrayList<>();
         users.stream().forEach(user -> dtos.add(new UserDTO(user)));
         return dtos;
     }
@@ -62,24 +50,24 @@ public class UserService {
         return new UserDTO(user);
     }
 
-    public ArrayList<UserDTO> findAllHotelAdmins() {
-        ArrayList<UserDTO> userList = new ArrayList<UserDTO>();
+    public List<UserDTO> findAllHotelAdmins() {
+        ArrayList<UserDTO> userList = new ArrayList<>();
         for (User user : new ArrayList<>(userRepository.findAllHotelAdmins())) {
             userList.add(new UserDTO(user));
         }
         return userList;
     }
 
-    public ArrayList<UserDTO> findAllRACAdmins() {
-        ArrayList<UserDTO> userList = new ArrayList<UserDTO>();
+    public List<UserDTO> findAllRACAdmins() {
+        ArrayList<UserDTO> userList = new ArrayList<>();
         for (User user : new ArrayList<>(userRepository.findAllRACAdmins())) {
             userList.add(new UserDTO(user));
         }
         return userList;
     }
 
-    public ArrayList<UserDTO> findAllAirlineAdmins() {
-        ArrayList<UserDTO> userList = new ArrayList<UserDTO>();
+    public List<UserDTO> findAllAirlineAdmins() {
+        ArrayList<UserDTO> userList = new ArrayList<>();
         for (User user : new ArrayList<>(userRepository.findAllAirlineAdmins())) {
             userList.add(new UserDTO(user));
         }

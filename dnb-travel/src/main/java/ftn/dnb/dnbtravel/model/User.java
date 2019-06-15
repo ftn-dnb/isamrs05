@@ -49,10 +49,10 @@ public class User implements UserDetails {
     private List<Authority> authorityList;
 
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    private Set<Friendship> friendships = new HashSet<Friendship>();
+    private Set<Friendship> friendships = new HashSet<>();
 
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    private Set<FlightReservation> reservations = new HashSet<FlightReservation>();
+    private Set<FlightReservation> reservations = new HashSet<>();
 
 
     public User() {
@@ -189,7 +189,7 @@ public class User implements UserDetails {
 
     public Set<FlightReservation> getReservations() {
         if (reservations == null)
-            reservations = new HashSet<FlightReservation>();
+            reservations = new HashSet<>();
 
         return reservations;
     }

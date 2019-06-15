@@ -7,6 +7,7 @@ public class FlightFastReservationDataDTO {
     private String passport;
 
     public FlightFastReservationDataDTO() {
+        super();
     }
 
     public Long getReservationId() {

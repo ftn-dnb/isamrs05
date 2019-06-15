@@ -36,7 +36,7 @@ public class AirlineStatsDTO {
 
     public List<IncomeDTO> getIncome() {
         if (income == null)
-            income = new ArrayList<IncomeDTO>();
+            income = new ArrayList<>();
 
         return income;
     }
