@@ -27,18 +27,13 @@ public class Airline {
     private float rating;
 
     @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    private Set<Destination> destinations = new HashSet<Destination>();
+    private Set<Destination> destinations = new HashSet<>();
 
     @OneToMany(mappedBy = "airline", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    private Set<Flight> flights = new HashSet<Flight>();
+    private Set<Flight> flights = new HashSet<>();
 
     @OneToOne(cascade = CascadeType.ALL)
     private User administrator;
-
-    // @TODO: dodati
-    // Spisak karata sa popustima za brzu rezervaciju
-    // Konfiguraciju segmenata i mesta u avionima
-    // Cenovnik i informacije o prtljagu
 
     public Airline() {
         super();

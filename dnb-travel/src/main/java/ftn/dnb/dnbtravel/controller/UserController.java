@@ -101,7 +101,7 @@ public class UserController {
         return new ResponseEntity<>(user, (user == null) ? HttpStatus.NOT_FOUND : HttpStatus.OK);
     }
 
-    @RequestMapping(value = "/sysadmin_add", method = RequestMethod.POST)
+    @PostMapping(value = "/sysadmin_add")
     @PreAuthorize("hasRole('SYSTEM_ADMIN')")
     public ResponseEntity<?> addSystemAdmin(@RequestBody UserDTO user) {
         userService.addUser(user);

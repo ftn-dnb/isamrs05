@@ -26,7 +26,7 @@ public class AirlineController {
     @PostMapping(path = "", consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<AirlineDTO> addAirline(@RequestBody AirlineDTO airlineToInsert) {
         AirlineDTO savedAirline = airlineService.addAirline(airlineToInsert);
-        return new ResponseEntity<AirlineDTO>(savedAirline, HttpStatus.CREATED); // @TODO: mozda dodati proveru za null ? koji http kod onda vratiti ?
+        return new ResponseEntity<>(savedAirline, HttpStatus.CREATED);
     }
 
     @GetMapping(path = "")
