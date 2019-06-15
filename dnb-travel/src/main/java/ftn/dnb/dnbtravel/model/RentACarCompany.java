@@ -22,6 +22,9 @@ public class RentACarCompany {
     @Column(name = "rating", nullable = false)
     private double rating;
 
+    @OneToOne(cascade = CascadeType.ALL)
+    private RACPriceList currentPriceList;
+
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinTable(name = "rac_cars",
             joinColumns = @JoinColumn(name = "rac_id", referencedColumnName = "id"),
@@ -144,5 +147,13 @@ public class RentACarCompany {
 
     public void setAdministrator(User administrator) {
         this.administrator = administrator;
+    }
+
+    public RACPriceList getCurrentPriceList() {
+        return currentPriceList;
+    }
+
+    public void setCurrentPriceList(RACPriceList currentPriceList) {
+        this.currentPriceList = currentPriceList;
     }
 }

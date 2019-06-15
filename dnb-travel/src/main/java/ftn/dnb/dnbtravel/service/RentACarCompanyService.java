@@ -1,14 +1,13 @@
 package ftn.dnb.dnbtravel.service;
 
 import ftn.dnb.dnbtravel.dto.*;
-import ftn.dnb.dnbtravel.model.Car;
-import ftn.dnb.dnbtravel.model.RACPriceListItem;
-import ftn.dnb.dnbtravel.model.RentACarCompany;
-import ftn.dnb.dnbtravel.model.User;
+import ftn.dnb.dnbtravel.model.*;
 import ftn.dnb.dnbtravel.repository.RentACarCompanyRepository;
 import ftn.dnb.dnbtravel.repository.RentACarPriceListItem;
 import ftn.dnb.dnbtravel.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -40,6 +39,7 @@ public class RentACarCompanyService {
         if(rentACarCompany == null)
             return null;
         RentACarCompanyDTO rentACarCompanyDTO = new RentACarCompanyDTO(rentACarCompany);
+
         return rentACarCompanyDTO;
     }
 
@@ -143,5 +143,56 @@ public class RentACarCompanyService {
         racRepository.save(company);
 
         return new CarDTO(savedCar);
+    }
+
+    public RACListItemDTO addReservation(RACListItemDTO item){
+        RentACarCompany racToAdd = racRepository.findOneById(item.getCar().getCompany().getId());
+        Car carToAdd = racRepository.findCarById(item.getCar().getId());
+
+        RACPriceList priceList = racToAdd.getCurrentPriceList();
+
+        // provera svega
+
+        RACPriceListItem itemToAdd = new RACPriceListItem(item.getActiveDiscount(),item.getStartDate(),item.getEndDate(),
+                item.getPricePerDay(),priceList,carToAdd);
+
+        priceList.getItems().add(itemToAdd);
+        racRepository.save(racToAdd);
+
+        return new RACListItemDTO(itemToAdd);
+    }
+
+    public ResponseEntity <?> setActivePriceList(Long copmany_id, Long price_list_id){
+
+        RentACarCompany company = racRepository.findOneById(copmany_id);
+        RACPriceList listToSet = null;
+        for(RACPriceList  l : company.getPriceList()){
+            if(l.getId() == price_list_id){
+                listToSet = l;
+                break;
+            }
+        }
+        if(listToSet == null){
+
+            return new ResponseEntity<>("List set failed", HttpStatus.CONFLICT);
+        }
+
+        company.setCurrentPriceList(listToSet);
+        racRepository.save(company);
+        return new ResponseEntity<>("New price list is" + listToSet.getName(), HttpStatus.OK);
+    }
+
+    public ResponseEntity<?> addPriceList(RACSetPriceListDTO addList){
+        RentACarCompany company = racRepository.findOneById(addList.getCompany_id());
+
+        RACPriceList priceList = new RACPriceList();
+        priceList.setName(addList.getName());
+        priceList.setCompany(company);
+
+        company.getPriceList().add(priceList);
+        racRepository.save(company);
+        // dodaj proveru
+        return new ResponseEntity<>("Price list added", HttpStatus.OK);
+
     }
 }
