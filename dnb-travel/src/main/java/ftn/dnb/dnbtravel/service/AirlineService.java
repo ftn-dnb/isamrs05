@@ -289,4 +289,17 @@ public class AirlineService {
 
         return reservations;
     }
+
+    public AirlineDTO getAirlineByAdminUsername(String username) {
+        User admin = userRepository.findOneByUsername(username);
+
+        if (admin == null)
+            return null;
+
+        Airline airline = airlineRepository.findOneByAdministrator(admin);
+        if (airline == null)
+            return null;
+
+        return new AirlineDTO(airline);
+    }
 }

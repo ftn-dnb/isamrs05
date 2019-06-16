@@ -65,7 +65,14 @@ export default {
         // @TODO: pokupiti podatke odgovarajuce aviokompanije na osnovu podataka
         // njenog administratora
         // Zasad se uzima predefinisana vrednost iz baze
-        axios.get("http://localhost:8080/api/airlines/22").then(response => this.airline = response.data);
+        //axios.get("http://localhost:8080/api/airlines/22").then(response => this.airline = response.data);
+
+        const username = localStorage.getItem('username');
+        const header = {headers: {"Authorization": `Bearer ${localStorage.getItem('user-token')}`}};
+
+        axios.post(`http://localhost:8080/api/airlines/company/${username}`, {}, header)
+        .then(response => this.airline = response.data)
+        .catch(error => this.$toasted.error('Error while loading airline company', {duration:5000}));
     }
 }
 </script>

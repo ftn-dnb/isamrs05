@@ -86,4 +86,11 @@ public class AirlineController {
         List<FlightReservationDTO> reservations = airlineService.getFastReservations(id);
         return new ResponseEntity<>(reservations, HttpStatus.OK);
     }
+
+    @PostMapping(path = "/company/{username}")
+    @PreAuthorize("hasRole('AIRLINE_ADMIN')")
+    public ResponseEntity<AirlineDTO> getAirlineByAdminUsername(@PathVariable String username) {
+        AirlineDTO airline = airlineService.getAirlineByAdminUsername(username);
+        return new ResponseEntity<>(airline, (airline == null) ? HttpStatus.BAD_REQUEST : HttpStatus.OK);
+    }
 }
