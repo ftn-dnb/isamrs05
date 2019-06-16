@@ -49,9 +49,15 @@ public class AirlineService {
         return new AirlineDTO(airline);
     }
 
-    public AirlineDTO updateAirline(AirlineDTO airline) {
-        addressRepository.save(airline.getAddress());
-        Airline savedAirline = airlineRepository.save(new Airline(airline));
+    public AirlineDTO updateAirline(AirlineDTO airlineDto) {
+        addressRepository.save(airlineDto.getAddress());
+
+        Airline airline = airlineRepository.findOneById(airlineDto.getId());
+        airline.setAddress(airlineDto.getAddress());
+        airline.setDescription(airlineDto.getDescription());
+        airline.setName(airlineDto.getName());
+
+        Airline savedAirline = airlineRepository.save(airline);
 
         if (savedAirline == null)
             return null;

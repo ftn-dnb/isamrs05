@@ -122,8 +122,8 @@ export default {
     methods: {
         showIncome() {
             const header = {headers:{"Authorization":`Bearer ${localStorage.getItem('user-token')}`} };
-            // @TODO promeniti da uzmia ID kompanije od admina
-            this.filter.airlineId = 22;
+
+            this.filter.airlineId = this.airline.id;
 
             axios.post('http://localhost:8080/api/airlines/stats', this.filter, header)
             .then(response => {
@@ -143,8 +143,8 @@ export default {
 
         showReservationStats() {
             const header = {headers:{"Authorization":`Bearer ${localStorage.getItem('user-token')}`} };
-            // @TODO promeniti da uzmia ID kompanije od admina
-            this.filter.airlineId = 22;
+
+            this.filter.airlineId = this.airline.id;
 
             axios.post('http://localhost:8080/api/airlines/stats/reservations', this.filter, header)
             .then(response => {
@@ -164,10 +164,10 @@ export default {
     },
 
     mounted() {
-        // @TODO: pokupiti podatke odgovarajuce aviokompanije na osnovu podataka
-        // njenog administratora
-        // Zasad se uzima predefinisana vrednost iz baze
-        axios.get("http://localhost:8080/api/airlines/22")
+        const username = localStorage.getItem('username');
+        const header = {headers: {"Authorization": `Bearer ${localStorage.getItem('user-token')}`}};
+
+        axios.post(`http://localhost:8080/api/airlines/company/${username}`, {}, header)
         .then(response => {
             this.airline = response.data;
             this.airline.ratingInt = parseInt(this.airline.rating);
