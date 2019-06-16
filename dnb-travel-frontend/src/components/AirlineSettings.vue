@@ -55,17 +55,21 @@ export default {
                 return;
             }
 
-            axios.put('http://localhost:8080/api/airlines', this.airline)
+            const header = {headers: {"Authorization": `Bearer ${localStorage.getItem('user-token')}`}};
+
+            axios.put('http://localhost:8080/api/airlines', this.airline, header)
             .then(response => this.$toasted.success('Profile successfully updated.', {duration:5000}))
             .catch(error => this.$toasted.error('Error while updating airline data.', {duration:5000}));
         },
     },
 
     mounted() {
-        // @TODO: pokupiti podatke odgovarajuce aviokompanije na osnovu podataka
-        // njenog administratora
-        // Zasad se uzima predefinisana vrednost iz baze
-        axios.get("http://localhost:8080/api/airlines/22").then(response => this.airline = response.data);
+        const username = localStorage.getItem('username');
+        const header = {headers: {"Authorization": `Bearer ${localStorage.getItem('user-token')}`}};
+
+        axios.post(`http://localhost:8080/api/airlines/company/${username}`, {}, header)
+        .then(response => this.airline = response.data)
+        .catch(error => this.$toasted.error('Error while loading airline company', {duration:5000}));
     }
 }
 </script>

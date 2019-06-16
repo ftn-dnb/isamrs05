@@ -365,9 +365,12 @@ export default {
     },
 
     mounted() {
-        // Dobaviti aviokompaniju za ulogovanog admina - pa se preko toga dobave i destinacije
-        // @TODO: popraviti ovo da se ne dovaljva prva aviokompanija vec ona za koju je korisnik admin
-        axios.get('http://localhost:8080/api/airlines/22').then(response => this.airline = response.data);
+        const username = localStorage.getItem('username');
+        const header = {headers: {"Authorization": `Bearer ${localStorage.getItem('user-token')}`}};
+
+        axios.post(`http://localhost:8080/api/airlines/company/${username}`, {}, header)
+        .then(response => this.airline = response.data)
+        .catch(error => this.$toasted.error('Error while loading airline data', {duration:5000}));
 
         // Get list of destinations that can be used for list of transits for flight
         axios.get('http://localhost:8080/api/destinations').then(response => this.destinations = response.data);
