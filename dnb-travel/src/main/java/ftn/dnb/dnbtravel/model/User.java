@@ -36,6 +36,9 @@ public class User implements UserDetails {
     @Column(name = "enabled")
     private boolean enabled;
 
+    @Column(name = "admin_password")
+    private boolean admin_password;
+
     @Column(name = "last_password_reset_date")
     private Timestamp lastPasswordResetDate;
 
@@ -46,23 +49,26 @@ public class User implements UserDetails {
     private List<Authority> authorityList;
 
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    private Set<Friendship> friendships = new HashSet<Friendship>();
+    private Set<Friendship> friendships = new HashSet<>();
 
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    private Set<FlightReservation> reservations = new HashSet<FlightReservation>();
+    private Set<FlightReservation> reservations = new HashSet<>();
 
+    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private Set<HotelReservation> hotelReservations;
 
     public User() {
         super();
     }
 
-    public User(Long id, String firstName, String lastName, String email, String password,String username) {
+    public User(Long id, String firstName, String lastName, String email, String password,String username, Set<HotelReservation> hotelReservations) {
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
         this.password = password;
         this.username = username;
+        this.hotelReservations = hotelReservations;
     }
 
     public User(UserDTO dto) {
@@ -77,6 +83,7 @@ public class User implements UserDetails {
         this.username = dto.getUsername();
         this.enabled = false;
         this.lastPasswordResetDate = new Timestamp(new Date().getTime());
+        this.admin_password = dto.isAdmin_password(); //true until first change
     }
 
     public Long getId() {
@@ -185,13 +192,32 @@ public class User implements UserDetails {
 
     public Set<FlightReservation> getReservations() {
         if (reservations == null)
-            reservations = new HashSet<FlightReservation>();
+            reservations = new HashSet<>();
 
         return reservations;
     }
 
+    public boolean isAdmin_password() {
+        return admin_password;
+    }
+
+    public void setAdmin_password(boolean admin_password) {
+        this.admin_password = admin_password;
+    }
+
     public void setReservations(Set<FlightReservation> reservations) {
         this.reservations = reservations;
+    }
+
+    public Set<HotelReservation> getHotelReservations() {
+        if (this.hotelReservations == null) {
+            this.hotelReservations = new HashSet<>();
+        }
+        return this.hotelReservations;
+    }
+
+    public void setHotelReservations(Set<HotelReservation> hotelReservations) {
+        this.hotelReservations = hotelReservations;
     }
 
     @Override

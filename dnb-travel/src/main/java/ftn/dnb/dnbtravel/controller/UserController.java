@@ -2,6 +2,7 @@ package ftn.dnb.dnbtravel.controller;
 
 import ftn.dnb.dnbtravel.dto.UserDTO;
 import ftn.dnb.dnbtravel.messaging.Producer;
+import ftn.dnb.dnbtravel.model.User;
 import ftn.dnb.dnbtravel.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
@@ -100,7 +101,7 @@ public class UserController {
         return new ResponseEntity<>(user, (user == null) ? HttpStatus.NOT_FOUND : HttpStatus.OK);
     }
 
-    @RequestMapping(value = "/sysadmin_add", method = RequestMethod.POST)
+    @PostMapping(value = "/sysadmin_add")
     @PreAuthorize("hasRole('SYSTEM_ADMIN')")
     public ResponseEntity<?> addSystemAdmin(@RequestBody UserDTO user) {
         userService.addUser(user);
@@ -162,5 +163,32 @@ public class UserController {
         HttpHeaders headers = new HttpHeaders();
         headers.put("Location", Arrays.asList("http://localhost:8000/login"));
         return new ResponseEntity<>(userDTO, headers, HttpStatus.FOUND);
+    }
+
+    @PostMapping(value = "/passwordChange", consumes = MediaType.APPLICATION_JSON_VALUE)
+    @PreAuthorize("hasRole('SYSTEM_ADMIN') or hasRole('AIRLINE_ADMIN') or hasRole('RAC_ADMIN') or hasRole('HOTEL_ADMIN')")
+    public ResponseEntity<UserDTO> changePassword(@RequestBody UserDTO userDTO){
+
+        HttpStatus status;
+        UserDTO responseUser = userService.changePasswordAdmin(userDTO);
+        if(responseUser != null){
+            status = HttpStatus.OK;
+        }
+
+        else{
+            status = HttpStatus.CONFLICT;
+        }
+
+        return new ResponseEntity<>(responseUser,status);
+    }
+
+    @PostMapping(value = "/getUser")
+    @PreAuthorize("hasRole('SYSTEM_ADMIN') or hasRole('AIRLINE_ADMIN') or hasRole('RAC_ADMIN') or hasRole('HOTEL_ADMIN')")
+    public ResponseEntity<UserDTO>getUserByUsername(@RequestBody UserDTO userDTO){
+
+
+        UserDTO responseUser = userService.getUserByUsername(userDTO.getUsername());
+        System.out.println("Poslao sam user-a");
+        return  new ResponseEntity<>(responseUser,HttpStatus.OK);
     }
 }

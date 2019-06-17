@@ -26,7 +26,7 @@ public class AirlineController {
     @PostMapping(path = "", consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<AirlineDTO> addAirline(@RequestBody AirlineDTO airlineToInsert) {
         AirlineDTO savedAirline = airlineService.addAirline(airlineToInsert);
-        return new ResponseEntity<AirlineDTO>(savedAirline, HttpStatus.CREATED); // @TODO: mozda dodati proveru za null ? koji http kod onda vratiti ?
+        return new ResponseEntity<>(savedAirline, HttpStatus.CREATED);
     }
 
     @GetMapping(path = "")
@@ -85,5 +85,12 @@ public class AirlineController {
     public ResponseEntity<List<FlightReservationDTO>> getFastReservations(@PathVariable Long id) {
         List<FlightReservationDTO> reservations = airlineService.getFastReservations(id);
         return new ResponseEntity<>(reservations, HttpStatus.OK);
+    }
+
+    @PostMapping(path = "/company/{username}")
+    @PreAuthorize("hasRole('AIRLINE_ADMIN')")
+    public ResponseEntity<AirlineDTO> getAirlineByAdminUsername(@PathVariable String username) {
+        AirlineDTO airline = airlineService.getAirlineByAdminUsername(username);
+        return new ResponseEntity<>(airline, (airline == null) ? HttpStatus.BAD_REQUEST : HttpStatus.OK);
     }
 }

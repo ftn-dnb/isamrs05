@@ -1,10 +1,11 @@
-INSERT INTO `users` (`id`, `email`, `enabled`, `first_name`, `last_name`, `last_password_reset_date`, `password` ,`username`) VALUES (2,'m@m.com',true,'Marko','Markovic','2017-10-01 21:58:58','$2a$04$Vbug2lwwJGrvUXTj6z7ff.97IzVBkrJ1XfApfGNl.Z695zqcnPYra','marko');
-INSERT INTO `users` (`id`, `email`, `enabled`, `first_name`, `last_name`, `last_password_reset_date`, `password` ,`username`) VALUES (3,'p@s.com',true,'Pera','Peric','2017-10-01 21:58:58','$2a$04$Vbug2lwwJGrvUXTj6z7ff.97IzVBkrJ1XfApfGNl.Z695zqcnPYra','peki');
-INSERT INTO `users` (`id`, `email`, `enabled`, `first_name`, `last_name`, `last_password_reset_date`, `password` ,`username`) VALUES (4,'l@s.com',true,'Laza','Peric','2017-10-01 21:58:58','$2a$04$Vbug2lwwJGrvUXTj6z7ff.97IzVBkrJ1XfApfGNl.Z695zqcnPYra','laki');
-INSERT INTO `users` (`id`, `email`, `enabled`, `first_name`, `last_name`, `last_password_reset_date`, `password` ,`username`) VALUES (5,'d@s.com',true,'Djoka','Peric','2017-10-01 21:58:58','$2a$04$Vbug2lwwJGrvUXTj6z7ff.97IzVBkrJ1XfApfGNl.Z695zqcnPYra','djox');
-INSERT INTO `users` (`id`, `email`, `enabled`, `first_name`, `last_name`, `last_password_reset_date`, `password` ,`username`) VALUES (6,'m@s.com',true,'Mika','Peric','2017-10-01 21:58:58','$2a$04$Vbug2lwwJGrvUXTj6z7ff.97IzVBkrJ1XfApfGNl.Z695zqcnPYra','miki');
-INSERT INTO `users` (`id`, `email`, `enabled`, `first_name`, `last_name`, `last_password_reset_date`, `password` ,`username`) VALUES (7,'t@s.com',true,'Tarzan','Peric','2017-10-01 21:58:58','$2a$04$Vbug2lwwJGrvUXTj6z7ff.97IzVBkrJ1XfApfGNl.Z695zqcnPYra','tarzan');
-INSERT INTO `users` (`id`, `email`, `enabled`, `first_name`, `last_name`, `last_password_reset_date`, `password` ,`username`) VALUES (8,'ms@s.com',true,'Mika','Peric','2017-10-01 21:58:58','$2a$04$Vbug2lwwJGrvUXTj6z7ff.97IzVBkrJ1XfApfGNl.Z695zqcnPYra','miki2');
+INSERT INTO `users` (`id`, `email`, `enabled`, `first_name`, `last_name`, `last_password_reset_date`, `password` ,`username`,`admin_password`) VALUES (2,'m@m.com',true,'Marko','Markovic','2017-10-01 21:58:58','$2a$04$Vbug2lwwJGrvUXTj6z7ff.97IzVBkrJ1XfApfGNl.Z695zqcnPYra','marko',false);
+INSERT INTO `users` (`id`, `email`, `enabled`, `first_name`, `last_name`, `last_password_reset_date`, `password` ,`username`,`admin_password`) VALUES (3,'p@s.com',true,'Pera','Peric','2017-10-01 21:58:58','$2a$04$Vbug2lwwJGrvUXTj6z7ff.97IzVBkrJ1XfApfGNl.Z695zqcnPYra','peki',false);
+INSERT INTO `users` (`id`, `email`, `enabled`, `first_name`, `last_name`, `last_password_reset_date`, `password` ,`username`,`admin_password`) VALUES (4,'l@s.com',true,'Laza','Peric','2017-10-01 21:58:58','$2a$04$Vbug2lwwJGrvUXTj6z7ff.97IzVBkrJ1XfApfGNl.Z695zqcnPYra','laki',false);
+INSERT INTO `users` (`id`, `email`, `enabled`, `first_name`, `last_name`, `last_password_reset_date`, `password` ,`username`,`admin_password`) VALUES (5,'d@s.com',true,'Djoka','Peric','2017-10-01 21:58:58','$2a$04$Vbug2lwwJGrvUXTj6z7ff.97IzVBkrJ1XfApfGNl.Z695zqcnPYra','djox',false);
+INSERT INTO `users` (`id`, `email`, `enabled`, `first_name`, `last_name`, `last_password_reset_date`, `password` ,`username`,`admin_password`) VALUES (6,'m@s.com',true,'Mika','Peric','2017-10-01 21:58:58','$2a$04$Vbug2lwwJGrvUXTj6z7ff.97IzVBkrJ1XfApfGNl.Z695zqcnPYra','miki',false);
+INSERT INTO `users` (`id`, `email`, `enabled`, `first_name`, `last_name`, `last_password_reset_date`, `password` ,`username`,`admin_password`) VALUES (7,'t@s.com',true,'Tarzan','Peric','2017-10-01 21:58:58','$2a$04$Vbug2lwwJGrvUXTj6z7ff.97IzVBkrJ1XfApfGNl.Z695zqcnPYra','tarzan',false);
+INSERT INTO `users` (`id`, `email`, `enabled`, `first_name`, `last_name`, `last_password_reset_date`, `password` ,`username`,`admin_password`) VALUES (8,'ms@s.com',true,'Mika','Peric','2017-10-01 21:58:58','$2a$04$Vbug2lwwJGrvUXTj6z7ff.97IzVBkrJ1XfApfGNl.Z695zqcnPYra','miki2',false);
+
 
 INSERT INTO `authority` (id, name) VALUES (1, 'ROLE_USER');
 INSERT INTO `authority` (id, name) VALUES (2, 'ROLE_SYSTEM_ADMIN');
@@ -19,6 +20,8 @@ INSERT INTO `user_authority` (user_id, authority_id) VALUES (5, 3);
 INSERT INTO `user_authority` (user_id, authority_id) VALUES (6, 4);
 INSERT INTO `user_authority` (user_id, authority_id) VALUES (7, 5);
 INSERT INTO `user_authority` (user_id, authority_id) VALUES (8, 4);
+INSERT INTO `user_authority` (user_id, authority_id) VALUES (9, 3);
+INSERT INTO `user_authority` (user_id, authority_id) VALUES (10, 3);
 
 INSERT INTO `friendship` VALUES (1, 0, 2);
 INSERT INTO `friendship` VALUES (2, 0, 3);
@@ -42,9 +45,9 @@ INSERT INTO `address` VALUES(32, 'Belgrade', 'Serbia', 11000, 'Bulevar', 213);
 INSERT INTO `address` VALUES(33, 'Athens', 'Greece', 5433, 'Alfa', 24);
 
 -- Airlines
-INSERT INTO `airline` VALUES(22, 'Best airline company in US', 'United', 4, 31, 4);
-INSERT INTO `airline` VALUES(23, 'Najbolja aviokompanija', 'AirSerbia', 3, 32, 4);
-INSERT INTO `airline` VALUES(24, 'Best company in Greece', 'AirGreece', 5, 33, 4);
+INSERT INTO `airline` VALUES(22, 'Best airline company in US', 'United', 4, 31, 5);
+INSERT INTO `airline` VALUES(23, 'Najbolja aviokompanija', 'AirSerbia', 3, 32, 9);
+INSERT INTO `airline` VALUES(24, 'Best company in Greece', 'AirGreece', 5, 33, 10);
 
 -- Destinations where airlines work
 INSERT INTO `airline_destinations` VALUES(22, 11);
@@ -100,10 +103,21 @@ INSERT INTO `hotel` (`id`, `name`, `description`, `rating`, `address_id`) VALUES
 INSERT INTO `room` (`id`, `room_number`, `floor`, `rating`, `capacity`, `hotel_id`) VALUES (1, 21, 2, 4.0, 3, 1);
 INSERT INTO `room` (`id`, `room_number`, `floor`, `rating`, `capacity`, `hotel_id`) VALUES (2, 22, 2, 5.0, 2, 2);
 INSERT INTO `room` (`id`, `room_number`, `floor`, `rating`, `capacity`, `hotel_id`) VALUES (3, 25, 2, 5.0, 2, 1);
+INSERT INTO `room` (`id`, `room_number`, `floor`, `rating`, `capacity`, `hotel_id`) VALUES (4, 100, 3, 3.0, 4, 1);
+INSERT INTO `room` (`id`, `room_number`, `floor`, `rating`, `capacity`, `hotel_id`) VALUES (5, 102, 3, 3.0, 3, 1);
+INSERT INTO `room` (`id`, `room_number`, `floor`, `rating`, `capacity`, `hotel_id`) VALUES (6, 103, 3, 3.0, 3, 1);
+INSERT INTO `room` (`id`, `room_number`, `floor`, `rating`, `capacity`, `hotel_id`) VALUES (7, 105, 3, 3.0, 2, 1);
+INSERT INTO `room` (`id`, `room_number`, `floor`, `rating`, `capacity`, `hotel_id`) VALUES (8, 150, 3, 3.0, 1, 1);
 
 INSERT INTO `hotel_rooms` (`hotel_id`, `rooms_id`) VALUES (1, 1)
 INSERT INTO `hotel_rooms` (`hotel_id`, `rooms_id`) VALUES (2, 2)
 INSERT INTO `hotel_rooms` (`hotel_id`, `rooms_id`) VALUES (1, 3)
+INSERT INTO `hotel_rooms` (`hotel_id`, `rooms_id`) VALUES (1, 4)
+INSERT INTO `hotel_rooms` (`hotel_id`, `rooms_id`) VALUES (1, 5)
+INSERT INTO `hotel_rooms` (`hotel_id`, `rooms_id`) VALUES (1, 6)
+INSERT INTO `hotel_rooms` (`hotel_id`, `rooms_id`) VALUES (1, 7)
+INSERT INTO `hotel_rooms` (`hotel_id`, `rooms_id`) VALUES (1, 8)
+
 -- Price List
 INSERT INTO `hotel_price_list` (`id`, `description`, `hotel_id`) VALUES (1, 'Majski cjenovnik', 1);
 INSERT INTO `hotel_price_list` (`id`, `description`, `hotel_id`) VALUES (2, 'Junski cjenovnik', 1);
@@ -121,13 +135,28 @@ UPDATE `hotel` SET `current_price_list_id` = 3 WHERE `id` = 2;
 UPDATE `hotel` SET `current_price_list_id` = 4 WHERE `id` = 3;
 
 -- Price List Item
-INSERT INTO `hotel_price_list_item` (`id`, `active_discount`, `start_date`, `end_date`, `price_per_day`, `room_id`, `hotel_price_list_id`) VALUES (1, 0.5, '2019-10-01 22:00:00', '2019-10-01 22:30:00', 40, 1, 1);
+INSERT INTO `hotel_price_list_item` (`id`, `active_discount`, `start_date`, `end_date`, `price_per_day`, `room_id`, `hotel_price_list_id`) VALUES (1, 0.5, '2019-10-01 00:00:00', '2019-10-01 00:00:00', 40, 1, 1);
+INSERT INTO `hotel_price_list_item` (`id`, `active_discount`, `start_date`, `end_date`, `price_per_day`, `room_id`, `hotel_price_list_id`) VALUES (2, 0.0, '2019-06-10 00:00:00', '2019-06-20 00:00:00', 60, 3, 1);
+INSERT INTO `hotel_price_list_item` (`id`, `active_discount`, `start_date`, `end_date`, `price_per_day`, `room_id`, `hotel_price_list_id`) VALUES (3, 0.0, '2019-06-10 00:00:00', '2019-06-20 00:00:00', 60, 4, 1);
+INSERT INTO `hotel_price_list_item` (`id`, `active_discount`, `start_date`, `end_date`, `price_per_day`, `room_id`, `hotel_price_list_id`) VALUES (4, 0.0, '2019-06-10 00:00:00', '2019-06-20 00:00:00', 60, 5, 1);
+INSERT INTO `hotel_price_list_item` (`id`, `active_discount`, `start_date`, `end_date`, `price_per_day`, `room_id`, `hotel_price_list_id`) VALUES (5, 0.0, '2019-06-10 00:00:00', '2019-06-20 00:00:00', 60, 6, 1);
+INSERT INTO `hotel_price_list_item` (`id`, `active_discount`, `start_date`, `end_date`, `price_per_day`, `room_id`, `hotel_price_list_id`) VALUES (6, 0.0, '2019-06-10 00:00:00', '2019-06-20 00:00:00', 60, 7, 1);
 
 -- list <-> list_item
 INSERT INTO `hotel_price_list_hotel_price_list_items` (`hotel_price_list_id`, `hotel_price_list_items_id`) VALUES (1, 1);
+INSERT INTO `hotel_price_list_hotel_price_list_items` (`hotel_price_list_id`, `hotel_price_list_items_id`) VALUES (1, 2);
+INSERT INTO `hotel_price_list_hotel_price_list_items` (`hotel_price_list_id`, `hotel_price_list_items_id`) VALUES (1, 3);
+INSERT INTO `hotel_price_list_hotel_price_list_items` (`hotel_price_list_id`, `hotel_price_list_items_id`) VALUES (1, 4);
+INSERT INTO `hotel_price_list_hotel_price_list_items` (`hotel_price_list_id`, `hotel_price_list_items_id`) VALUES (1, 5);
+INSERT INTO `hotel_price_list_hotel_price_list_items` (`hotel_price_list_id`, `hotel_price_list_items_id`) VALUES (1, 6);
 
 -- room <-> list_item
 INSERT INTO `room_hotel_price_list_items` (`room_id`, `hotel_price_list_items_id`) VALUES (1, 1)
+INSERT INTO `room_hotel_price_list_items` (`room_id`, `hotel_price_list_items_id`) VALUES (3, 2)
+INSERT INTO `room_hotel_price_list_items` (`room_id`, `hotel_price_list_items_id`) VALUES (4, 3)
+INSERT INTO `room_hotel_price_list_items` (`room_id`, `hotel_price_list_items_id`) VALUES (5, 4)
+INSERT INTO `room_hotel_price_list_items` (`room_id`, `hotel_price_list_items_id`) VALUES (6, 5)
+INSERT INTO `room_hotel_price_list_items` (`room_id`, `hotel_price_list_items_id`) VALUES (7, 6)
 
 INSERT INTO `rac` (`id`,`name`,`description`,rating) VALUES (1,'Pegaz','acab',1.0);
 INSERT INTO `rac` (`id`,`name`,`description`,rating) VALUES (2,'Pegaz2','acab',1.5);

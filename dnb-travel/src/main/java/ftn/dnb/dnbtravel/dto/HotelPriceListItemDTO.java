@@ -11,9 +11,10 @@ public class HotelPriceListItemDTO {
     private Date startDate;
     private Date endDate;
     private int pricePerDay;
-    private Long roomID;
-    private int roomNumber;
+    //private Long roomID;
+    //private int roomNumber;
     private Long hotelPriceListID;
+    private RoomDTO room;
 
     public HotelPriceListItemDTO() {
         super();
@@ -24,19 +25,21 @@ public class HotelPriceListItemDTO {
         this.startDate = hotelPriceListItem.getStartDate();
         this.endDate = hotelPriceListItem.getEndDate();
         this.pricePerDay = hotelPriceListItem.getPricePerDay();
-        this.roomID = hotelPriceListItem.getRoom().getId();
+        //this.roomID = hotelPriceListItem.getRoom().getId();
         this.hotelPriceListID = hotelPriceListItem.getHotelPriceList().getId();
-        this.roomNumber = hotelPriceListItem.getRoom().getRoomNumber();
+        //this.roomNumber = hotelPriceListItem.getRoom().getRoomNumber();
+        this.room = new RoomDTO(hotelPriceListItem.getRoom());
     }
 
-    public HotelPriceListItemDTO(double activeDiscount, Date startDate, Date endDate, int pricePerDay, Long roomID, Long hotelPriceListID, int roomNumber) {
+    public HotelPriceListItemDTO(double activeDiscount, Date startDate, Date endDate, int pricePerDay, Long hotelPriceListID, RoomDTO room) {
         this.activeDiscount = activeDiscount;
         this.startDate = startDate;
         this.endDate = endDate;
         this.pricePerDay = pricePerDay;
-        this.roomID = roomID;
+        //this.roomID = roomID;
         this.hotelPriceListID = hotelPriceListID;
-        this.roomNumber = roomNumber;
+        //this.roomNumber = roomNumber;
+        this.room = room;
     }
 
     public Long getId() {
@@ -79,14 +82,6 @@ public class HotelPriceListItemDTO {
         this.pricePerDay = pricePerDay;
     }
 
-    public Long getRoomID() {
-        return roomID;
-    }
-
-    public void setRoomID(Long roomID) {
-        this.roomID = roomID;
-    }
-
     public Long getHotelPriceListID() {
         return hotelPriceListID;
     }
@@ -95,12 +90,12 @@ public class HotelPriceListItemDTO {
         this.hotelPriceListID = hotelPriceListID;
     }
 
-    public int getRoomNumber() {
-        return roomNumber;
+    public RoomDTO getRoom() {
+        return room;
     }
 
-    public void setRoomNumber(int roomNumber) {
-        this.roomNumber = roomNumber;
+    public void setRoom(RoomDTO room) {
+        this.room = room;
     }
 }
 

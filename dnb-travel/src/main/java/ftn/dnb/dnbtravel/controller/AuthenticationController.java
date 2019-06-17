@@ -10,7 +10,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.mobile.device.Device;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -42,9 +41,9 @@ public class AuthenticationController {
     @Autowired
     private DeviceProvider deviceProvider;
 
-    @RequestMapping(value = "/login", method = RequestMethod.POST)
+    @PostMapping(value = "/login")
     public ResponseEntity<?> createAuthenticationToken(@RequestBody JwtAuthenticationRequest authenticationRequest,
-                                                       HttpServletResponse response) throws AuthenticationException, IOException {
+                                                       HttpServletResponse response) throws AuthenticationException {
 
 
         Authentication authentication = null;
@@ -71,7 +70,7 @@ public class AuthenticationController {
         return ResponseEntity.ok(new UserTokenState(jwt, expiresIn,role));
     }
 
-    @RequestMapping(value = "/refresh", method = RequestMethod.POST)
+    @PostMapping(value = "/refresh")
     public ResponseEntity<?> refreshAuthenticationToken(HttpServletRequest request) {
         String token = tokenUtils.getToken(request);
         String username = this.tokenUtils.getUsernameFromToken(token);
@@ -89,7 +88,7 @@ public class AuthenticationController {
         }
     }
 
-    @RequestMapping(value = "/change-password", method = RequestMethod.POST)
+    @PostMapping(value = "/change-password")
     @PreAuthorize("hasRole('SYSTEM_ADMIN') or hasRole('AIRLINE_ADMIN') or hasRole('RAC_ADMIN') or hasRole('HOTEL_ADMIN') or hasRole('USER')")
     public ResponseEntity<?> changePassword(@RequestBody PasswordChanger passwordChanger) {
         userDetailsService.changePassword(passwordChanger.oldPassword, passwordChanger.newPassword);

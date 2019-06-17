@@ -38,8 +38,8 @@ public class AirlineDTO {
         this.name = airline.getName();
         this.address = airline.getAddress();
         this.description = airline.getDescription();
-        this.destinations = new ArrayList<DestinationDTO>();
-        this.flights = new ArrayList<FlightDTO>();
+        this.destinations = new ArrayList<>();
+        this.flights = new ArrayList<>();
         this.rating = airline.getRating();
         this.administrator = new UserDTO(airline.getAdministrator());
 

@@ -29,7 +29,7 @@ public class FlightService {
 
     public List<FlightDTO> getAllFlights() {
         List<Flight> flights = flightRepository.findAll();
-        List<FlightDTO> dtos = new ArrayList<FlightDTO>();
+        List<FlightDTO> dtos = new ArrayList<>();
         flights.stream().forEach(flight -> dtos.add(new FlightDTO(flight)));
         return dtos;
     }

@@ -50,6 +50,7 @@ export default {
 			destinations: [],
 			airlineDestinations: [],
 			destToAdd: null,
+			airlineId: null,
 		};
 	},
 
@@ -59,17 +60,21 @@ export default {
 				return;
 			}
 
-			// @TODO promeni ID
-			axios.post('http://localhost:8080/api/airlines/24/addDestination', this.destToAdd, this.header)
+			axios.post(`http://localhost:8080/api/airlines/${this.airlineId}/addDestination`, this.destToAdd, this.header)
 			.then(response => this.airlineDestinations = response.data.destinations)
 			.catch(error => this.$toasted.error('There was and error while adding new destination', {duration: 5000}));
 		},
 	},
 
 	mounted() {
-		// @TODO promeni ID kompanija
-		axios.get('http://localhost:8080/api/airlines/24')
-		.then(response => this.airlineDestinations = response.data.destinations);
+		const username = localStorage.getItem('username');
+
+		axios.post(`http://localhost:8080/api/airlines/company/${username}`, {}, this.header)
+		.then(response => {
+			this.airlineId = response.data.id;
+			this.airlineDestinations = response.data.destinations;
+		})
+		.catch(error => this.$toasted.error('Error while loading airline data', {duration:5000}));
 
         axios.get('http://localhost:8080/api/destinations')
         .then(response => this.destinations = response.data);

@@ -1,6 +1,7 @@
 package ftn.dnb.dnbtravel.repository;
 
 import ftn.dnb.dnbtravel.dto.UserDTO;
+import ftn.dnb.dnbtravel.model.Car;
 import ftn.dnb.dnbtravel.model.RACPriceListItem;
 import ftn.dnb.dnbtravel.model.RentACarCompany;
 import ftn.dnb.dnbtravel.model.User;
@@ -18,5 +19,7 @@ public interface RentACarCompanyRepository extends JpaRepository<RentACarCompany
     RentACarCompany findOneById(Long id);
 
     RentACarCompany findOneByAdministrator(User user);
+
+    Car findCarById(Long id);
 
 }
