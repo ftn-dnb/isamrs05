@@ -1,8 +1,11 @@
 package ftn.dnb.dnbtravel.dto;
 
-import ftn.dnb.dnbtravel.model.Address;
-import ftn.dnb.dnbtravel.model.RentACarCompany;
-import ftn.dnb.dnbtravel.model.User;
+import ftn.dnb.dnbtravel.model.*;
+
+import java.util.HashSet;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Set;
 
 public class RentACarCompanyDTO {
 
@@ -11,6 +14,9 @@ public class RentACarCompanyDTO {
     private String description;
     private double rating;
     private UserDTO administrator;
+    private List<CarDTO> cars;
+    private List<RACPriceListDTO> priceList;
+    private RACPriceListDTO currentPriceList;
 
     public RentACarCompanyDTO(){
         super();
@@ -22,6 +28,7 @@ public class RentACarCompanyDTO {
         this.description = description;
         this.rating = rating;
         this.administrator = administrator;
+        this.cars = cars;
     }
 
     public RentACarCompanyDTO(RentACarCompany rentACarCompany){
@@ -30,8 +37,23 @@ public class RentACarCompanyDTO {
         this.description = rentACarCompany.getDescription();
         this.rating = rentACarCompany.getRating();
         this.administrator = new UserDTO(rentACarCompany.getAdministrator());
-    }
 
+        if(rentACarCompany.getCurrentPriceList()!= null)
+            this.currentPriceList = new RACPriceListDTO(rentACarCompany.getCurrentPriceList());
+
+        this.cars = new LinkedList<>();
+
+        if((rentACarCompany.getCars()!= null) && (rentACarCompany.getCars().size() > 0)){
+            fakeCars(rentACarCompany.getCars());
+        }
+
+        this.priceList = new LinkedList<>();
+        if((rentACarCompany.getPriceList() != null ) && (rentACarCompany.getPriceList().size() > 0)){
+            fakePraceLists(rentACarCompany.getPriceList());
+        }
+
+
+    }
     public long getId() {
         return id;
     }
@@ -70,5 +92,47 @@ public class RentACarCompanyDTO {
 
     public void setRating(double rating) {
         this.rating = rating;
+    }
+
+    public List<CarDTO> getCars() {
+        return cars;
+    }
+
+    public void setCars(List<CarDTO> cars) {
+        this.cars = cars;
+    }
+
+    public RACPriceListDTO getCurrentPriceList() {
+        return currentPriceList;
+    }
+
+    public void setCurrentPriceList(RACPriceListDTO currentPriceList) {
+        this.currentPriceList = currentPriceList;
+    }
+
+    private void fakeCars(Set<Car> realCars){
+        for(Car c: realCars){
+            RentACarCompanyDTO fakeCompany = new RentACarCompanyDTO();
+            fakeCompany.setId(c.getCompany().getId());
+            fakeCompany.setName(c.getCompany().getName());
+            CarDTO fakeCar = new CarDTO(c.getId(),c.getName(),c.getBrand(),c.getManufYear(),c.getSeatsNumber(),c.getType(),c.getRating(),
+                    fakeCompany);
+            this.cars.add(fakeCar);
+        }
+    }
+
+    private void fakePraceLists(Set<RACPriceList> lists){
+        for(RACPriceList l: lists){
+            RACPriceListDTO fakeList = new RACPriceListDTO(l);
+            this.priceList.add(fakeList);
+        }
+    }
+
+    public List<RACPriceListDTO> getPriceList() {
+        return priceList;
+    }
+
+    public void setPriceList(List<RACPriceListDTO> priceList) {
+        this.priceList = priceList;
     }
 }

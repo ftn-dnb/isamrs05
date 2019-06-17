@@ -1,8 +1,6 @@
 package ftn.dnb.dnbtravel.controller;
 
-import com.sun.mail.iap.Response;
 import ftn.dnb.dnbtravel.dto.*;
-import ftn.dnb.dnbtravel.model.RentACarCompany;
 import ftn.dnb.dnbtravel.service.RentACarCompanyService;
 import ftn.dnb.dnbtravel.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -70,5 +68,29 @@ public class RentACarCompanyController {
     public ResponseEntity<?> addCarToCompany(@RequestBody CarDTO car){
         CarDTO response = rentACarCompanyService.addNewCar(car);
         return  new ResponseEntity<>(response,HttpStatus.OK);
+    }
+
+    @RequestMapping(path = "/addReservation", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
+    @PreAuthorize("hasRole('RAC_ADMIN')")
+    public ResponseEntity<?> addReservation(@RequestBody RACListItemDTO item){
+        //RACListItemDTO response = rentACarCompanyService.addReservation(item);
+        ResponseEntity<?> response = rentACarCompanyService.addReservation(item);
+        return new ResponseEntity<>(response,HttpStatus.OK);
+    }
+
+    @RequestMapping(path = "/setPriceList", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
+    @PreAuthorize("hasRole('RAC_ADMIN')")
+    public ResponseEntity<?> setPriceList(@RequestBody RACSetPriceListDTO listDTO){
+
+        ResponseEntity<?> response = rentACarCompanyService.setActivePriceList(listDTO.getCompany_id(),listDTO.getPrice_list_id());
+        return response;
+    }
+
+    @RequestMapping(path = "/addPriceList", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
+    @PreAuthorize("hasRole('RAC_ADMIN')")
+    public ResponseEntity<?> addPriceList(@RequestBody RACSetPriceListDTO addList){
+        //dodaj provere
+        ResponseEntity<?> response = rentACarCompanyService.addPriceList(addList);
+        return response;
     }
 }

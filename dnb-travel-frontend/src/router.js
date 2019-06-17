@@ -34,6 +34,9 @@ import AddRoom from './components/AddRoom';
 import HotelSearch from './components/HotelSearch';
 import HotelDetailedView from './components/HotelDetailedView';
 import AdminPasswordChange from './components/AdminPasswordChange';
+import AddCarReservation from './components/AddCarReservation';
+import AddPriceListRAC from './components/AddPriceListRAC';
+import SetActivePriceListRAC from './components/SetActivePriceListRAC';
 
 
 Vue.use(Router)
@@ -266,6 +269,25 @@ export default new Router({
         name:'AdminPasswordChange',
         component: AdminPasswordChange
 
+    },
+
+    {
+        path:'/add-car-reservation',
+        name:'AddCarReservation',
+        component: AddCarReservation
+    },
+
+    {
+        path:'/add-price-list-rac',
+        name:'AddPriceListRAC',
+        component: AddPriceListRAC
+
+    },
+
+    {
+        path:'/set-active-price-list-rac',
+        name:'SetActivePriceListRAC',
+        component: SetActivePriceListRAC
     },
 
 
