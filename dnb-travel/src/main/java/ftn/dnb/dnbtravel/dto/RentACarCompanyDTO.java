@@ -17,6 +17,7 @@ public class RentACarCompanyDTO {
     private List<CarDTO> cars;
     private List<RACPriceListDTO> priceList;
     private RACPriceListDTO currentPriceList;
+    private Address address;
 
     public RentACarCompanyDTO(){
         super();
@@ -36,6 +37,9 @@ public class RentACarCompanyDTO {
         this.name = rentACarCompany.getName();
         this.description = rentACarCompany.getDescription();
         this.rating = rentACarCompany.getRating();
+        if(rentACarCompany.getMainOffice() != null) {
+            this.address = rentACarCompany.getMainOffice().getAddress();
+        }
         this.administrator = new UserDTO(rentACarCompany.getAdministrator());
 
         if(rentACarCompany.getCurrentPriceList()!= null)
@@ -134,5 +138,13 @@ public class RentACarCompanyDTO {
 
     public void setPriceList(List<RACPriceListDTO> priceList) {
         this.priceList = priceList;
+    }
+
+    public Address getAddress() {
+        return address;
+    }
+
+    public void setAddress(Address address) {
+        this.address = address;
     }
 }

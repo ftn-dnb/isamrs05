@@ -83,6 +83,8 @@ export default {
 			{icon: 'add_circle', text: 'Add new reservation', route: '/add-car-reservation'},
 			{icon: 'add_circle', text: 'Add new price list', route: '/add-price-list-rac'},
 			{icon: 'add_circle', text: 'Set active price list', route: '/set-active-price-list-rac'},
+			{icon: 'add_circle', text: 'Add branch office', route: '/add-branch-office'},
+			{icon: 'add_circle', text: 'Set main branch office', route: '/set-main-branch-office'},
 			],
 
 			userDrawer: [

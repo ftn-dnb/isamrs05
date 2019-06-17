@@ -58,6 +58,31 @@
     </v-container>
 
     <v-layout row wrap>
+            <v-flex xs12 sm6 md4 lg3 v-for="company in rentACarCompanies" :key="company.id">
+                <v-card flat class="text-xs-center ma-3">
+                    <v-card-text>
+                        <div class="subheading">
+                            {{company.name}}, {{company.address.city}}
+                        </div>
+                        <div class="grey--text">
+                            {{company.description}}.<br/>
+                            Rating:
+                        </div>
+                        <div>
+                            <v-rating v-model="company.rating" readonly></v-rating>
+                        </div>
+                    </v-card-text>
+                    <v-card-actions>
+                        <v-btn flat small router :to="{ name: 'HotelDetailedView', params: { hotelID: hotel.id} }">
+                            <v-icon left>info</v-icon>
+                            <span>View company profile</span>
+                        </v-btn>
+                    </v-card-actions>
+                </v-card>
+            </v-flex>
+    </v-layout>
+
+    <v-layout row wrap>
         <v-flex xs12 sm6 md4 lg3 v-for="item in cars">
             <v-card flat class="text-xs-center ma-3">
                 <v-card-title>
@@ -107,13 +132,12 @@ export default {
             type: null,
             brand: null,
         },
+        rentACarCompanies:[],
         
     }
   },
   methods:{
-    mounted(){
 
-    },
     formatDate(date){
         return date ? format(date,'Do MMM YYYY') : '';
     },
@@ -133,6 +157,12 @@ export default {
         })
     },
   },
+    mounted(){
+        axios.get("http://localhost:8080/api/rentACarCompanies/getAllCompanies")
+        .then(response =>{
+            this.rentACarCompanies = response.data;
+        })
+    },
 
 }
 </script>

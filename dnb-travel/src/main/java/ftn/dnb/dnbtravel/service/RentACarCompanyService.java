@@ -222,5 +222,51 @@ public class RentACarCompanyService {
 
     }
 
+    public ResponseEntity<?> addBranchOffice(BranchOfficeDTO office){
+        RentACarCompany company = racRepository.findOneById(office.getCompanyDTO().getId());
+
+        if(company == null){
+            return  new ResponseEntity<>("Unable to add office",HttpStatus.CONFLICT);
+        }
+
+        BranchOffice newOffice = new BranchOffice(office.getName(),office.getAddress(),company);
+
+        company.getOffices().add(newOffice);
+
+        racRepository.save(company);
+
+        return  new ResponseEntity<>("New office added",HttpStatus.OK);
+    }
+
+    public ResponseEntity<?> setMainOffice(BranchOfficeDTO office){
+        RentACarCompany company = racRepository.findOneById(office.getCompanyDTO().getId());
+
+        if(company == null){
+            return  new ResponseEntity<>("Unable to set office",HttpStatus.CONFLICT);
+        }
+
+        for(BranchOffice b: company.getOffices()){
+           if( b.getId() == office.getId()){
+               company.setMainOffice(b);
+               break;
+           }
+        }
+
+        racRepository.save(company);
+
+        return new ResponseEntity<>("New main office",HttpStatus.OK);
+    }
+
+    public List<BranchOfficeDTO> getAllOffices(RentACarCompanyDTO companyDTO){
+        RentACarCompany company = racRepository.findOneById(companyDTO.getId());
+        List<BranchOfficeDTO> officeDTOS = new ArrayList<>();
+        for(BranchOffice b : company.getOffices()){
+             BranchOfficeDTO fake_office = new BranchOfficeDTO(b);
+             officeDTOS.add(fake_office);
+        }
+        return officeDTOS;
+
+    }
+
 
 }

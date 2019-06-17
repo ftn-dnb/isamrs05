@@ -3,7 +3,6 @@ package ftn.dnb.dnbtravel.model;
 import ftn.dnb.dnbtravel.dto.RentACarCompanyDTO;
 
 import javax.persistence.*;
-import java.util.Calendar;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -106,7 +105,7 @@ public class RentACarCompany {
     }
 
     public void setCars(Set<Car> cars) {
-        cars = cars;
+        this.cars = cars;
     }
 
     public double getRating() {

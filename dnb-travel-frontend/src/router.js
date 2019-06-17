@@ -37,6 +37,8 @@ import AdminPasswordChange from './components/AdminPasswordChange';
 import AddCarReservation from './components/AddCarReservation';
 import AddPriceListRAC from './components/AddPriceListRAC';
 import SetActivePriceListRAC from './components/SetActivePriceListRAC';
+import AddBranchOffice from './components/AddBranchOffice';
+import SetMainBranchOffice from './components/SetMainBranchOffice';
 
 
 Vue.use(Router)
@@ -288,6 +290,18 @@ export default new Router({
         path:'/set-active-price-list-rac',
         name:'SetActivePriceListRAC',
         component: SetActivePriceListRAC
+    },
+
+    {
+        path:'/add-branch-office',
+        name:'AddBranchOffice',
+        component: AddBranchOffice
+    },
+
+    {
+        path:'/set-main-branch-office',
+        name:'SetMainBranchOffice',
+        component: SetMainBranchOffice
     },
 
 
