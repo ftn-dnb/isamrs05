@@ -77,7 +77,6 @@ public class AuthenticationController {
         User user = (User) this.userDetailsService.loadUserByUsername(username);
 
         if (this.tokenUtils.canTokenBeRefreshed(token, new Date(user.getLastPasswordResetDate().getTime()))) {
-            //String refreshedToken = tokenUtils.refreshToken(token);
             String refreshedToken = tokenUtils.generateToken(username);
             int expiresIn = tokenUtils.getExpiredIn();
             String role = user.getAuthorities().toString();

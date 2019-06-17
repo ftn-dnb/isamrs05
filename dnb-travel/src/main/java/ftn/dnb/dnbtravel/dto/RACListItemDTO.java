@@ -1,10 +1,6 @@
 package ftn.dnb.dnbtravel.dto;
 
-import ftn.dnb.dnbtravel.model.Car;
-import ftn.dnb.dnbtravel.model.RACPriceList;
 import ftn.dnb.dnbtravel.model.RACPriceListItem;
-
-
 import java.util.Date;
 
 public class RACListItemDTO {
