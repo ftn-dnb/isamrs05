@@ -89,8 +89,18 @@ export default {
         searchHotels() {
             const header = { headers: {"Authorization" : `Bearer ${localStorage.getItem('user-token')}`} };
 
+            if (this.searchFilter.address == null) {
+                this.$toasted.error('Hotel address not selected.', {duration:2000});
+                return;
+            }
+
             axios.post('http://localhost:8080/api/hotels/searchHotels', this.searchFilter, header)
-            .then(response => this.hotels = response.data)
+            .then(response => {
+                this.hotels = response.data;
+                if (this.hotels.length == 0) {
+                    this.$toasted.info('No results found.', {duration: 2000});
+                }
+            })
             .catch(error => this.$toasted.error('Error while searching hotels.', {duration: 5000}));
         },
         clearSearch() {
@@ -106,8 +116,6 @@ export default {
     },
 
     mounted() {
-        console.log(this.users);
-
         const header = { headers: {"Authorization" : `Bearer ${localStorage.getItem('user-token')}`} };
 
         axios.get('http://localhost:8080/api/hotels/all', header)

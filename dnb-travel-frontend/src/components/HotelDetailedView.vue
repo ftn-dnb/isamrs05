@@ -136,6 +136,11 @@ export default {
         searchItems() {
             const header = { headers: {"Authorization" : `Bearer ${localStorage.getItem('user-token')}`} };
 
+            if (this.itemFilter.date_arrival == null) {
+                this.$toasted.error('Arrival date is not selected.', {duration: 2000});
+                return;
+            }
+
             axios.post('http://localhost:8080/api/rooms/filterItems', this.itemFilter, header)
             .then(response => {
                 this.priceList.hotelPriceListItems = response.data;
@@ -145,6 +150,9 @@ export default {
                         this.priceList_normal.push(element);
                     }
                 });
+                if (this.priceList_normal.length == 0) {
+                    this.$toasted.info('No results found.', {duration:2000});
+                }
             })
             .catch(error => this.$toasted.error('Error while retrieving filtered items.', {duration:5000}));
         },
