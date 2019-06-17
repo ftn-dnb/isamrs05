@@ -35,7 +35,13 @@ public class RentACarCompanyService {
     public List<RentACarCompanyDTO> getAllRentACarCompanies(){
         List<RentACarCompany> companies = racRepository.findAll();
         List<RentACarCompanyDTO> dtos = new ArrayList<>();
-        companies.stream().forEach(company -> dtos.add(new RentACarCompanyDTO(company)));
+
+        for (RentACarCompany c: companies) {
+            BranchOffice b = c.getMainOffice();
+            RentACarCompanyDTO dto = new RentACarCompanyDTO(c);
+            dtos.add(dto);
+        }
+
         return dtos;
     }
 
@@ -75,23 +81,22 @@ public class RentACarCompanyService {
         return new RentACarCompanyDTO(savedRentACarCompany);
     }
 
-    public List<RACListItemDTO> getAllItems(){
+    public List<RACListItemDTO> getAllItems(Long id){
 
         List<RACPriceListItem> items = new LinkedList<>();
-        for (RentACarCompany c : racRepository.findAll()) {
-            if(c.getCurrentPriceList() != null){
-                for(RACPriceListItem real_item: c.getCurrentPriceList().getItems()){
+        RentACarCompany company = racRepository.findOneById(id);
+            if(company.getCurrentPriceList() != null){
+                for(RACPriceListItem real_item: company.getCurrentPriceList().getItems()){
                     items.add(real_item);
                 }
             }
-        }
         List<RACListItemDTO> dtos = new ArrayList<>();
         items.stream().forEach(item -> dtos.add(new RACListItemDTO(item)));
         return dtos;
     }
 
     public List<RACListItemDTO> searchCar(CarFilterDTO filter){
-        List<RACListItemDTO> list = this.getAllItems();
+        List<RACListItemDTO> list = this.getAllItems(filter.getId());
         
         //start date
         if (filter.getStartDate() != null) {

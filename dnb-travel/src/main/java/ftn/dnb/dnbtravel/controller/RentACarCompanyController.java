@@ -37,7 +37,6 @@ public class RentACarCompanyController {
     }
 
     @GetMapping(path = "/{id}")
-    @PreAuthorize("hasRole('RAC_ADMIN')")
     public ResponseEntity<RentACarCompanyDTO> getRentACarCompanyById(@PathVariable("id") Long id){
         RentACarCompanyDTO rentACarCompany = rentACarCompanyService.getRentACarCompanyById(id);
         return new ResponseEntity<>(rentACarCompany,(rentACarCompany == null) ? HttpStatus.NOT_FOUND : HttpStatus.OK);

@@ -19,7 +19,7 @@ import RentACarCompanySettings from './components/RentACarCompanySettings.vue';
 import UserRegistration from './components/UserRegistration.vue';
 import Logout from './components/Logout.vue';
 import Login from './components/Login.vue';
-import CarSearch from './components/CarSearch.vue';
+import RACDetailedView from './components/RACDetailedView.vue';
 import Friends from './components/Friends.vue';
 import AddHotel from './components/AddHotel';
 import AddRentACar from './components/AddRentACar';
@@ -39,7 +39,7 @@ import AddPriceListRAC from './components/AddPriceListRAC';
 import SetActivePriceListRAC from './components/SetActivePriceListRAC';
 import AddBranchOffice from './components/AddBranchOffice';
 import SetMainBranchOffice from './components/SetMainBranchOffice';
-
+import SearchRAC from './components/SearchRAC';
 
 Vue.use(Router)
 
@@ -230,11 +230,6 @@ export default new Router({
         component: Login
     },
     {
-        path: '/carSearch',
-        name: 'CarSearch',
-        component: CarSearch
-    },
-    {
         path: '/friends',
         name: 'Friends',
         component: Friends
@@ -305,6 +300,20 @@ export default new Router({
         component: SetMainBranchOffice
     },
 
+    {
+        path:'/search-rac',
+        props: true,
+        name:'SearchRAC',
+        component: SearchRAC
+    },
+
+    {
+        path: 'rac/:racID',
+        props: true,
+        name: 'RACDetailedView',
+        component: RACDetailedView
+
+    },
 
   ]
 })

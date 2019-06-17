@@ -42,10 +42,8 @@ public class RentACarCompany {
             inverseJoinColumns = @JoinColumn(name = "office_id", referencedColumnName = "id"))
     private Set<BranchOffice> offices = new HashSet<>();
 
-    @JoinTable(name = "main_office",
-            joinColumns = @JoinColumn(name = "rac_id", referencedColumnName = "id"),
-            inverseJoinColumns = @JoinColumn(name = "office_id", referencedColumnName = "id"))
-    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+
+    @OneToOne(cascade = CascadeType.ALL)
     private BranchOffice mainOffice;
 
     @OneToOne(cascade = CascadeType.ALL)

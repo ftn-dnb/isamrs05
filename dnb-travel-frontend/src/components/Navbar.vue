@@ -97,7 +97,7 @@ export default {
 
 			defaultUser: [
 			{icon: 'flight_takeoff', text: 'Flights search', route:'/flights'},
-			{icon: 'directions_car', text: 'Car search', route: '/carSearch'},
+			{icon: 'directions_car', text: 'Car search', route: '/search-rac'},
 			{icon: 'hotel', text: 'Hotel Search', route: '/hotels'}
       		],
 
