@@ -1,5 +1,15 @@
 <template>
 <div>
+    <v-container align-center>
+            <h1 class="headline text-md-center">
+            {{rentACarCompany.name}}<v-rating v-model="rentACarCompany.rating" readonly></v-rating>
+            </h1>
+            <br>
+            <h2 class="subheading grey--text text-darken-3 text-md-center">{{rentACarCompany.address.streetName}}
+                 {{rentACarCompany.address.streetNumber}}, {{rentACarCompany.address.postalCode}} {{rentACarCompany.address.city}}, {{rentACarCompany.address.country}}
+            </h2>
+    </v-container>
+
     <v-container>
         <v-form ref="form">
             <v-layout row wrap>
@@ -60,10 +70,10 @@
     <v-layout row wrap>
         <v-flex xs12 sm6 md4 lg3 v-for="item in cars">
             <v-card flat class="text-xs-center ma-3">
-                <v-card-title>
-                   
-                </v-card-title>
                 <v-card-text>
+                    <div>
+                        <v-rating v-model="item.car.rating" readonly></v-rating>
+                    </div>
                     <div class="subbheading">
                         {{item.car.name}},{{item.car.brand}}
                     </div>
@@ -110,7 +120,9 @@ export default {
             brand: null,
             id: null,
         },
-        rentACarCompanies:[],
+        rentACarCompany:{
+            address:{},
+        },
         
     }
   },
@@ -141,8 +153,8 @@ export default {
         console.log(this.racID);
         axios.get(`http://localhost:8080/api/rentACarCompanies/${this.racID}`)
         .then(response =>{
-            this.rentACarCompanies = response.data;
-            console.log(this.rentACarCompanies);
+            this.rentACarCompany = response.data;
+            console.log(this.rentACarCompany);
         })
     },
 

@@ -1,7 +1,7 @@
 <template>
     <div>
         
-        <v-combobox v-model="city_name" :items="this.city_list" label="Filter by company name">
+        <v-combobox v-model="city_name" :items="this.city_list" label="Filter by city name">
         </v-combobox>
 
         <v-btn @click="">
