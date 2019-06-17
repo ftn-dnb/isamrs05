@@ -234,7 +234,10 @@ export default {
 	},
 
 	mounted() {
-		axios.get('http://localhost:8080/api/airlines/22')
+		const username = localStorage.getItem('username');
+		const header = {headers: {"Authorization": `Bearer ${localStorage.getItem('user-token')}`}};
+
+		axios.post(`http://localhost:8080/api/airlines/company/${username}`, {}, header)
 		.then(response => {
 			this.flights = response.data.flights;
 			

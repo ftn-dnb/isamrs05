@@ -1,5 +1,36 @@
 <template>
     <div>
+        <h1 class="heading text-md-center">Welcome {{user.firstName}} {{user.lastName}} !</h1>
+        <br />
+
+        <h1 class="heading text-md-center">{{airline.name}}</h1>
+        <h2 class="subheading text-md-center">{{airline.address.streetName}} {{airline.address.streetNumber}} {{airline.address.city}}, {{airline.address.country}}</h2>
+
+        <h3 class="subheading grey--text text-md-center">
+            {{airline.description}}
+        </h3>
+
+        <br />
+
+        <v-layout row wrap>
+            <v-flex xs12 sm6 md4 lg3 v-for="option in adminOptions" :key="option.route">
+                <v-card flat class="text-xs-center ma-3">
+                    <v-responsive class="pt-4">
+                        <v-icon size="70">{{option.icon}}</v-icon>
+                    </v-responsive>
+                    <v-card-text>
+                        {{option.description}}
+                    </v-card-text>
+                    <v-card-actions center>
+                        <v-flex class="text-xs-center">
+                            <v-btn flat @click="gotoRoute(option.route)">
+                                <span>{{option.text}}</span>
+                            </v-btn>
+                        </v-flex>
+                    </v-card-actions>
+                </v-card>
+            </v-flex>
+        </v-layout>
 
     </div>
 </template>
@@ -12,20 +43,59 @@ export default{
     
     props: {},
 
-    components: {
-    },
+    components: {},
 
     data(){
         return{
+            airline: {
+                id: null,
+                name: null,
+                address: {
+                    id: null,
+                    streetName: null,
+                    streetNumber: null,
+                    city: null,
+                    country: null,
+                    postalCode: null
+                },
+                description: null,
+                destinations: [],
+                flights: [],
+            },
+            user: {
+                id: null,
+                firstName: null,
+                lastName: null,
+            },
+            adminOptions: [
+				{ icon: 'flight_takeoff', text: 'All flights', description:'See all flights', route: '/flights' },
+				{ icon: 'airplanemode_active', text: 'Add flight', description:'Add new flight', route: '/add-flight' },
+				{ icon: 'map', text: 'Add destination', description:'Add new destination where company works', route: '/add-company-destination' },
+				{ icon: 'fast_forward', text: 'Fast reservations', description:'Add new seats for fast reservations', route: '/fast-reservation-seats' },
+				{ icon: 'assessment', text: 'Statistics', description:'See company statistics', route: '/airline-statistics' },
+				{ icon: 'work_outline', text: 'Company settings', description:'Change company information', route: '/airline-settings' },
+				{ icon: 'perm_identity', text: 'Profile settings', description:'Change your profile settings', route: '/user-settings' },
+			],
         };
     },
 
-    methods: { 
+    methods: {
+        gotoRoute(path) {
+            this.$router.push(path);
+        },
     },
 
     mounted(){
-        // @TODO: dobaviti informacije o user-u pa samim tim i ID kompanije za koju je admin
-        // @TODO: za adminov prikaz svih letova omoguciti da mu se prikazuju samo letovi njegove kompanije
+        const username = localStorage.getItem('username');
+        const header = {headers: {"Authorization": `Bearer ${localStorage.getItem('user-token')}`}};
+
+        axios.post(`http://localhost:8080/api/airlines/company/${username}`, {}, header)
+        .then(response => this.airline = response.data)
+        .catch(error => this.$toasted.error('Error while loading airline company', {duration:5000}));
+
+        axios.get(`http://localhost:8080/api/users/info/${username}`, header)
+        .then(response => this.user = response.data)
+        .catch(error => this.$toasted.error('Error while getting data about user', {duration:5000}));
     }
 }
 

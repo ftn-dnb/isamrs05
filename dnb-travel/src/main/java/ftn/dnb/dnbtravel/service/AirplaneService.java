@@ -17,7 +17,7 @@ public class AirplaneService {
 
     public List<AirplaneDTO> getAllAirplanes() {
         List<Airplane> airplanes = airplaneRepository.findAll();
-        List<AirplaneDTO> dtos = new ArrayList<AirplaneDTO>();
+        List<AirplaneDTO> dtos = new ArrayList<>();
         airplanes.stream().forEach(airplane -> dtos.add(new AirplaneDTO(airplane)));
 
         return dtos;

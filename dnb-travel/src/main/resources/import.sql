@@ -6,6 +6,7 @@ INSERT INTO `users` (`id`, `email`, `enabled`, `first_name`, `last_name`, `last_
 INSERT INTO `users` (`id`, `email`, `enabled`, `first_name`, `last_name`, `last_password_reset_date`, `password` ,`username`,`admin_password`) VALUES (7,'t@s.com',true,'Tarzan','Peric','2017-10-01 21:58:58','$2a$04$Vbug2lwwJGrvUXTj6z7ff.97IzVBkrJ1XfApfGNl.Z695zqcnPYra','tarzan',false);
 INSERT INTO `users` (`id`, `email`, `enabled`, `first_name`, `last_name`, `last_password_reset_date`, `password` ,`username`,`admin_password`) VALUES (8,'ms@s.com',true,'Mika','Peric','2017-10-01 21:58:58','$2a$04$Vbug2lwwJGrvUXTj6z7ff.97IzVBkrJ1XfApfGNl.Z695zqcnPYra','miki2',false);
 
+
 INSERT INTO `authority` (id, name) VALUES (1, 'ROLE_USER');
 INSERT INTO `authority` (id, name) VALUES (2, 'ROLE_SYSTEM_ADMIN');
 INSERT INTO `authority` (id, name) VALUES (3, 'ROLE_AIRLINE_ADMIN');
@@ -19,6 +20,8 @@ INSERT INTO `user_authority` (user_id, authority_id) VALUES (5, 3);
 INSERT INTO `user_authority` (user_id, authority_id) VALUES (6, 4);
 INSERT INTO `user_authority` (user_id, authority_id) VALUES (7, 5);
 INSERT INTO `user_authority` (user_id, authority_id) VALUES (8, 4);
+INSERT INTO `user_authority` (user_id, authority_id) VALUES (9, 3);
+INSERT INTO `user_authority` (user_id, authority_id) VALUES (10, 3);
 
 INSERT INTO `friendship` VALUES (1, 0, 2);
 INSERT INTO `friendship` VALUES (2, 0, 3);
@@ -42,9 +45,9 @@ INSERT INTO `address` VALUES(32, 'Belgrade', 'Serbia', 11000, 'Bulevar', 213);
 INSERT INTO `address` VALUES(33, 'Athens', 'Greece', 5433, 'Alfa', 24);
 
 -- Airlines
-INSERT INTO `airline` VALUES(22, 'Best airline company in US', 'United', 4, 31, 4);
-INSERT INTO `airline` VALUES(23, 'Najbolja aviokompanija', 'AirSerbia', 3, 32, 4);
-INSERT INTO `airline` VALUES(24, 'Best company in Greece', 'AirGreece', 5, 33, 4);
+INSERT INTO `airline` VALUES(22, 'Best airline company in US', 'United', 4, 31, 5);
+INSERT INTO `airline` VALUES(23, 'Najbolja aviokompanija', 'AirSerbia', 3, 32, 9);
+INSERT INTO `airline` VALUES(24, 'Best company in Greece', 'AirGreece', 5, 33, 10);
 
 -- Destinations where airlines work
 INSERT INTO `airline_destinations` VALUES(22, 11);

@@ -28,7 +28,7 @@ public class FlightController {
     @GetMapping(path = "/{id}")
     public ResponseEntity<FlightDTO> getFlightById(@PathVariable Long id) {
         FlightDTO flight = flightService.getFlightById(id);
-        return new ResponseEntity<FlightDTO>(flight, (flight == null) ? HttpStatus.NOT_FOUND : HttpStatus.OK);
+        return new ResponseEntity<>(flight, (flight == null) ? HttpStatus.NOT_FOUND : HttpStatus.OK);
     }
 
     @PostMapping(path="")
@@ -39,9 +39,9 @@ public class FlightController {
 
     @PostMapping(path = "/{flightId}/reserve")
     @PreAuthorize("hasRole('USER')")
-    public ResponseEntity<?> reserveTickets(@PathVariable Long flightId, @RequestBody FlightReservationDataDTO data) {
-        flightService.reserveTickets(flightId, data);
-        return new ResponseEntity<>(HttpStatus.OK);
+    public ResponseEntity<FlightDTO> reserveTickets(@PathVariable Long flightId, @RequestBody FlightReservationDataDTO data) {
+        FlightDTO flight = flightService.reserveTickets(flightId, data);
+        return new ResponseEntity<>((flight == null) ? HttpStatus.BAD_REQUEST : HttpStatus.OK);
     }
 
     @PostMapping(path = "/{flightId}/fastSeats")

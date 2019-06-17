@@ -1,6 +1,5 @@
 package ftn.dnb.dnbtravel.dto;
 
-import ftn.dnb.dnbtravel.model.AirlinePriceListItem;
 import ftn.dnb.dnbtravel.model.Flight;
 
 import java.util.ArrayList;
@@ -38,11 +37,11 @@ public class FlightDTO {
         this.rating = flight.getRating();
         this.startDestination = new DestinationDTO(flight.getStartDestination());
         this.endDestination = new DestinationDTO(flight.getEndDestination());
-        this.transits = new ArrayList<DestinationDTO>();
+        this.transits = new ArrayList<>();
         this.airlineId = flight.getAirline().getId();
         this.airplane = new AirplaneDTO(flight.getAirplane());
-        this.prices = new ArrayList<AirlinePriceListItemDTO>();
-        this.reservations = new ArrayList<FlightReservationDTO>();
+        this.prices = new ArrayList<>();
+        this.reservations = new ArrayList<>();
         this.isOneWay = flight.isOneWay();
 
         flight.getTransits().stream().forEach(destination -> this.transits.add(new DestinationDTO(destination)));

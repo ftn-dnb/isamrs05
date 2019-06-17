@@ -35,7 +35,7 @@ public class AirlineService {
 
     public List<AirlineDTO> getAllAirlines() {
         List<Airline> airlines = airlineRepository.findAll();
-        List<AirlineDTO> dtos = new ArrayList<AirlineDTO>();
+        List<AirlineDTO> dtos = new ArrayList<>();
         airlines.stream().forEach(airline -> dtos.add(new AirlineDTO(airline)));
         return dtos;
     }
@@ -46,23 +46,18 @@ public class AirlineService {
         if (airline == null)
             return null;
 
-        AirlineDTO airlineDto = new AirlineDTO(airline);
-        return airlineDto;
+        return new AirlineDTO(airline);
     }
 
-    //public AirlineDTO addAirline(AirlineDTO airline) {
-    //    addressRepository.save(airline.getAddress());
-    //    Airline savedAirline = airlineRepository.save(new Airline(airline));
-    //
-    //    if (savedAirline == null)
-    //       return null;
-    //
-    //    return new AirlineDTO(savedAirline);
-    //}
+    public AirlineDTO updateAirline(AirlineDTO airlineDto) {
+        addressRepository.save(airlineDto.getAddress());
 
-    public AirlineDTO updateAirline(AirlineDTO airline) {
-        addressRepository.save(airline.getAddress());
-        Airline savedAirline = airlineRepository.save(new Airline(airline));
+        Airline airline = airlineRepository.findOneById(airlineDto.getId());
+        airline.setAddress(airlineDto.getAddress());
+        airline.setDescription(airlineDto.getDescription());
+        airline.setName(airlineDto.getName());
+
+        Airline savedAirline = airlineRepository.save(airline);
 
         if (savedAirline == null)
             return null;
@@ -76,10 +71,10 @@ public class AirlineService {
         Destination endDestination = destinationRepository.findOneById(flightToAdd.getEndDestination().getId());
         Airplane airplane = airplaneRepository.findOneById(flightToAdd.getAirplane().getId());
 
-        Set<Destination> transits = new HashSet<Destination>();
+        Set<Destination> transits = new HashSet<>();
         flightToAdd.getTransits().forEach(transit -> transits.add(destinationRepository.findOneById(transit.getId())));
 
-        Set<AirlinePriceListItem> prices = new HashSet<AirlinePriceListItem>();
+        Set<AirlinePriceListItem> prices = new HashSet<>();
         flightToAdd.getPrices().forEach(item -> prices.add(new AirlinePriceListItem(item)));
 
         Flight flight = new Flight(null, flightToAdd.getStartDateTime(), flightToAdd.getEndDateTime(),
@@ -94,7 +89,7 @@ public class AirlineService {
 
     public List<FlightDTO> getFlights(Long id) {
         List<Flight> flights = flightRepository.findAllByAirlineId(id);
-        List<FlightDTO> dtoFlights = new ArrayList<FlightDTO>();
+        List<FlightDTO> dtoFlights = new ArrayList<>();
         flights.stream().forEach(flight -> dtoFlights.add(new FlightDTO(flight)));
         return dtoFlights;
     }
@@ -106,7 +101,7 @@ public class AirlineService {
             return null;
 
         AirlineStatsDTO stats = new AirlineStatsDTO();
-        LinkedHashMap<String, Float> income = new LinkedHashMap<>();
+        LinkedHashMap<String, Float> income;
 
         if (filter.getDateTo() == null)
             filter.setDateTo(new Date());
@@ -299,5 +294,18 @@ public class AirlineService {
         }
 
         return reservations;
+    }
+
+    public AirlineDTO getAirlineByAdminUsername(String username) {
+        User admin = userRepository.findOneByUsername(username);
+
+        if (admin == null)
+            return null;
+
+        Airline airline = airlineRepository.findOneByAdministrator(admin);
+        if (airline == null)
+            return null;
+
+        return new AirlineDTO(airline);
     }
 }

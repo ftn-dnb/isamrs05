@@ -38,7 +38,7 @@ public class Flight {
     private Destination endDestination;
 
     @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    private Set<Destination> transits = new HashSet<Destination>();
+    private Set<Destination> transits = new HashSet<>();
 
     @ManyToOne
     private Airline airline;
@@ -47,10 +47,10 @@ public class Flight {
     private Airplane airplane;
 
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    private Set<AirlinePriceListItem> prices = new HashSet<AirlinePriceListItem>();
+    private Set<AirlinePriceListItem> prices = new HashSet<>();
 
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    private Set<FlightReservation> reservations = new HashSet<FlightReservation>();
+    private Set<FlightReservation> reservations = new HashSet<>();
 
 
     public Flight() {
