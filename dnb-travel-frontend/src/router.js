@@ -199,6 +199,7 @@ export default new Router({
     },
     {
         path: '/hotels',
+        props: true,
         name: 'HotelSearch',
         component: HotelSearch
     },

@@ -2,6 +2,7 @@ package ftn.dnb.dnbtravel.controller;
 
 import ftn.dnb.dnbtravel.dto.HotelPriceListDTO;
 import ftn.dnb.dnbtravel.dto.HotelPriceListItemDTO;
+import ftn.dnb.dnbtravel.dto.ItemFilterDTO;
 import ftn.dnb.dnbtravel.dto.RoomDTO;
 import ftn.dnb.dnbtravel.service.RoomService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,6 +10,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -47,5 +49,11 @@ public class RoomController {
     public ResponseEntity<HotelPriceListDTO> getHotelPriceList(@PathVariable("id") Long id) {
         HotelPriceListDTO hotelPriceListDTO = roomService.getHotelPriceList(id);
         return new ResponseEntity<>(hotelPriceListDTO, HttpStatus.OK);
+    }
+
+    @RequestMapping(value = "/filterItems", method = RequestMethod.POST, consumes = "application/json")
+    public ResponseEntity<List<HotelPriceListItemDTO>> searchHotelPriceListItems(@RequestBody ItemFilterDTO filterDTO) {
+        ArrayList<HotelPriceListItemDTO> filteredList = roomService.searchHotelPriceListItems(filterDTO);
+        return new ResponseEntity<>(filteredList, HttpStatus.OK);
     }
 }
