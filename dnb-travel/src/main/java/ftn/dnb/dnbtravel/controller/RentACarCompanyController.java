@@ -73,11 +73,11 @@ public class RentACarCompanyController {
     @RequestMapping(path = "/addReservation", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
     @PreAuthorize("hasRole('RAC_ADMIN')")
     public ResponseEntity<?> addReservation(@RequestBody RACListItemDTO item){
-        String response = "asdf";
+        RACListItemDTO response = rentACarCompanyService.addReservation(item);
         return new ResponseEntity<>(response,HttpStatus.OK);
     }
 
-    @RequestMapping(path = "/addReservation", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
+    @RequestMapping(path = "/setPriceList", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
     @PreAuthorize("hasRole('RAC_ADMIN')")
     public ResponseEntity<?> setPriceList(@RequestBody RACSetPriceListDTO listDTO){
 
@@ -85,6 +85,8 @@ public class RentACarCompanyController {
         return response;
     }
 
+    @RequestMapping(path = "/addPriceList", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
+    @PreAuthorize("hasRole('RAC_ADMIN')")
     public ResponseEntity<?> addPriceList(@RequestBody RACSetPriceListDTO addList){
         //dodaj provere
         ResponseEntity<?> response = rentACarCompanyService.addPriceList(addList);

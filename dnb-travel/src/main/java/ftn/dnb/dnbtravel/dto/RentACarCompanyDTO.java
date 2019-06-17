@@ -16,6 +16,7 @@ public class RentACarCompanyDTO {
     private UserDTO administrator;
     private List<CarDTO> cars;
     private List<RACPriceListDTO> priceList;
+    private RACPriceListDTO currentPriceList;
 
     public RentACarCompanyDTO(){
         super();
@@ -36,6 +37,9 @@ public class RentACarCompanyDTO {
         this.description = rentACarCompany.getDescription();
         this.rating = rentACarCompany.getRating();
         this.administrator = new UserDTO(rentACarCompany.getAdministrator());
+
+        if(rentACarCompany.getCurrentPriceList()!= null)
+            this.currentPriceList = new RACPriceListDTO(rentACarCompany.getCurrentPriceList());
 
         this.cars = new LinkedList<>();
 
@@ -96,6 +100,14 @@ public class RentACarCompanyDTO {
 
     public void setCars(List<CarDTO> cars) {
         this.cars = cars;
+    }
+
+    public RACPriceListDTO getCurrentPriceList() {
+        return currentPriceList;
+    }
+
+    public void setCurrentPriceList(RACPriceListDTO currentPriceList) {
+        this.currentPriceList = currentPriceList;
     }
 
     private void fakeCars(Set<Car> realCars){

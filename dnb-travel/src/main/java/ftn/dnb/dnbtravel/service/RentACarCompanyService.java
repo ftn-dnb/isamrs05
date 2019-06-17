@@ -2,6 +2,7 @@ package ftn.dnb.dnbtravel.service;
 
 import ftn.dnb.dnbtravel.dto.*;
 import ftn.dnb.dnbtravel.model.*;
+import ftn.dnb.dnbtravel.repository.CarRepository;
 import ftn.dnb.dnbtravel.repository.RentACarCompanyRepository;
 import ftn.dnb.dnbtravel.repository.RentACarPriceListItem;
 import ftn.dnb.dnbtravel.repository.UserRepository;
@@ -25,6 +26,9 @@ public class RentACarCompanyService {
 
     @Autowired
     private RentACarPriceListItem priceListItemRepository;
+
+    @Autowired
+    private CarRepository carRepository;
 
     public List<RentACarCompanyDTO> getAllRentACarCompanies(){
         List<RentACarCompany> companies = racRepository.findAll();
@@ -147,16 +151,16 @@ public class RentACarCompanyService {
 
     public RACListItemDTO addReservation(RACListItemDTO item){
         RentACarCompany racToAdd = racRepository.findOneById(item.getCar().getCompany().getId());
-        Car carToAdd = racRepository.findCarById(item.getCar().getId());
+        Car carToAdd = carRepository.findOneById(item.getCar().getId());
 
         RACPriceList priceList = racToAdd.getCurrentPriceList();
 
         // provera svega
 
         RACPriceListItem itemToAdd = new RACPriceListItem(item.getActiveDiscount(),item.getStartDate(),item.getEndDate(),
-                item.getPricePerDay(),priceList,carToAdd);
+                item.getPricePerDay(),racToAdd.getCurrentPriceList(),carToAdd);
 
-        priceList.getItems().add(itemToAdd);
+        racToAdd.getCurrentPriceList().getItems().add(itemToAdd);
         racRepository.save(racToAdd);
 
         return new RACListItemDTO(itemToAdd);
@@ -179,7 +183,7 @@ public class RentACarCompanyService {
 
         company.setCurrentPriceList(listToSet);
         racRepository.save(company);
-        return new ResponseEntity<>("New price list is" + listToSet.getName(), HttpStatus.OK);
+        return new ResponseEntity<>("New price list is " + listToSet.getName(), HttpStatus.OK);
     }
 
     public ResponseEntity<?> addPriceList(RACSetPriceListDTO addList){
@@ -195,4 +199,6 @@ public class RentACarCompanyService {
         return new ResponseEntity<>("Price list added", HttpStatus.OK);
 
     }
+
+
 }
