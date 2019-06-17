@@ -100,9 +100,9 @@ export default{
 
                         axios.post("http://localhost:8080/api/rentACarCompanies/addReservation",this.item,header)
                         .then(response => {
-                            console.log(response)
+                            console.log(response.data)
                         })
-                        .catch(error => console.log('mucak'));
+                        .catch(error => console.log(error.data));
 
 
 

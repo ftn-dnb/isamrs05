@@ -11,7 +11,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -74,7 +76,15 @@ public class RentACarCompanyService {
     }
 
     public List<RACListItemDTO> getAllItems(){
-        List<RACPriceListItem> items = priceListItemRepository.findAll();
+
+        List<RACPriceListItem> items = new LinkedList<>();
+        for (RentACarCompany c : racRepository.findAll()) {
+            if(c.getCurrentPriceList() != null){
+                for(RACPriceListItem real_item: c.getCurrentPriceList().getItems()){
+                    items.add(real_item);
+                }
+            }
+        }
         List<RACListItemDTO> dtos = new ArrayList<>();
         items.stream().forEach(item -> dtos.add(new RACListItemDTO(item)));
         return dtos;
@@ -82,15 +92,17 @@ public class RentACarCompanyService {
 
     public List<RACListItemDTO> searchCar(CarFilterDTO filter){
         List<RACListItemDTO> list = this.getAllItems();
-
+        
         //start date
-        if (filter.getStartDate() != null)
+        if (filter.getStartDate() != null) {
+            filter.getStartDate().setHours(0);
             list = list.stream().filter(f -> f.getStartDate().after(filter.getStartDate())).collect(Collectors.toList());
-
+        }
         //end date
-        if(filter.getEndDate() != null)
+        if(filter.getEndDate() != null) {
+            filter.getEndDate().setHours(0);
             list = list.stream().filter(f -> f.getEndDate().before(filter.getEndDate())).collect(Collectors.toList());
-
+        }
         //price per day max price
         if(filter.getPricePerDay() != null)
             list = list.stream().filter(f->{
@@ -149,13 +161,23 @@ public class RentACarCompanyService {
         return new CarDTO(savedCar);
     }
 
-    public RACListItemDTO addReservation(RACListItemDTO item){
+    public ResponseEntity<?> addReservation(RACListItemDTO item){
         RentACarCompany racToAdd = racRepository.findOneById(item.getCar().getCompany().getId());
         Car carToAdd = carRepository.findOneById(item.getCar().getId());
 
+
         RACPriceList priceList = racToAdd.getCurrentPriceList();
 
-        // provera svega
+        for (RACPriceListItem real_item: priceList.getItems()) {
+                if(real_item.getCar().getId() == item.getCar().getId()){
+                    if(item.getStartDate().after(real_item.getStartDate()) && item.getStartDate().before(real_item.getEndDate())){
+                        return new ResponseEntity<>("Start date problem",HttpStatus.CONFLICT);
+                    }
+                    else if (item.getEndDate().after(real_item.getStartDate()) && item.getEndDate().before(real_item.getEndDate())){
+                        return new ResponseEntity<>("End date problem",HttpStatus.CONFLICT);
+                    }
+                }
+        }
 
         RACPriceListItem itemToAdd = new RACPriceListItem(item.getActiveDiscount(),item.getStartDate(),item.getEndDate(),
                 item.getPricePerDay(),racToAdd.getCurrentPriceList(),carToAdd);
@@ -163,7 +185,7 @@ public class RentACarCompanyService {
         racToAdd.getCurrentPriceList().getItems().add(itemToAdd);
         racRepository.save(racToAdd);
 
-        return new RACListItemDTO(itemToAdd);
+        return new ResponseEntity<>("New reservation added",HttpStatus.OK);
     }
 
     public ResponseEntity <?> setActivePriceList(Long copmany_id, Long price_list_id){

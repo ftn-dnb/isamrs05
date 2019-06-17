@@ -73,7 +73,8 @@ public class RentACarCompanyController {
     @RequestMapping(path = "/addReservation", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
     @PreAuthorize("hasRole('RAC_ADMIN')")
     public ResponseEntity<?> addReservation(@RequestBody RACListItemDTO item){
-        RACListItemDTO response = rentACarCompanyService.addReservation(item);
+        //RACListItemDTO response = rentACarCompanyService.addReservation(item);
+        ResponseEntity<?> response = rentACarCompanyService.addReservation(item);
         return new ResponseEntity<>(response,HttpStatus.OK);
     }
 
