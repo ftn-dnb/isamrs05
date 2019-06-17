@@ -1,71 +1,152 @@
-INSERT INTO `users` (`id`, `email`, `enabled`, `first_name`, `last_name`, `last_password_reset_date`, `password` ,`username`,`admin_password`) VALUES (2,'m@m.com',true,'Marko','Markovic','2017-10-01 21:58:58','$2a$04$Vbug2lwwJGrvUXTj6z7ff.97IzVBkrJ1XfApfGNl.Z695zqcnPYra','marko',true);
-INSERT INTO `users` (`id`, `email`, `enabled`, `first_name`, `last_name`, `last_password_reset_date`, `password` ,`username`,`admin_password`) VALUES (3,'p@s.com',true,'Pera','Peric','2017-10-01 21:58:58','$2a$04$Vbug2lwwJGrvUXTj6z7ff.97IzVBkrJ1XfApfGNl.Z695zqcnPYra','peki',true);
-INSERT INTO `users` (`id`, `email`, `enabled`, `first_name`, `last_name`, `last_password_reset_date`, `password` ,`username`,`admin_password`) VALUES (4,'l@s.com',true,'Laza','Peric','2017-10-01 21:58:58','$2a$04$Vbug2lwwJGrvUXTj6z7ff.97IzVBkrJ1XfApfGNl.Z695zqcnPYra','laki',true);
-INSERT INTO `users` (`id`, `email`, `enabled`, `first_name`, `last_name`, `last_password_reset_date`, `password` ,`username`,`admin_password`) VALUES (5,'d@s.com',true,'Djoka','Peric','2017-10-01 21:58:58','$2a$04$Vbug2lwwJGrvUXTj6z7ff.97IzVBkrJ1XfApfGNl.Z695zqcnPYra','djox',true);
-INSERT INTO `users` (`id`, `email`, `enabled`, `first_name`, `last_name`, `last_password_reset_date`, `password` ,`username`,`admin_password`) VALUES (6,'m@s.com',true,'Mika','Peric','2017-10-01 21:58:58','$2a$04$Vbug2lwwJGrvUXTj6z7ff.97IzVBkrJ1XfApfGNl.Z695zqcnPYra','miki',true);
-INSERT INTO `users` (`id`, `email`, `enabled`, `first_name`, `last_name`, `last_password_reset_date`, `password` ,`username`,`admin_password`) VALUES (7,'t@s.com',true,'Tarzan','Peric','2017-10-01 21:58:58','$2a$04$Vbug2lwwJGrvUXTj6z7ff.97IzVBkrJ1XfApfGNl.Z695zqcnPYra','tarzan',true);
-INSERT INTO `users` (`id`, `email`, `enabled`, `first_name`, `last_name`, `last_password_reset_date`, `password` ,`username`,`admin_password`) VALUES (8,'ms@s.com',true,'Mika','Peric','2017-10-01 21:58:58','$2a$04$Vbug2lwwJGrvUXTj6z7ff.97IzVBkrJ1XfApfGNl.Z695zqcnPYra','miki2',true);
-INSERT INTO `users` (`id`, `email`, `enabled`, `first_name`, `last_name`, `last_password_reset_date`, `password` ,`username`,`admin_password`) VALUES (9,'d2@s.com',true,'Djoka2','Peric','2017-10-01 21:58:58','$2a$04$Vbug2lwwJGrvUXTj6z7ff.97IzVBkrJ1XfApfGNl.Z695zqcnPYra','djox2',true);
-INSERT INTO `users` (`id`, `email`, `enabled`, `first_name`, `last_name`, `last_password_reset_date`, `password` ,`username`,`admin_password`) VALUES (10,'d3@s.com',true,'Djoka3','Peric','2017-10-01 21:58:58','$2a$04$Vbug2lwwJGrvUXTj6z7ff.97IzVBkrJ1XfApfGNl.Z695zqcnPYra','djox3',true);
+-- Obicni korisnici
+INSERT INTO `users` (`id`, `email`, `enabled`, `first_name`, `last_name`, `last_password_reset_date`, `password` ,`username`,`admin_password`) VALUES (2,'marko@gmail.com',true,'Marko','Markovic','2017-10-01 21:58:58','$2a$04$Vbug2lwwJGrvUXTj6z7ff.97IzVBkrJ1XfApfGNl.Z695zqcnPYra','marko',true);
+INSERT INTO `users` (`id`, `email`, `enabled`, `first_name`, `last_name`, `last_password_reset_date`, `password` ,`username`,`admin_password`) VALUES (3,'pera@gmail.com',true,'Pera','Peric','2017-10-01 21:58:58','$2a$04$Vbug2lwwJGrvUXTj6z7ff.97IzVBkrJ1XfApfGNl.Z695zqcnPYra','peki',true);
+INSERT INTO `users` (`id`, `email`, `enabled`, `first_name`, `last_name`, `last_password_reset_date`, `password` ,`username`,`admin_password`) VALUES (11,'filip@gmail.com',true,'Filip','Filipovic','2017-10-01 21:58:58','$2a$04$Vbug2lwwJGrvUXTj6z7ff.97IzVBkrJ1XfApfGNl.Z695zqcnPYra','filip',true);
+INSERT INTO `users` (`id`, `email`, `enabled`, `first_name`, `last_name`, `last_password_reset_date`, `password` ,`username`,`admin_password`) VALUES (12,'maja@gmail.com',true,'Maja','Majic','2017-10-01 21:58:58','$2a$04$Vbug2lwwJGrvUXTj6z7ff.97IzVBkrJ1XfApfGNl.Z695zqcnPYra','maja',true);
+INSERT INTO `users` (`id`, `email`, `enabled`, `first_name`, `last_name`, `last_password_reset_date`, `password` ,`username`,`admin_password`) VALUES (13,'vlada@gmail.com',true,'Vladimir','Peric','2017-10-01 21:58:58','$2a$04$Vbug2lwwJGrvUXTj6z7ff.97IzVBkrJ1XfApfGNl.Z695zqcnPYra','vlada',true);
+INSERT INTO `users` (`id`, `email`, `enabled`, `first_name`, `last_name`, `last_password_reset_date`, `password` ,`username`,`admin_password`) VALUES (14,'ivana@gmail.com',true,'Ivana','Maric','2017-10-01 21:58:58','$2a$04$Vbug2lwwJGrvUXTj6z7ff.97IzVBkrJ1XfApfGNl.Z695zqcnPYra','ivana',true);
+INSERT INTO `users` (`id`, `email`, `enabled`, `first_name`, `last_name`, `last_password_reset_date`, `password` ,`username`,`admin_password`) VALUES (15,'sneza@gmail.com',true,'Snezana','Pajtic','2017-10-01 21:58:58','$2a$04$Vbug2lwwJGrvUXTj6z7ff.97IzVBkrJ1XfApfGNl.Z695zqcnPYra','sneza',true);
 
+-- Admin sistema
+INSERT INTO `users` (`id`, `email`, `enabled`, `first_name`, `last_name`, `last_password_reset_date`, `password` ,`username`,`admin_password`) VALUES (4,'laza@gmail.com',true,'Laza','Peric','2017-10-01 21:58:58','$2a$04$Vbug2lwwJGrvUXTj6z7ff.97IzVBkrJ1XfApfGNl.Z695zqcnPYra','laki',true);
 
+-- Admini hotel
+INSERT INTO `users` (`id`, `email`, `enabled`, `first_name`, `last_name`, `last_password_reset_date`, `password` ,`username`,`admin_password`) VALUES (6,'mika@gmail.com',true,'Mika','Peric','2017-10-01 21:58:58','$2a$04$Vbug2lwwJGrvUXTj6z7ff.97IzVBkrJ1XfApfGNl.Z695zqcnPYra','miki',true);
+INSERT INTO `users` (`id`, `email`, `enabled`, `first_name`, `last_name`, `last_password_reset_date`, `password` ,`username`,`admin_password`) VALUES (8,'miroslav@gmail.com',true,'Miroslav','Miroslavic','2017-10-01 21:58:58','$2a$04$Vbug2lwwJGrvUXTj6z7ff.97IzVBkrJ1XfApfGNl.Z695zqcnPYra','miki2',true);
+INSERT INTO `users` (`id`, `email`, `enabled`, `first_name`, `last_name`, `last_password_reset_date`, `password` ,`username`,`admin_password`) VALUES (16,'nikola@gmail.com',true,'Nikola','Nikolic','2017-10-01 21:58:58','$2a$04$Vbug2lwwJGrvUXTj6z7ff.97IzVBkrJ1XfApfGNl.Z695zqcnPYra','nikola',true);
+
+-- Admini RAC
+INSERT INTO `users` (`id`, `email`, `enabled`, `first_name`, `last_name`, `last_password_reset_date`, `password` ,`username`,`admin_password`) VALUES (7,'tarzan@gmail.com',true,'Tarzan','Peric','2017-10-01 21:58:58','$2a$04$Vbug2lwwJGrvUXTj6z7ff.97IzVBkrJ1XfApfGNl.Z695zqcnPYra','tarzan',true);
+INSERT INTO `users` (`id`, `email`, `enabled`, `first_name`, `last_name`, `last_password_reset_date`, `password` ,`username`,`admin_password`) VALUES (17,'dzoni@gmail.com',true,'Dzoni','Maric','2017-10-01 21:58:58','$2a$04$Vbug2lwwJGrvUXTj6z7ff.97IzVBkrJ1XfApfGNl.Z695zqcnPYra','dzoni',true);
+INSERT INTO `users` (`id`, `email`, `enabled`, `first_name`, `last_name`, `last_password_reset_date`, `password` ,`username`,`admin_password`) VALUES (18,'luka@gmail.com',true,'Luka','Lukic','2017-10-01 21:58:58','$2a$04$Vbug2lwwJGrvUXTj6z7ff.97IzVBkrJ1XfApfGNl.Z695zqcnPYra','luka',true);
+
+-- Airline admins
+INSERT INTO `users` (`id`, `email`, `enabled`, `first_name`, `last_name`, `last_password_reset_date`, `password` ,`username`,`admin_password`) VALUES (5,'djoka@gmail.com',true,'Djoka','Peric','2017-10-01 21:58:58','$2a$04$Vbug2lwwJGrvUXTj6z7ff.97IzVBkrJ1XfApfGNl.Z695zqcnPYra','djox',true);
+INSERT INTO `users` (`id`, `email`, `enabled`, `first_name`, `last_name`, `last_password_reset_date`, `password` ,`username`,`admin_password`) VALUES (9,'peca@gmail.com',true,'Petar','Petrovic','2017-10-01 21:58:58','$2a$04$Vbug2lwwJGrvUXTj6z7ff.97IzVBkrJ1XfApfGNl.Z695zqcnPYra','peca',true);
+INSERT INTO `users` (`id`, `email`, `enabled`, `first_name`, `last_name`, `last_password_reset_date`, `password` ,`username`,`admin_password`) VALUES (10,'rajko@gmail.com',true,'Rajko','Rajkic','2017-10-01 21:58:58','$2a$04$Vbug2lwwJGrvUXTj6z7ff.97IzVBkrJ1XfApfGNl.Z695zqcnPYra','rajko',true);
+
+-- Role za korisnike
 INSERT INTO `authority` (id, name) VALUES (1, 'ROLE_USER');
 INSERT INTO `authority` (id, name) VALUES (2, 'ROLE_SYSTEM_ADMIN');
 INSERT INTO `authority` (id, name) VALUES (3, 'ROLE_AIRLINE_ADMIN');
 INSERT INTO `authority` (id, name) VALUES (4, 'ROLE_HOTEL_ADMIN');
 INSERT INTO `authority` (id, name) VALUES (5, 'ROLE_RAC_ADMIN');
 
+-- Dodavanje role korisniku
 INSERT INTO `user_authority` (user_id, authority_id) VALUES (2, 1);
 INSERT INTO `user_authority` (user_id, authority_id) VALUES (3, 1);
+INSERT INTO `user_authority` (user_id, authority_id) VALUES (11, 1);
+INSERT INTO `user_authority` (user_id, authority_id) VALUES (12, 1);
+INSERT INTO `user_authority` (user_id, authority_id) VALUES (13, 1);
+INSERT INTO `user_authority` (user_id, authority_id) VALUES (14, 1);
+INSERT INTO `user_authority` (user_id, authority_id) VALUES (15, 1);
+
+-- Dodavanje role sistem adminu
 INSERT INTO `user_authority` (user_id, authority_id) VALUES (4, 2);
+
+-- Dodavanje role airline adminu
 INSERT INTO `user_authority` (user_id, authority_id) VALUES (5, 3);
-INSERT INTO `user_authority` (user_id, authority_id) VALUES (6, 4);
-INSERT INTO `user_authority` (user_id, authority_id) VALUES (7, 5);
-INSERT INTO `user_authority` (user_id, authority_id) VALUES (8, 4);
 INSERT INTO `user_authority` (user_id, authority_id) VALUES (9, 3);
 INSERT INTO `user_authority` (user_id, authority_id) VALUES (10, 3);
 
+-- Dodavanje role hotel adminu
+INSERT INTO `user_authority` (user_id, authority_id) VALUES (6, 4);
+INSERT INTO `user_authority` (user_id, authority_id) VALUES (8, 4);
+INSERT INTO `user_authority` (user_id, authority_id) VALUES (16, 4);
+
+-- Dodavanje role RAC adminu
+INSERT INTO `user_authority` (user_id, authority_id) VALUES (7, 5);
+INSERT INTO `user_authority` (user_id, authority_id) VALUES (17, 5);
+INSERT INTO `user_authority` (user_id, authority_id) VALUES (18, 5);
+
+
+-- Dodavanje prijateljstva
 INSERT INTO `friendship` VALUES (1, 0, 2);
 INSERT INTO `friendship` VALUES (2, 0, 3);
+INSERT INTO `friendship` VALUES (3, 0, 12);
+INSERT INTO `friendship` VALUES (4, 0, 13);
 
 INSERT INTO `users_friendships` VALUES (3, 1);
+INSERT INTO `users_friendships` VALUES (3, 3);
+INSERT INTO `users_friendships` VALUES (3, 4);
 INSERT INTO `users_friendships` VALUES (2, 2);
+
 
 -- Destinations
 INSERT INTO `destination` VALUES (11, 'JFK', 'John. F. Kennedy. International Airport', 'New York', 'US', 123.23, 132.23);
 INSERT INTO `destination` VALUES (12, 'BGD', 'Nikola Tesla International Airport', 'Belgrade', 'Serbia', 222.23, 543.23);
-INSERT INTO `destination` VALUES (13, 'ATH', 'Athens Airport', 'Athens', 'Greece', 123.22, 423.22);
+INSERT INTO `destination` VALUES (13, 'BER', 'Berlin Airport', 'Berlin', 'Germany', 123.22, 423.22);
+INSERT INTO `destination` VALUES (14, 'BFL', 'Meadows Field Airport', 'Bekersfield', 'US', 123.22, 423.22);
+INSERT INTO `destination` VALUES (15, 'HAM', 'Hamburg Airport', 'Hamburg', 'Germany', 123.22, 423.22);
+INSERT INTO `destination` VALUES (16, 'HAJ', 'Hanover Airport', 'Hanover', 'Germany', 123.22, 423.22);
+INSERT INTO `destination` VALUES (17, 'HEL', 'Helsinki Airport', 'Helsinki', 'Finland', 123.22, 423.22);
+INSERT INTO `destination` VALUES (18, 'MAD', 'Adolfo Suárez Madrid–Barajas Airport', 'Madrid', 'Spain', 123.22, 423.22);
+INSERT INTO `destination` VALUES (19, 'MBQ', 'Mbarara Airport', 'Mbarara', 'Uganda', 123.22, 423.22);
+INSERT INTO `destination` VALUES (20, 'MCQ', 'Miskolc Airport', 'Miskolc', 'Hungary', 123.22, 423.22);
+
 
 -- Airplanes
 INSERT INTO `airplane` VALUES(20, 'Boeing 747', 10, 10);
 INSERT INTO `airplane` VALUES(21, 'Boeing 567', 15, 15);
-INSERT INTO `airplane` VALUES(22, 'Boeing 900', 8, 18);
+INSERT INTO `airplane` VALUES(22, 'Boeing 900', 6, 10);
+INSERT INTO `airplane` VALUES(23, 'Airbus 222', 6, 8);
+INSERT INTO `airplane` VALUES(24, 'Airbus 123', 7, 9);
+INSERT INTO `airplane` VALUES(25, 'Airbus 876', 6, 11);
+
 
 -- Addresses
 INSERT INTO `address` VALUES(31, 'New York', 'US', 1234, '1st street', 22);
 INSERT INTO `address` VALUES(32, 'Belgrade', 'Serbia', 11000, 'Bulevar', 213);
 INSERT INTO `address` VALUES(33, 'Athens', 'Greece', 5433, 'Alfa', 24);
 
+
 -- Airlines
 INSERT INTO `airline` VALUES(22, 'Best airline company in US', 'United', 4, 31, 5);
 INSERT INTO `airline` VALUES(23, 'Najbolja aviokompanija', 'AirSerbia', 3, 32, 9);
 INSERT INTO `airline` VALUES(24, 'Best company in Greece', 'AirGreece', 5, 33, 10);
 
+
 -- Destinations where airlines work
 INSERT INTO `airline_destinations` VALUES(22, 11);
 INSERT INTO `airline_destinations` VALUES(22, 12);
 INSERT INTO `airline_destinations` VALUES(22, 13);
-INSERT INTO `airline_destinations` VALUES(23, 11);
-INSERT INTO `airline_destinations` VALUES(23, 12);
-INSERT INTO `airline_destinations` VALUES(24, 13);
+INSERT INTO `airline_destinations` VALUES(22, 14);
+INSERT INTO `airline_destinations` VALUES(22, 15);
+INSERT INTO `airline_destinations` VALUES(23, 14);
+INSERT INTO `airline_destinations` VALUES(23, 15);
+INSERT INTO `airline_destinations` VALUES(23, 16);
+INSERT INTO `airline_destinations` VALUES(23, 17);
+INSERT INTO `airline_destinations` VALUES(24, 18);
+INSERT INTO `airline_destinations` VALUES(24, 19);
+INSERT INTO `airline_destinations` VALUES(24, 20);
+
 
 -- Flights
-INSERT INTO `flight` VALUES(50, '2017-10-01 21:58:58', true, 5, '2017-09-30 21:58:58', 1200, 24, 22, 20, 11, 12);
-INSERT INTO `flight` VALUES(51, '2016-10-01 21:58:58', false, 5, '2016-09-30 21:58:58', 1200, 24, 23, 21, 11, 12);
+INSERT INTO `flight` VALUES(50, '2017-06-01 23:01:00', true, 5, '2017-06-01 00:01:00', 1200, 23, 22, 20, 11, 12);
+INSERT INTO `flight` VALUES(51, '2019-06-02 00:01:00', false, 4, '2019-06-01 00:01:00', 1600, 24, 22, 21, 11, 12);
+INSERT INTO `flight` VALUES(52, '2019-07-01 15:01:00', true, 3, '2019-07-01 00:01:00', 800, 15, 22, 21, 14, 15);
+INSERT INTO `flight` VALUES(53, '2019-07-01 12:01:00', false, 2, '2019-07-01 00:01:00', 500, 12, 23, 22, 14, 16);
+INSERT INTO `flight` VALUES(54, '2018-07-01 20:01:00', true, 5, '2018-07-01 00:01:00', 1000, 20, 23, 23, 12, 13);
+
+INSERT INTO `flight` VALUES(55, '2019-08-01 13:01:00', false, 0, '2019-08-30 00:01:00', 900, 13, 23, 24, 19, 20);
+INSERT INTO `flight` VALUES(56, '2019-08-02 00:01:00', true, 0, '2019-08-30 00:01:00', 1700, 24, 24, 23, 20, 17);
+INSERT INTO `flight` VALUES(57, '2019-09-01 10:01:00', false, 0, '2019-09-30 00:01:00', 905, 10, 24, 25, 16, 19);
+INSERT INTO `flight` VALUES(58, '2019-09-01 05:01:00', true, 0, '2019-09-30 00:01:00', 700, 5, 23, 22, 15, 12);
+INSERT INTO `flight` VALUES(59, '2019-10-01 03:01:00', false, 0, '2019-10-30 00:01:00', 200, 3, 23, 21, 17, 12);
+
 
 -- Airline price list items
 INSERT INTO `airline_price_list_item` VALUES(60, 10, '2017-11-01 00:00:00', 1500, '2017-10-01 00:00:00');
-INSERT INTO `airline_price_list_item` VALUES(61, 10, '2017-12-01 00:00:00', 1700, '2017-11-01 00:00:00');
+INSERT INTO `airline_price_list_item` VALUES(62, 8, '2017-12-01 00:00:00', 1500, '2017-11-01 00:00:00');
+INSERT INTO `airline_price_list_item` VALUES(63, 4, '2017-12-01 00:00:00', 1500, '2017-11-01 00:00:00');
+INSERT INTO `airline_price_list_item` VALUES(64, 0, '2017-12-01 00:00:00', 1700, '2017-11-01 00:00:00');
+INSERT INTO `airline_price_list_item` VALUES(65, 0, '2017-12-01 00:00:00', 1700, '2017-11-01 00:00:00');
+INSERT INTO `airline_price_list_item` VALUES(66, 0, '2017-12-01 00:00:00', 1700, '2017-11-01 00:00:00');
+INSERT INTO `airline_price_list_item` VALUES(67, 0, '2017-12-01 00:00:00', 1700, '2017-11-01 00:00:00');
+INSERT INTO `airline_price_list_item` VALUES(68, 0, '2017-12-01 00:00:00', 1700, '2017-11-01 00:00:00');
+INSERT INTO `airline_price_list_item` VALUES(69, 5, '2017-12-01 00:00:00', 1700, '2017-11-01 00:00:00');
+INSERT INTO `airline_price_list_item` VALUES(70, 10, '2017-12-01 00:00:00', 1700, '2017-11-01 00:00:00');
+
 
 -- Flight prices
 INSERT INTO `flight_prices` VALUES (50, 60);
