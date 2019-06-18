@@ -51,4 +51,12 @@ public class BranchOffice {
     public void setCompany(RentACarCompany company) {
         this.company = company;
     }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
 }
