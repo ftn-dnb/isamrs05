@@ -63,12 +63,8 @@ INSERT INTO `user_authority` (user_id, authority_id) VALUES (18, 5);
 -- Dodavanje prijateljstva
 INSERT INTO `friendship` VALUES (1, 0, 2);
 INSERT INTO `friendship` VALUES (2, 0, 3);
-INSERT INTO `friendship` VALUES (3, 0, 12);
-INSERT INTO `friendship` VALUES (4, 0, 13);
 
 INSERT INTO `users_friendships` VALUES (3, 1);
-INSERT INTO `users_friendships` VALUES (3, 3);
-INSERT INTO `users_friendships` VALUES (3, 4);
 INSERT INTO `users_friendships` VALUES (2, 2);
 
 
@@ -128,37 +124,50 @@ INSERT INTO `flight` VALUES(52, '2019-07-01 15:01:00', true, 3, '2019-07-01 00:0
 INSERT INTO `flight` VALUES(53, '2019-07-01 12:01:00', false, 2, '2019-07-01 00:01:00', 500, 12, 23, 22, 14, 16);
 INSERT INTO `flight` VALUES(54, '2018-07-01 20:01:00', true, 5, '2018-07-01 00:01:00', 1000, 20, 23, 23, 12, 13);
 
-INSERT INTO `flight` VALUES(55, '2019-08-01 13:01:00', false, 0, '2019-08-30 00:01:00', 900, 13, 23, 24, 19, 20);
-INSERT INTO `flight` VALUES(56, '2019-08-02 00:01:00', true, 0, '2019-08-30 00:01:00', 1700, 24, 24, 23, 20, 17);
-INSERT INTO `flight` VALUES(57, '2019-09-01 10:01:00', false, 0, '2019-09-30 00:01:00', 905, 10, 24, 25, 16, 19);
-INSERT INTO `flight` VALUES(58, '2019-09-01 05:01:00', true, 0, '2019-09-30 00:01:00', 700, 5, 23, 22, 15, 12);
-INSERT INTO `flight` VALUES(59, '2019-10-01 03:01:00', false, 0, '2019-10-30 00:01:00', 200, 3, 23, 21, 17, 12);
+INSERT INTO `flight` VALUES(55, '2019-08-30 13:01:00', false, 0, '2019-08-30 00:01:00', 900, 13, 23, 24, 19, 20);
+INSERT INTO `flight` VALUES(56, '2019-08-31 00:01:00', true, 0, '2019-08-30 00:01:00', 1700, 24, 24, 23, 20, 17);
+INSERT INTO `flight` VALUES(57, '2019-09-30 10:01:00', false, 0, '2019-09-30 00:01:00', 905, 10, 24, 25, 16, 19);
+INSERT INTO `flight` VALUES(58, '2019-09-30 05:01:00', true, 0, '2019-09-30 00:01:00', 700, 5, 23, 22, 15, 12);
+INSERT INTO `flight` VALUES(59, '2019-10-30 03:01:00', false, 0, '2019-10-30 00:01:00', 200, 3, 23, 21, 17, 12);
 
 
 -- Airline price list items
-INSERT INTO `airline_price_list_item` VALUES(60, 10, '2017-11-01 00:00:00', 1500, '2017-10-01 00:00:00');
-INSERT INTO `airline_price_list_item` VALUES(62, 8, '2017-12-01 00:00:00', 1500, '2017-11-01 00:00:00');
-INSERT INTO `airline_price_list_item` VALUES(63, 4, '2017-12-01 00:00:00', 1500, '2017-11-01 00:00:00');
-INSERT INTO `airline_price_list_item` VALUES(64, 0, '2017-12-01 00:00:00', 1700, '2017-11-01 00:00:00');
-INSERT INTO `airline_price_list_item` VALUES(65, 0, '2017-12-01 00:00:00', 1700, '2017-11-01 00:00:00');
-INSERT INTO `airline_price_list_item` VALUES(66, 0, '2017-12-01 00:00:00', 1700, '2017-11-01 00:00:00');
-INSERT INTO `airline_price_list_item` VALUES(67, 0, '2017-12-01 00:00:00', 1700, '2017-11-01 00:00:00');
-INSERT INTO `airline_price_list_item` VALUES(68, 0, '2017-12-01 00:00:00', 1700, '2017-11-01 00:00:00');
-INSERT INTO `airline_price_list_item` VALUES(69, 5, '2017-12-01 00:00:00', 1700, '2017-11-01 00:00:00');
-INSERT INTO `airline_price_list_item` VALUES(70, 10, '2017-12-01 00:00:00', 1700, '2017-11-01 00:00:00');
+INSERT INTO `airline_price_list_item` VALUES(60, 10, '2017-06-01 00:01:00', 1500, '2017-04-01 00:01:00');
+INSERT INTO `airline_price_list_item` VALUES(62, 8, '2019-06-01 00:01:00', 1500, '2019-04-01 00:01:00');
+INSERT INTO `airline_price_list_item` VALUES(63, 4, '2019-07-01 00:01:00', 1500, '2019-05-01 00:01:00');
+INSERT INTO `airline_price_list_item` VALUES(64, 0, '2019-07-01 00:01:00', 1700, '2019-04-01 00:01:00');
+INSERT INTO `airline_price_list_item` VALUES(65, 0, '2018-07-01 00:01:00', 1700, '2018-05-01 00:01:00');
+
+INSERT INTO `airline_price_list_item` VALUES(66, 0, '2019-08-30 00:01:00', 1700, '2019-05-30 00:01:00');
+INSERT INTO `airline_price_list_item` VALUES(67, 0, '2019-08-30 00:01:00', 1700, '2019-05-30 00:01:00');
+INSERT INTO `airline_price_list_item` VALUES(68, 0, '2019-09-30 00:01:00', 1700, '2019-05-30 00:01:00');
+INSERT INTO `airline_price_list_item` VALUES(69, 5, '2019-09-30 00:01:00', 1700, '2019-05-30 00:01:00');
+INSERT INTO `airline_price_list_item` VALUES(70, 10, '2019-10-30 00:01:00', 1700, '2019-05-30 00:01:00');
 
 
 -- Flight prices
 INSERT INTO `flight_prices` VALUES (50, 60);
-INSERT INTO `flight_prices` VALUES (50, 61);
+INSERT INTO `flight_prices` VALUES (51, 62);
+INSERT INTO `flight_prices` VALUES (52, 63);
+INSERT INTO `flight_prices` VALUES (53, 64);
+INSERT INTO `flight_prices` VALUES (54, 65);
+
+INSERT INTO `flight_prices` VALUES (55, 66);
+INSERT INTO `flight_prices` VALUES (56, 67);
+INSERT INTO `flight_prices` VALUES (57, 68);
+INSERT INTO `flight_prices` VALUES (58, 69);
+INSERT INTO `flight_prices` VALUES (59, 70);
+
 
 -- Flight reservation
 INSERT INTO `flight_reservation` VALUES (71, true, false, 'Marko', 'Markovic', '12345', 1000, 0, '2019-01-01 00:00:00', 5, 6, 2);
 INSERT INTO `flight_reservation` VALUES (72, true, false, 'Marko', 'Markovic', '12345', 1000, 0, '2019-01-04 01:00:00', 6, 7, 2);
 INSERT INTO `flight_reservation` VALUES (73, true, false, 'Marko', 'Markovic', '12345', 1000, 0, '2019-02-01 00:00:00', 5, 7, 2);
-INSERT INTO `flight_reservation` VALUES (74, true, false, 'Pera', 'Peric', '65432', 1400, 0, '2019-03-01 01:00:00', 6, 8, 3);
-INSERT INTO `flight_reservation` VALUES (75, true, false, 'Pera', 'Peric', '65432', 1600, 0, '2019-03-01 00:00:00', 5, 9, 3);
+INSERT INTO `flight_reservation` VALUES (74, true, false, 'Pera', 'Peric', '65432', 1400, 0, '2019-03-01 01:00:00', 6, 5, 3);
+INSERT INTO `flight_reservation` VALUES (75, true, false, 'Pera', 'Peric', '65432', 1600, 0, '2019-03-01 00:00:00', 5, 5, 3);
 INSERT INTO `flight_reservation` VALUES (76, true, false, 'Pera', 'Peric', '65432', 1500, 0, '2019-05-02 01:00:00', 1, 1, 3);
+INSERT INTO `flight_reservation` VALUES (77, true, false, 'Filip', 'Filipovic', '63222', 1800, 0, '2019-05-02 01:00:00', 1, 1, 11);
+INSERT INTO `flight_reservation` VALUES (78, true, false, 'Filip', 'Filipovic', '63222', 1800, 0, '2019-05-03 01:00:00', 1, 2, 11);
 
 -- Users and flight reservations
 INSERT INTO `users_reservations` VALUES (2, 71);
@@ -167,14 +176,19 @@ INSERT INTO `users_reservations` VALUES (2, 73);
 INSERT INTO `users_reservations` VALUES (3, 74);
 INSERT INTO `users_reservations` VALUES (3, 75);
 INSERT INTO `users_reservations` VALUES (3, 76);
+INSERT INTO `users_reservations` VALUES (11, 77);
+INSERT INTO `users_reservations` VALUES (11, 78);
+
 
 -- Flight reservations
 INSERT INTO `flight_reservations` VALUES (50, 71);
 INSERT INTO `flight_reservations` VALUES (50, 72);
-INSERT INTO `flight_reservations` VALUES (50, 73);
-INSERT INTO `flight_reservations` VALUES (50, 74);
-INSERT INTO `flight_reservations` VALUES (50, 75);
-INSERT INTO `flight_reservations` VALUES (50, 76);
+INSERT INTO `flight_reservations` VALUES (52, 73);
+INSERT INTO `flight_reservations` VALUES (52, 74);
+INSERT INTO `flight_reservations` VALUES (53, 75);
+INSERT INTO `flight_reservations` VALUES (53, 76);
+INSERT INTO `flight_reservations` VALUES (59, 77);
+INSERT INTO `flight_reservations` VALUES (59, 78);
 
 
 -- Hotels
