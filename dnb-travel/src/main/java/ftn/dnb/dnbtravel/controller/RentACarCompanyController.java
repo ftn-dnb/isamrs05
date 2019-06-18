@@ -119,4 +119,11 @@ public class RentACarCompanyController {
         List<BranchOfficeDTO> officeDTOS = rentACarCompanyService.getAllOffices(company);
         return new ResponseEntity<>(officeDTOS,HttpStatus.OK);
     }
+
+    @PostMapping(path = "/reserveCar", consumes = MediaType.APPLICATION_JSON_VALUE)
+    @PreAuthorize("hasRole('USER')")
+    public ResponseEntity<?> reserveCar(@RequestBody RACReservationRequestDTO reservation){
+        ResponseEntity<?> response = rentACarCompanyService.reserveCar(reservation);
+        return new ResponseEntity<>("asd",HttpStatus.OK);
+    }
 }

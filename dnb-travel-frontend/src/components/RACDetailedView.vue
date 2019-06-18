@@ -58,7 +58,7 @@
                             item-text="name" 
                             prepend-icon="directions_car"
                         ></v-combobox>
-                    <v-btn @click="searchCars()">
+                    <v-btn @click="searchCars(item)">
                         <v-icon left>search</v-icon>
                         <span>Search</span>
                     </v-btn>
@@ -84,9 +84,16 @@
                         {{item.car.type}}
                     </div>
                     <div>
+                        {{formatDate(item.startDate)}}, {{formatDate(item.endDate)}}
+                    </div>
+                    <div>
                         <v-icon>attach_money</v-icon>
                         {{item.pricePerDay}}
                     </div>
+                    <v-btn @click="reserveCar(item)">
+                        <v-icon left>done</v-icon>
+                        <span>Reserve</span>
+                    </v-btn>
                 </v-card-text>
             </v-card>
         </v-flex>
@@ -123,7 +130,22 @@ export default {
         rentACarCompany:{
             address:{},
         },
-        
+
+        item:{},
+        user:{
+            username: null,
+            id: null,
+        },
+
+        reservation:{
+            user:null,
+            itemID: null,
+            beginDate: null,
+            endDate: null,
+            companyID: null,
+
+        },
+
     }
   },
   methods:{
@@ -144,10 +166,44 @@ export default {
 
             console.log(response.data);
             this.cars = response.data;
-            this.$refs.form.reset()
+            this.$refs.form.reset();
+
+            // reset object
+            this.carSearch.startDate = null;
+            this.carSearch.endDate = null;
+            this.carSearch.pricePerDay = null;
+            this.carSearch.seatsNumber = null;
+            this.carSearch.type = null;
+            this.carSearch.brand = null;
+            this.carSearch.id = null;
 
         })
     },
+
+    reserveCar(item){
+        console.log(item.id);
+
+        const header = {headers: {"Authorization": `Bearer ${localStorage.getItem('user-token')}`}};
+        this.user.username = localStorage.getItem('username');
+
+        this.reservation.user = this.user.username;
+        this.reservation.itemID = item.id;
+        this.reservation.beginDate = item.startDate;
+        this.reservation.endDate = item.endDate;
+        this.reservation.companyID = item.car.company.id;
+
+        console.log(this.reservation);
+
+        axios.post("http://localhost:8080/api/rentACarCompanies/reserveCar", this.reservation, header)
+        .then(response =>{
+            console.log(response.data);
+
+        })
+        .catch(error=>{
+            console.log(error.data);
+        });
+    }
+
   },
     mounted(){
         console.log(this.racID);
