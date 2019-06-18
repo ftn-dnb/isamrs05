@@ -12,19 +12,21 @@ public class CarFilterDTO {
     private Integer seatsNumber;
     private CarType type;
     private String  brand;
+    private Long id;
 
     public CarFilterDTO(){
         super();
     }
 
     public CarFilterDTO(Date startDate, Date endDate, Integer pricePerDay,
-                        Integer seatsNumber, CarType type, String brand) {
+                        Integer seatsNumber, CarType type, String brand,Long id) {
         this.startDate = startDate;
         this.endDate = endDate;
         this.pricePerDay = pricePerDay;
         this.seatsNumber = seatsNumber;
         this.type = type;
         this.brand = brand;
+        this.id = id;
     }
 
     public Date getStartDate() {
@@ -73,5 +75,13 @@ public class CarFilterDTO {
 
     public void setBrand(String brand) {
         this.brand = brand;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 }

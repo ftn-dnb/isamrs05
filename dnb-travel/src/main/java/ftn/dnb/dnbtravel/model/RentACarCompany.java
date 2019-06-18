@@ -3,7 +3,6 @@ package ftn.dnb.dnbtravel.model;
 import ftn.dnb.dnbtravel.dto.RentACarCompanyDTO;
 
 import javax.persistence.*;
-import java.util.Calendar;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -21,6 +20,9 @@ public class RentACarCompany {
 
     @Column(name = "rating", nullable = false)
     private double rating;
+
+    @OneToOne(cascade = CascadeType.ALL)
+    private RACPriceList currentPriceList;
 
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinTable(name = "rac_cars",
@@ -40,10 +42,8 @@ public class RentACarCompany {
             inverseJoinColumns = @JoinColumn(name = "office_id", referencedColumnName = "id"))
     private Set<BranchOffice> offices = new HashSet<>();
 
-    @JoinTable(name = "main_office",
-            joinColumns = @JoinColumn(name = "rac_id", referencedColumnName = "id"),
-            inverseJoinColumns = @JoinColumn(name = "office_id", referencedColumnName = "id"))
-    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+
+    @OneToOne(cascade = CascadeType.ALL)
     private BranchOffice mainOffice;
 
     @OneToOne(cascade = CascadeType.ALL)
@@ -103,7 +103,7 @@ public class RentACarCompany {
     }
 
     public void setCars(Set<Car> cars) {
-        cars = cars;
+        this.cars = cars;
     }
 
     public double getRating() {
@@ -144,5 +144,13 @@ public class RentACarCompany {
 
     public void setAdministrator(User administrator) {
         this.administrator = administrator;
+    }
+
+    public RACPriceList getCurrentPriceList() {
+        return currentPriceList;
+    }
+
+    public void setCurrentPriceList(RACPriceList currentPriceList) {
+        this.currentPriceList = currentPriceList;
     }
 }

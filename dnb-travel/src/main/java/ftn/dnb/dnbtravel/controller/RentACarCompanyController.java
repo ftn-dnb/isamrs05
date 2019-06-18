@@ -1,8 +1,6 @@
 package ftn.dnb.dnbtravel.controller;
 
-import com.sun.mail.iap.Response;
 import ftn.dnb.dnbtravel.dto.*;
-import ftn.dnb.dnbtravel.model.RentACarCompany;
 import ftn.dnb.dnbtravel.service.RentACarCompanyService;
 import ftn.dnb.dnbtravel.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,7 +37,6 @@ public class RentACarCompanyController {
     }
 
     @GetMapping(path = "/{id}")
-    @PreAuthorize("hasRole('RAC_ADMIN')")
     public ResponseEntity<RentACarCompanyDTO> getRentACarCompanyById(@PathVariable("id") Long id){
         RentACarCompanyDTO rentACarCompany = rentACarCompanyService.getRentACarCompanyById(id);
         return new ResponseEntity<>(rentACarCompany,(rentACarCompany == null) ? HttpStatus.NOT_FOUND : HttpStatus.OK);
@@ -70,5 +67,56 @@ public class RentACarCompanyController {
     public ResponseEntity<?> addCarToCompany(@RequestBody CarDTO car){
         CarDTO response = rentACarCompanyService.addNewCar(car);
         return  new ResponseEntity<>(response,HttpStatus.OK);
+    }
+
+    @RequestMapping(path = "/addReservation", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
+    @PreAuthorize("hasRole('RAC_ADMIN')")
+    public ResponseEntity<?> addReservation(@RequestBody RACListItemDTO item){
+        //RACListItemDTO response = rentACarCompanyService.addReservation(item);
+        ResponseEntity<?> response = rentACarCompanyService.addReservation(item);
+        return new ResponseEntity<>(response,HttpStatus.OK);
+    }
+
+    @RequestMapping(path = "/setPriceList", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
+    @PreAuthorize("hasRole('RAC_ADMIN')")
+    public ResponseEntity<?> setPriceList(@RequestBody RACSetPriceListDTO listDTO){
+
+        ResponseEntity<?> response = rentACarCompanyService.setActivePriceList(listDTO.getCompany_id(),listDTO.getPrice_list_id());
+        return response;
+    }
+
+    @RequestMapping(path = "/addPriceList", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
+    @PreAuthorize("hasRole('RAC_ADMIN')")
+    public ResponseEntity<?> addPriceList(@RequestBody RACSetPriceListDTO addList){
+        //dodaj provere
+        ResponseEntity<?> response = rentACarCompanyService.addPriceList(addList);
+        return response;
+    }
+
+    @RequestMapping(path ="/getAllCompanies", method = RequestMethod.GET)
+    public ResponseEntity<?> getAllCompanies(){
+        List<RentACarCompanyDTO> dtos = rentACarCompanyService.getAllRentACarCompanies();
+        return new ResponseEntity<>(dtos, HttpStatus.OK);
+    }
+
+    @RequestMapping(path = "/addBranchOffice", method = RequestMethod.POST)
+    @PreAuthorize("hasRole('RAC_ADMIN')")
+    public ResponseEntity<?> addBranchOffice(@RequestBody BranchOfficeDTO office){
+        ResponseEntity<?> response = rentACarCompanyService.addBranchOffice(office);
+        return response;
+    }
+
+    @RequestMapping(path = "/setMainBranchOffice", method = RequestMethod.POST)
+    @PreAuthorize("hasRole('RAC_ADMIN')")
+    public ResponseEntity<?> setMainBranchOffice(@RequestBody BranchOfficeDTO office){
+        ResponseEntity response = rentACarCompanyService.setMainOffice(office);
+        return response;
+    }
+
+    @RequestMapping(path = "/getAllOffices", method = RequestMethod.POST)
+    @PreAuthorize("hasRole('RAC_ADMIN')")
+    public ResponseEntity<?> getAllBranchOffices(@RequestBody RentACarCompanyDTO company){
+        List<BranchOfficeDTO> officeDTOS = rentACarCompanyService.getAllOffices(company);
+        return new ResponseEntity<>(officeDTOS,HttpStatus.OK);
     }
 }

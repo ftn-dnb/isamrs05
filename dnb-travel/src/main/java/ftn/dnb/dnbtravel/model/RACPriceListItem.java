@@ -1,5 +1,7 @@
 package ftn.dnb.dnbtravel.model;
 
+import ftn.dnb.dnbtravel.dto.RACListItemDTO;
+
 import javax.persistence.*;
 import java.util.Date;
 
@@ -7,7 +9,7 @@ import java.util.Date;
 public class RACPriceListItem {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column(name = "active_discount")
@@ -35,12 +37,14 @@ public class RACPriceListItem {
         super();
     }
 
-    public RACPriceListItem(double activeDiscount, Date startDate, Date endDate, int pricePerDay, RACPriceList racPriceList) {
+    public RACPriceListItem(double activeDiscount, Date startDate, Date endDate, int pricePerDay, RACPriceList racPriceList, Car car) {
         this.activeDiscount = activeDiscount;
         this.startDate = startDate;
         this.endDate = endDate;
         this.pricePerDay = pricePerDay;
         this.racPriceList = racPriceList;
+        this.car = car;
+
     }
 
     public double getActiveDiscount() {

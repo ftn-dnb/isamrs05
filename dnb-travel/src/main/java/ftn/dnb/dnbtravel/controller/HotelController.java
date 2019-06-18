@@ -3,9 +3,11 @@ package ftn.dnb.dnbtravel.controller;
 import com.sun.mail.iap.Response;
 import ftn.dnb.dnbtravel.dto.HotelDTO;
 import ftn.dnb.dnbtravel.dto.HotelFilterDTO;
+import ftn.dnb.dnbtravel.dto.HotelReservationDTO;
 import ftn.dnb.dnbtravel.dto.RoomDTO;
 import ftn.dnb.dnbtravel.model.Address;
 import ftn.dnb.dnbtravel.model.Hotel;
+import ftn.dnb.dnbtravel.model.HotelReservation;
 import ftn.dnb.dnbtravel.service.HotelService;
 import ftn.dnb.dnbtravel.service.RoomService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +15,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -86,5 +89,11 @@ public class HotelController {
             return new ResponseEntity<>(id, HttpStatus.BAD_REQUEST);
         else
             return new ResponseEntity<>(id, HttpStatus.OK);
+    }
+
+    @RequestMapping(value = "/addHotelReservation", method = RequestMethod.POST, consumes = "application/json")
+    public ResponseEntity<ArrayList<Long>> addHotelReservation(@RequestBody HotelReservationDTO hotelReservationDTO) {
+        ArrayList<Long> id_list = hotelService.addHotelReservation(hotelReservationDTO);
+        return new ResponseEntity<>(id_list, HttpStatus.OK);
     }
 }

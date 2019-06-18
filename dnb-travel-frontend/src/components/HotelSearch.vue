@@ -1,5 +1,8 @@
 <template>
     <div>
+        <h1 class="headline text-md-center">
+            Hotel search
+        </h1>
         <v-container grid-list-md text-xs-center>
             <v-layout row wrap>
                 <v-flex xs4>
@@ -47,13 +50,9 @@
                         </div>
                     </v-card-text>
                     <v-card-actions>
-                        <v-btn flat small router :to="{ name: 'HotelDetailedView', params: { hotelID: hotel.id} }">
+                        <v-btn flat small router :to="{ name: 'HotelDetailedView', params: { hotelID: hotel.id, flight_res: flight, users: users} }">
                             <v-icon left>info</v-icon>
                             <span>View Hotel Profile</span>
-                        </v-btn>
-                        <v-btn v-if="userLoggedIn" flat small router :to="{ name: 'FlightReservation', params: { hotelID: hotel.id} }">
-                            <v-icon left>attach_money</v-icon>
-                            <span>Buy</span>
                         </v-btn>
                     </v-card-actions>
                 </v-card>
@@ -68,7 +67,10 @@ import axios from 'axios';
 
 export default {
     name: 'HotelSearch',
-    props: {},
+    props: {
+        flight: null,
+        users: null,
+    },
     components: {},
 
     data() {
@@ -78,7 +80,7 @@ export default {
             addresses: [],
             searchFilter: {
                 address: null,
-                rating: null
+                rating: null,
             }
         }
     },
@@ -87,16 +89,26 @@ export default {
         searchHotels() {
             const header = { headers: {"Authorization" : `Bearer ${localStorage.getItem('user-token')}`} };
 
+            if (this.searchFilter.address == null) {
+                this.$toasted.error('Hotel address not selected.', {duration:2000});
+                return;
+            }
+
             axios.post('http://localhost:8080/api/hotels/searchHotels', this.searchFilter, header)
-            .then(response => this.hotels = response.data)
-            .catch(error => this.$roasted.error('Error while searching hotels.', {duration: 5000}));
+            .then(response => {
+                this.hotels = response.data;
+                if (this.hotels.length == 0) {
+                    this.$toasted.info('No results found.', {duration: 2000});
+                }
+            })
+            .catch(error => this.$toasted.error('Error while searching hotels.', {duration: 5000}));
         },
         clearSearch() {
             const header = { headers: {"Authorization" : `Bearer ${localStorage.getItem('user-token')}`} };
 
             axios.get('http://localhost:8080/api/hotels/all', header)
             .then(response => this.hotels = response.data)
-            .catch(error => this.$roasted.error('Error while searching hotels.', {duration: 5000}));
+            .catch(error => this.$toasted.error('Error while searching hotels.', {duration: 5000}));
 
             this.searchFilter.address = "";
             this.searchFilter.rating = 0;
@@ -112,7 +124,7 @@ export default {
     
         axios.get('http://localhost:8080/api/hotels/addresses', header)
         .then(response => this.addresses = response.data)
-        .catch(error => this.$toadted.error('Error while loading addresses.', {duration: 5000}));
+        .catch(error => this.$toasted.error('Error while loading addresses.', {duration: 5000}));
 
         this.userLoggedIn = localStorage.getItem("role") === "ROLE_USER";
     }

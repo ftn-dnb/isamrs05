@@ -1,19 +1,13 @@
 package ftn.dnb.dnbtravel.service;
 
-import ftn.dnb.dnbtravel.dto.HotelDTO;
-import ftn.dnb.dnbtravel.dto.HotelFilterDTO;
-import ftn.dnb.dnbtravel.model.Address;
-import ftn.dnb.dnbtravel.model.Hotel;
-import ftn.dnb.dnbtravel.model.HotelPriceList;
-import ftn.dnb.dnbtravel.model.User;
-import ftn.dnb.dnbtravel.repository.AddressRepository;
-import ftn.dnb.dnbtravel.repository.HotelPriceListRepository;
-import ftn.dnb.dnbtravel.repository.HotelRepository;
-import ftn.dnb.dnbtravel.repository.UserRepository;
+import ftn.dnb.dnbtravel.dto.*;
+import ftn.dnb.dnbtravel.model.*;
+import ftn.dnb.dnbtravel.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @Service
@@ -30,6 +24,12 @@ public class HotelService {
 
     @Autowired
     private HotelPriceListRepository hotelPriceListRepository;
+
+    @Autowired
+    private HotelPriceListItemRepository hotelPriceListItemRepository;
+
+    @Autowired
+    private HotelReservationRepository hotelReservationRepository;
 
     public Hotel findOne(Long id) { return hotelRepository.getOne(id); }
 
@@ -91,6 +91,38 @@ public class HotelService {
         hotel.setCurrentPriceList(currentPriceList);
         hotelRepository.save(hotel);
         return currentPriceList.getId();
+    }
+
+    public ArrayList<Long> addHotelReservation(HotelReservationDTO hotelReservationDTO) {
+        int capacity_counter = 1, item_counter = 0;
+        ArrayList<Long> id_list = new ArrayList<>();
+        Hotel hotel = hotelRepository.findOneById(hotelReservationDTO.getHotel_id());
+        for (UserDTO userDTO : hotelReservationDTO.getUsers()) {
+
+            HotelReservation reservation = new HotelReservation();
+            reservation.setBeginDate(hotelReservationDTO.getDate_arrival());
+            Date departure_date = new Date(hotelReservationDTO.getDate_arrival().getTime() + hotelReservationDTO.getOvernight_stays()*(1000 * 60 * 60 * 24));
+            reservation.setEndDate(departure_date);
+
+            HotelPriceListItem item = hotelPriceListItemRepository.findOneById(hotelReservationDTO.getItems().get(item_counter).getId());
+            if (item.getRoom().getCapacity() == capacity_counter) {
+                capacity_counter = 1;
+                item_counter += 1;
+            } else {
+                capacity_counter += 1;
+            }
+            if (userDTO.getUsername() != null) {
+                User user = userRepository.findByUsername(userDTO.getUsername());
+                user.getHotelReservations().add(reservation);
+                reservation.setUser(user);
+            }
+            reservation.setHotelPriceListItem(item);
+            reservation.setRating(3);
+            hotel.getHotelReservations().add(reservation);
+            hotelReservationRepository.save(reservation);
+            id_list.add(reservation.getId());
+        }
+        return id_list;
     }
 
 }

@@ -17,7 +17,7 @@
         <v-data-table :headers="priceListHeaders"
             :items="priceList.hotelPriceListItems">
             <template v-slot:items="props">
-                <td>{{ props.item.roomNumber }}</td>
+                <td>{{ props.item.room.roomNumber }}</td>
                 <td>{{ props.item.startDate }}</td>
                 <td>{{ props.item.endDate }}</td>
                 <td>{{ props.item.pricePerDay }}</td>
@@ -121,9 +121,8 @@ export default {
                 startDate: null,
                 endDate: null,
                 pricePerDay: null,
-                roomID: null,
-                hotelPriceListID: null,
-                roomNumber: null
+                room: null,
+                hotelPriceListID: null
             },
             priceListHeaders: [
                 {text: 'Room', value: 'roomNumber'},
@@ -179,8 +178,7 @@ export default {
             }
             const header = { headers: {"Authorization" : `Bearer ${localStorage.getItem('user-token')}`} };
             this.priceListItem.hotelPriceListID = this.priceList.id;
-            this.priceListItem.roomID = this.room.id;
-            this.priceListItem.roomNumber = this.room.roomNumber;
+            this.priceListItem.room = this.room;
 
             if (!this.checkPriceListItemIntegrity(this.priceListItem)) {
                 alert('PriceListItem constraint problem.');
@@ -221,7 +219,7 @@ export default {
             let sameRoomItems = []
             let flag = true;
             this.priceList.hotelPriceListItems.forEach(element => {
-                if (element.roomID == item.roomID) sameRoomItems.push(element);
+                if (element.room.id == item.room.id) sameRoomItems.push(element);
             });
             if (sameRoomItems.length == 0) flag = true;
             sameRoomItems.forEach(element => {
@@ -230,9 +228,9 @@ export default {
                 const date_start_item = new Date(item.startDate);
                 const date_end_item = new Date(item.endDate);
                 flag = true;
-                if (date_start_element <= date_start_item && date_start_item <= date_end_element) {flag = false; return;}
-                if (date_start_element <= date_end_item   && date_end_item   <= date_end_element) {flag = false; return;}
-                if (date_start_item <  date_start_element && date_end_element   <  date_end_item) {flag = false; return;}
+                if (date_start_element <= date_start_item && date_start_item < date_end_element) {flag = false; return;}
+                if (date_start_element < date_end_item && date_end_item <= date_end_element) {flag = false; return;}
+                if (date_start_item <= date_start_element && date_end_element <= date_end_item) {flag = false; return;}
             });
             return flag;
         }

@@ -54,18 +54,21 @@ public class User implements UserDetails {
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private Set<FlightReservation> reservations = new HashSet<>();
 
+    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private Set<HotelReservation> hotelReservations;
 
     public User() {
         super();
     }
 
-    public User(Long id, String firstName, String lastName, String email, String password,String username) {
+    public User(Long id, String firstName, String lastName, String email, String password,String username, Set<HotelReservation> hotelReservations) {
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
         this.password = password;
         this.username = username;
+        this.hotelReservations = hotelReservations;
     }
 
     public User(UserDTO dto) {
@@ -204,6 +207,17 @@ public class User implements UserDetails {
 
     public void setReservations(Set<FlightReservation> reservations) {
         this.reservations = reservations;
+    }
+
+    public Set<HotelReservation> getHotelReservations() {
+        if (this.hotelReservations == null) {
+            this.hotelReservations = new HashSet<>();
+        }
+        return this.hotelReservations;
+    }
+
+    public void setHotelReservations(Set<HotelReservation> hotelReservations) {
+        this.hotelReservations = hotelReservations;
     }
 
     @Override
