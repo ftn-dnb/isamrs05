@@ -57,11 +57,14 @@ public class User implements UserDetails {
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private Set<HotelReservation> hotelReservations;
 
+    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private Set<RACReservation> racReservations;
+
     public User() {
         super();
     }
 
-    public User(Long id, String firstName, String lastName, String email, String password,String username, Set<HotelReservation> hotelReservations) {
+    public User(Long id, String firstName, String lastName, String email, String password,String username, Set<HotelReservation> hotelReservations,Set<RACReservation> racReservations) {
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
@@ -69,6 +72,7 @@ public class User implements UserDetails {
         this.password = password;
         this.username = username;
         this.hotelReservations = hotelReservations;
+        this.racReservations = racReservations;
     }
 
     public User(UserDTO dto) {
@@ -241,5 +245,13 @@ public class User implements UserDetails {
                 ", lastName='" + lastName + '\'' +
                 ", email='" + email + '\'' +
                 '}';
+    }
+
+    public Set<RACReservation> getRacReservations() {
+        return racReservations;
+    }
+
+    public void setRacReservations(Set<RACReservation> racReservations) {
+        this.racReservations = racReservations;
     }
 }

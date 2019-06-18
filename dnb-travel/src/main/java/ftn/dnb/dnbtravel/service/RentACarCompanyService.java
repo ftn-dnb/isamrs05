@@ -2,10 +2,7 @@ package ftn.dnb.dnbtravel.service;
 
 import ftn.dnb.dnbtravel.dto.*;
 import ftn.dnb.dnbtravel.model.*;
-import ftn.dnb.dnbtravel.repository.CarRepository;
-import ftn.dnb.dnbtravel.repository.RentACarCompanyRepository;
-import ftn.dnb.dnbtravel.repository.RentACarPriceListItem;
-import ftn.dnb.dnbtravel.repository.UserRepository;
+import ftn.dnb.dnbtravel.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -28,6 +25,9 @@ public class RentACarCompanyService {
 
     @Autowired
     private RentACarPriceListItem priceListItemRepository;
+
+    @Autowired
+    private RACReservationRepository reservationRepository;
 
     @Autowired
     private CarRepository carRepository;
@@ -271,6 +271,32 @@ public class RentACarCompanyService {
         }
         return officeDTOS;
 
+    }
+
+    public ResponseEntity<?> reserveCar(RACReservationRequestDTO requestDTO){
+        RACPriceListItem item = priceListItemRepository.findOneById(requestDTO.getItemID());
+        User user = userRepository.findOneByUsername(requestDTO.getUser());
+        RentACarCompany company = racRepository.findOneById(requestDTO.getCompanyID());
+
+        RACReservation realReservation = new RACReservation();
+
+        realReservation.setBeginDate(requestDTO.getBeginDate());
+        realReservation.setEndDate(requestDTO.getEndDate());
+        realReservation.setRating(0);
+        realReservation.setItem(item);
+        realReservation.setUser(user);
+
+
+        // provera da li je zauzeto
+
+        user.getRacReservations().add(realReservation);
+        company.getRacReservations().add(realReservation);
+
+        racRepository.save(company);
+
+        // dodavanje korisniku/kompaniji
+        // odgovor
+        return new ResponseEntity<>("Reservation successfully added", HttpStatus.OK);
     }
 
 

@@ -49,13 +49,16 @@ public class RentACarCompany {
     @OneToOne(cascade = CascadeType.ALL)
     private User administrator;
 
+    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private Set<RACReservation> reservations;
+
     public RentACarCompany() {
         super();
     }
 
     public RentACarCompany(Long id, String name, String description,
                            double rating, Set<Car> cars, Set<RACPriceList> priceList,
-                           Set<BranchOffice> offices, BranchOffice mainOffice, User administrator) {
+                           Set<BranchOffice> offices, BranchOffice mainOffice, User administrator, Set<RACReservation> racReservations) {
         this.id = id;
         this.name = name;
         this.description = description;
@@ -65,6 +68,7 @@ public class RentACarCompany {
         this.offices = offices;
         this.mainOffice = mainOffice;
         this.administrator = administrator;
+        this.reservations = racReservations;
     }
 
     public RentACarCompany(RentACarCompanyDTO rentACarCompanyDTO){
@@ -152,5 +156,16 @@ public class RentACarCompany {
 
     public void setCurrentPriceList(RACPriceList currentPriceList) {
         this.currentPriceList = currentPriceList;
+    }
+
+    public Set<RACReservation> getRacReservations() {
+        if(this.reservations == null){
+            this.reservations = new HashSet<>();
+        }
+        return this.reservations;
+    }
+
+    public void setRacReservations(Set<RACReservation> racReservations) {
+        this.reservations = racReservations;
     }
 }
