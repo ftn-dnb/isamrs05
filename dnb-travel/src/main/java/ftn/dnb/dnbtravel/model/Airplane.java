@@ -7,7 +7,7 @@ import java.util.Objects;
 public class Airplane {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column(name = "name", nullable = false, unique = true, length = 100)
