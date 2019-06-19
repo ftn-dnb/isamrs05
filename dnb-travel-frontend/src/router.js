@@ -40,6 +40,8 @@ import SetActivePriceListRAC from './components/SetActivePriceListRAC';
 import AddBranchOffice from './components/AddBranchOffice';
 import SetMainBranchOffice from './components/SetMainBranchOffice';
 import SearchRAC from './components/SearchRAC';
+import DeleteCar from './components/DeleteCar';
+import EditCar from './components/EditCar';
 
 Vue.use(Router)
 
@@ -313,6 +315,18 @@ export default new Router({
         name: 'RACDetailedView',
         component: RACDetailedView
 
+    },
+
+    {
+        path:'/delete-car',
+        name: 'DeleteCar',
+        component: DeleteCar
+    },
+
+    {
+        path: '/edit-car',
+        name: 'EditCar',
+        component: EditCar
     },
 
   ]

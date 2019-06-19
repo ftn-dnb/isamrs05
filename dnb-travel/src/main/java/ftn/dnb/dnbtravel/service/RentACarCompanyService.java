@@ -306,8 +306,15 @@ public class RentACarCompanyService {
         List<RACPriceListItem> list = priceListItemRepository.findByCar(realCar);
 
         if(list == null || list.size() == 0){
-            carRepository.delete(realCar);
-            //dovrsiti
+
+            RentACarCompany company = realCar.getCompany();
+            company.getCars().remove(realCar);
+            racRepository.save(company);
+
+
+            realCar.setCompany(null);
+            carRepository.save(realCar);
+
             return  new ResponseEntity<>("Car is deleted", HttpStatus.OK);
         }
         {
@@ -325,12 +332,17 @@ public class RentACarCompanyService {
 
         if(list == null || list.size() == 0){
             realCar.setBrand(carDTO.getBrand());
-            //dovrsiti
+            realCar.setManufYear(carDTO.getManufYear());
+            realCar.setName(carDTO.getName());
+            realCar.setSeatsNumber(carDTO.getSeatsNumber());
+            realCar.setType(carDTO.getType());
+
+            carRepository.save(realCar);
 
             return  new ResponseEntity<>("Car is edited", HttpStatus.OK);
         }
         {
-            return  new ResponseEntity<>("Unable to delte car", HttpStatus.CONFLICT);
+            return  new ResponseEntity<>("Unable to edit car", HttpStatus.CONFLICT);
         }
 
 
