@@ -162,5 +162,10 @@ public class RentACarCompanyController {
         return new ResponseEntity<>(stats,HttpStatus.OK);
     }
 
-
+    @PostMapping(path ="/getReservationStats", consumes = MediaType.APPLICATION_JSON_VALUE)
+    @PreAuthorize("hasRole('RAC_ADMIN')")
+    public ResponseEntity<?> getReservationStats(@RequestBody RACReservationStatsDTO filterDTO){
+        List<ReservationStatsDTO> stats = rentACarCompanyService.getStatsForCompanyReservation(filterDTO);
+        return new ResponseEntity<>(stats,HttpStatus.OK);
+    }
 }

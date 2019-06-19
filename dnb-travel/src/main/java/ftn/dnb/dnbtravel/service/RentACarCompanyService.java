@@ -3,19 +3,16 @@ package ftn.dnb.dnbtravel.service;
 import ftn.dnb.dnbtravel.dto.*;
 import ftn.dnb.dnbtravel.model.*;
 import ftn.dnb.dnbtravel.repository.*;
-import org.joda.time.Days;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.hateoas.Link;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.LinkedHashMap;
-import java.util.LinkedList;
-import java.util.List;
+import java.time.LocalDate;
+import java.time.ZoneId;
+import java.util.*;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
@@ -444,6 +441,94 @@ public class RentACarCompanyService {
         income.forEach((key, value) -> stats.getIncome().add(new IncomeDTO(key, value)));
         return stats;
     }
+
+    public List<ReservationStatsDTO> getStatsForCompanyReservation(RACReservationStatsDTO filter){
+        RentACarCompany company = racRepository.findOneById(filter.getId());
+
+        switch (filter.getReservationCriteria()){
+            case "Day":
+                return getReservationStatsDay(company, filter.getDateReservation());
+            case "Week":
+                return getReservationStatsWeek(company, filter.getDateReservation());
+            case "Month":
+                return getReservationStatsMonth(company, filter.getDateReservation());
+            default:
+                return getReservationStatsWeek(company, filter.getDateReservation());
+        }
+    }
+
+    private List<ReservationStatsDTO> getReservationStatsDay(RentACarCompany company, Date date){
+        List<ReservationStatsDTO> stats = new ArrayList<>();
+        DateFormat formatter = new SimpleDateFormat("dd.MM.yyyy.");
+
+        stats.add(new ReservationStatsDTO(formatter.format(date), 0));
+
+        LocalDate startDate = date.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+
+        for(RACReservation reservation: company.getRacReservations()){
+            LocalDate resDate = reservation.getBeginDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+
+            if(startDate.isEqual(resDate)){
+                stats.get(0).setNumber(stats.get(0).getNumber()+1);
+            }
+        }
+        return stats;
+    }
+
+    private List<ReservationStatsDTO> getReservationStatsWeek(RentACarCompany company, Date date){
+        List<ReservationStatsDTO> statsList = new ArrayList<>();
+        LinkedHashMap<String,Integer>  stats = new LinkedHashMap<>();
+        DateFormat formatter = new SimpleDateFormat("dd.MM.yyyy.");
+
+
+        LocalDate startDate = date.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+        LocalDate endDate = date.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+
+        startDate = startDate.minusDays(startDate.getDayOfWeek().getValue());
+        endDate = endDate.plusDays(7 - endDate.getDayOfWeek().getValue());
+
+        for(RACReservation reservation: company.getRacReservations()){
+            LocalDate reservationDate = reservation.getBeginDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+            if (reservationDate.isAfter(startDate) && reservationDate.isBefore(endDate)) {
+                String key = formatter.format(reservation.getBeginDate());
+                if (stats.containsKey(key))
+                    stats.put(key, stats.get(key) + 1);
+                else
+                    stats.put(key, 1);
+            }
+        }
+
+        stats.forEach((key, value) -> statsList.add(new ReservationStatsDTO(key, value)));
+        return statsList;
+
+    }
+
+    private List<ReservationStatsDTO> getReservationStatsMonth(RentACarCompany company, Date date){
+        List<ReservationStatsDTO> statsList = new ArrayList<>();
+        LinkedHashMap<String,Integer>  stats = new LinkedHashMap<>();
+        DateFormat formatter = new SimpleDateFormat("dd.MM.yyyy.");
+
+        LocalDate filterDate = date.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+        int monthFilterDate = filterDate.getMonthValue();
+
+        for(RACReservation reservation : company.getRacReservations()){
+            LocalDate reservationDate = reservation.getBeginDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+
+            if (reservationDate.getMonthValue() == monthFilterDate) {
+                String key = formatter.format(reservation.getBeginDate());
+
+                if (stats.containsKey(key))
+                    stats.put(key, stats.get(key) + 1);
+                else
+                    stats.put(key, 1);
+            }
+        }
+
+        stats.forEach((key, value) -> statsList.add(new ReservationStatsDTO(key, value)));
+        return statsList;
+    }
+
+
 
 
 }
