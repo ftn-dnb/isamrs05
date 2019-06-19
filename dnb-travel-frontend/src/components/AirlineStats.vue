@@ -13,10 +13,11 @@
             
             <v-tab-item>
                 <div>
+                    <br />
                     <h2 class="grey--text">Company rating &nbsp;</h2>
                     <v-icon v-for="i in airline.ratingInt">star</v-icon>
                     <v-icon v-for="i in 5 - airline.ratingInt">star_border</v-icon>
-
+                    
                     <v-data-table :headers="tableHeaders" :items="airline.flights">
                         <template v-slot:items="props">
                             <td>{{ props.item.startDestination.airportName }}</td>
@@ -113,7 +114,7 @@ export default {
                 { text: 'Rating', value: 'rating' },
             ],
             chartDataIncome: [['Date', 'Income'], [0, 0]],
-            chartDataReservations: [['Date', 'Number of reservations'] [0, 0]],
+            chartDataReservations: [['Date', 'Number of reservations'], [0, 0]],
             incomeReportError: false,
             reservationsReportError: false,
         };
@@ -171,10 +172,10 @@ export default {
         .then(response => {
             this.airline = response.data;
             this.airline.ratingInt = parseInt(this.airline.rating);
-        });
 
-        this.showIncome();
-        this.showReservationStats();
+            this.showIncome();
+            this.showReservationStats();
+        });
     }
 }
 </script>

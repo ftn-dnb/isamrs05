@@ -1,5 +1,15 @@
 <template>
 <div>
+    <v-container align-center>
+            <h1 class="headline text-md-center">
+            {{rentACarCompany.name}}<v-rating v-model="rentACarCompany.rating" readonly></v-rating>
+            </h1>
+            <br>
+            <h2 class="subheading grey--text text-darken-3 text-md-center">{{rentACarCompany.address.streetName}}
+                 {{rentACarCompany.address.streetNumber}}, {{rentACarCompany.address.postalCode}} {{rentACarCompany.address.city}}, {{rentACarCompany.address.country}}
+            </h2>
+    </v-container>
+
     <v-container>
         <v-form ref="form">
             <v-layout row wrap>
@@ -48,7 +58,7 @@
                             item-text="name" 
                             prepend-icon="directions_car"
                         ></v-combobox>
-                    <v-btn @click="searchCars()">
+                    <v-btn @click="searchCars(item)">
                         <v-icon left>search</v-icon>
                         <span>Search</span>
                     </v-btn>
@@ -60,10 +70,10 @@
     <v-layout row wrap>
         <v-flex xs12 sm6 md4 lg3 v-for="item in cars">
             <v-card flat class="text-xs-center ma-3">
-                <v-card-title>
-                   
-                </v-card-title>
                 <v-card-text>
+                    <div>
+                        <v-rating v-model="item.car.rating" readonly></v-rating>
+                    </div>
                     <div class="subbheading">
                         {{item.car.name}},{{item.car.brand}}
                     </div>
@@ -74,9 +84,16 @@
                         {{item.car.type}}
                     </div>
                     <div>
+                        {{formatDate(item.startDate)}}, {{formatDate(item.endDate)}}
+                    </div>
+                    <div>
                         <v-icon>attach_money</v-icon>
                         {{item.pricePerDay}}
                     </div>
+                    <v-btn @click="reserveCar(item)">
+                        <v-icon left>done</v-icon>
+                        <span>Reserve</span>
+                    </v-btn>
                 </v-card-text>
             </v-card>
         </v-flex>
@@ -91,8 +108,10 @@ import axios from 'axios';
 import format from 'date-fns/format';
 
 export default {
-  name: 'CarSearch',
-  props: {},
+  name: 'RACDetailedView',
+  props: {
+    racID:null,
+  },
   components: {},
 
   data () {
@@ -106,19 +125,38 @@ export default {
             seatsNumber: null,
             type: null,
             brand: null,
+            id: null,
         },
-        
+        rentACarCompany:{
+            address:{},
+        },
+
+        item:{},
+        user:{
+            username: null,
+            id: null,
+        },
+
+        reservation:{
+            user:null,
+            itemID: null,
+            beginDate: null,
+            endDate: null,
+            companyID: null,
+
+        },
+
     }
   },
   methods:{
-    mounted(){
 
-    },
     formatDate(date){
         return date ? format(date,'Do MMM YYYY') : '';
     },
 
     searchCars(){
+
+        this.carSearch.id = this.racID;
         axios.post("http://localhost:8080/api/rentACarCompanies/carSearch",this.carSearch)
         .then(response =>{
             if(response.data ===''){
@@ -128,11 +166,53 @@ export default {
 
             console.log(response.data);
             this.cars = response.data;
-            this.$refs.form.reset()
+            this.$refs.form.reset();
+
+            // reset object
+            this.carSearch.startDate = null;
+            this.carSearch.endDate = null;
+            this.carSearch.pricePerDay = null;
+            this.carSearch.seatsNumber = null;
+            this.carSearch.type = null;
+            this.carSearch.brand = null;
+            this.carSearch.id = null;
 
         })
     },
+
+    reserveCar(item){
+        console.log(item.id);
+
+        const header = {headers: {"Authorization": `Bearer ${localStorage.getItem('user-token')}`}};
+        this.user.username = localStorage.getItem('username');
+
+        this.reservation.user = this.user.username;
+        this.reservation.itemID = item.id;
+        this.reservation.beginDate = item.startDate;
+        this.reservation.endDate = item.endDate;
+        this.reservation.companyID = item.car.company.id;
+
+        console.log(this.reservation);
+
+        axios.post("http://localhost:8080/api/rentACarCompanies/reserveCar", this.reservation, header)
+        .then(response =>{
+            console.log(response.data);
+
+        })
+        .catch(error=>{
+            console.log(error.data);
+        });
+    }
+
   },
+    mounted(){
+        console.log(this.racID);
+        axios.get(`http://localhost:8080/api/rentACarCompanies/${this.racID}`)
+        .then(response =>{
+            this.rentACarCompany = response.data;
+            console.log(this.rentACarCompany);
+        })
+    },
 
 }
 </script>

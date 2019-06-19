@@ -37,7 +37,6 @@ public class RentACarCompanyController {
     }
 
     @GetMapping(path = "/{id}")
-    @PreAuthorize("hasRole('RAC_ADMIN')")
     public ResponseEntity<RentACarCompanyDTO> getRentACarCompanyById(@PathVariable("id") Long id){
         RentACarCompanyDTO rentACarCompany = rentACarCompanyService.getRentACarCompanyById(id);
         return new ResponseEntity<>(rentACarCompany,(rentACarCompany == null) ? HttpStatus.NOT_FOUND : HttpStatus.OK);
@@ -92,5 +91,39 @@ public class RentACarCompanyController {
         //dodaj provere
         ResponseEntity<?> response = rentACarCompanyService.addPriceList(addList);
         return response;
+    }
+
+    @RequestMapping(path ="/getAllCompanies", method = RequestMethod.GET)
+    public ResponseEntity<?> getAllCompanies(){
+        List<RentACarCompanyDTO> dtos = rentACarCompanyService.getAllRentACarCompanies();
+        return new ResponseEntity<>(dtos, HttpStatus.OK);
+    }
+
+    @RequestMapping(path = "/addBranchOffice", method = RequestMethod.POST)
+    @PreAuthorize("hasRole('RAC_ADMIN')")
+    public ResponseEntity<?> addBranchOffice(@RequestBody BranchOfficeDTO office){
+        ResponseEntity<?> response = rentACarCompanyService.addBranchOffice(office);
+        return response;
+    }
+
+    @RequestMapping(path = "/setMainBranchOffice", method = RequestMethod.POST)
+    @PreAuthorize("hasRole('RAC_ADMIN')")
+    public ResponseEntity<?> setMainBranchOffice(@RequestBody BranchOfficeDTO office){
+        ResponseEntity response = rentACarCompanyService.setMainOffice(office);
+        return response;
+    }
+
+    @RequestMapping(path = "/getAllOffices", method = RequestMethod.POST)
+    @PreAuthorize("hasRole('RAC_ADMIN')")
+    public ResponseEntity<?> getAllBranchOffices(@RequestBody RentACarCompanyDTO company){
+        List<BranchOfficeDTO> officeDTOS = rentACarCompanyService.getAllOffices(company);
+        return new ResponseEntity<>(officeDTOS,HttpStatus.OK);
+    }
+
+    @PostMapping(path = "/reserveCar", consumes = MediaType.APPLICATION_JSON_VALUE)
+    @PreAuthorize("hasRole('USER')")
+    public ResponseEntity<?> reserveCar(@RequestBody RACReservationRequestDTO reservation){
+        ResponseEntity<?> response = rentACarCompanyService.reserveCar(reservation);
+        return new ResponseEntity<>("asd",HttpStatus.OK);
     }
 }

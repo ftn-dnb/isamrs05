@@ -2,10 +2,7 @@ package ftn.dnb.dnbtravel.service;
 
 import ftn.dnb.dnbtravel.dto.*;
 import ftn.dnb.dnbtravel.model.*;
-import ftn.dnb.dnbtravel.repository.CarRepository;
-import ftn.dnb.dnbtravel.repository.RentACarCompanyRepository;
-import ftn.dnb.dnbtravel.repository.RentACarPriceListItem;
-import ftn.dnb.dnbtravel.repository.UserRepository;
+import ftn.dnb.dnbtravel.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -30,12 +27,21 @@ public class RentACarCompanyService {
     private RentACarPriceListItem priceListItemRepository;
 
     @Autowired
+    private RACReservationRepository reservationRepository;
+
+    @Autowired
     private CarRepository carRepository;
 
     public List<RentACarCompanyDTO> getAllRentACarCompanies(){
         List<RentACarCompany> companies = racRepository.findAll();
         List<RentACarCompanyDTO> dtos = new ArrayList<>();
-        companies.stream().forEach(company -> dtos.add(new RentACarCompanyDTO(company)));
+
+        for (RentACarCompany c: companies) {
+            BranchOffice b = c.getMainOffice();
+            RentACarCompanyDTO dto = new RentACarCompanyDTO(c);
+            dtos.add(dto);
+        }
+
         return dtos;
     }
 
@@ -75,23 +81,22 @@ public class RentACarCompanyService {
         return new RentACarCompanyDTO(savedRentACarCompany);
     }
 
-    public List<RACListItemDTO> getAllItems(){
+    public List<RACListItemDTO> getAllItems(Long id){
 
         List<RACPriceListItem> items = new LinkedList<>();
-        for (RentACarCompany c : racRepository.findAll()) {
-            if(c.getCurrentPriceList() != null){
-                for(RACPriceListItem real_item: c.getCurrentPriceList().getItems()){
+        RentACarCompany company = racRepository.findOneById(id);
+            if(company.getCurrentPriceList() != null){
+                for(RACPriceListItem real_item: company.getCurrentPriceList().getItems()){
                     items.add(real_item);
                 }
             }
-        }
         List<RACListItemDTO> dtos = new ArrayList<>();
         items.stream().forEach(item -> dtos.add(new RACListItemDTO(item)));
         return dtos;
     }
 
     public List<RACListItemDTO> searchCar(CarFilterDTO filter){
-        List<RACListItemDTO> list = this.getAllItems();
+        List<RACListItemDTO> list = this.getAllItems(filter.getId());
         
         //start date
         if (filter.getStartDate() != null) {
@@ -220,6 +225,78 @@ public class RentACarCompanyService {
         // dodaj proveru
         return new ResponseEntity<>("Price list added", HttpStatus.OK);
 
+    }
+
+    public ResponseEntity<?> addBranchOffice(BranchOfficeDTO office){
+        RentACarCompany company = racRepository.findOneById(office.getCompanyDTO().getId());
+
+        if(company == null){
+            return  new ResponseEntity<>("Unable to add office",HttpStatus.CONFLICT);
+        }
+
+        BranchOffice newOffice = new BranchOffice(office.getName(),office.getAddress(),company);
+
+        company.getOffices().add(newOffice);
+
+        racRepository.save(company);
+
+        return  new ResponseEntity<>("New office added",HttpStatus.OK);
+    }
+
+    public ResponseEntity<?> setMainOffice(BranchOfficeDTO office){
+        RentACarCompany company = racRepository.findOneById(office.getCompanyDTO().getId());
+
+        if(company == null){
+            return  new ResponseEntity<>("Unable to set office",HttpStatus.CONFLICT);
+        }
+
+        for(BranchOffice b: company.getOffices()){
+           if( b.getId() == office.getId()){
+               company.setMainOffice(b);
+               break;
+           }
+        }
+
+        racRepository.save(company);
+
+        return new ResponseEntity<>("New main office",HttpStatus.OK);
+    }
+
+    public List<BranchOfficeDTO> getAllOffices(RentACarCompanyDTO companyDTO){
+        RentACarCompany company = racRepository.findOneById(companyDTO.getId());
+        List<BranchOfficeDTO> officeDTOS = new ArrayList<>();
+        for(BranchOffice b : company.getOffices()){
+             BranchOfficeDTO fake_office = new BranchOfficeDTO(b);
+             officeDTOS.add(fake_office);
+        }
+        return officeDTOS;
+
+    }
+
+    public ResponseEntity<?> reserveCar(RACReservationRequestDTO requestDTO){
+        RACPriceListItem item = priceListItemRepository.findOneById(requestDTO.getItemID());
+        User user = userRepository.findOneByUsername(requestDTO.getUser());
+        RentACarCompany company = racRepository.findOneById(requestDTO.getCompanyID());
+
+        RACReservation realReservation = new RACReservation();
+
+        realReservation.setBeginDate(requestDTO.getBeginDate());
+        realReservation.setEndDate(requestDTO.getEndDate());
+        realReservation.setRating(0);
+        realReservation.setItem(item);
+        realReservation.setUser(user);
+
+
+        // provera da li je zauzeto
+
+        user.getRacReservations().add(realReservation);
+        company.getRacReservations().add(realReservation);
+
+        racRepository.save(company);
+
+        // dodavanje korisniku/kompaniji
+        // odgovor
+        return new ResponseEntity<>("Reservation successfully added", HttpStatus.OK);
     }
 
 

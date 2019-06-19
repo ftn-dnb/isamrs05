@@ -3,7 +3,6 @@ package ftn.dnb.dnbtravel.model;
 import ftn.dnb.dnbtravel.dto.RentACarCompanyDTO;
 
 import javax.persistence.*;
-import java.util.Calendar;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -43,14 +42,15 @@ public class RentACarCompany {
             inverseJoinColumns = @JoinColumn(name = "office_id", referencedColumnName = "id"))
     private Set<BranchOffice> offices = new HashSet<>();
 
-    @JoinTable(name = "main_office",
-            joinColumns = @JoinColumn(name = "rac_id", referencedColumnName = "id"),
-            inverseJoinColumns = @JoinColumn(name = "office_id", referencedColumnName = "id"))
-    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+
+    @OneToOne(cascade = CascadeType.ALL)
     private BranchOffice mainOffice;
 
     @OneToOne(cascade = CascadeType.ALL)
     private User administrator;
+
+    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private Set<RACReservation> reservations;
 
     public RentACarCompany() {
         super();
@@ -58,7 +58,7 @@ public class RentACarCompany {
 
     public RentACarCompany(Long id, String name, String description,
                            double rating, Set<Car> cars, Set<RACPriceList> priceList,
-                           Set<BranchOffice> offices, BranchOffice mainOffice, User administrator) {
+                           Set<BranchOffice> offices, BranchOffice mainOffice, User administrator, Set<RACReservation> racReservations) {
         this.id = id;
         this.name = name;
         this.description = description;
@@ -68,6 +68,7 @@ public class RentACarCompany {
         this.offices = offices;
         this.mainOffice = mainOffice;
         this.administrator = administrator;
+        this.reservations = racReservations;
     }
 
     public RentACarCompany(RentACarCompanyDTO rentACarCompanyDTO){
@@ -106,7 +107,7 @@ public class RentACarCompany {
     }
 
     public void setCars(Set<Car> cars) {
-        cars = cars;
+        this.cars = cars;
     }
 
     public double getRating() {
@@ -155,5 +156,16 @@ public class RentACarCompany {
 
     public void setCurrentPriceList(RACPriceList currentPriceList) {
         this.currentPriceList = currentPriceList;
+    }
+
+    public Set<RACReservation> getRacReservations() {
+        if(this.reservations == null){
+            this.reservations = new HashSet<>();
+        }
+        return this.reservations;
+    }
+
+    public void setRacReservations(Set<RACReservation> racReservations) {
+        this.reservations = racReservations;
     }
 }

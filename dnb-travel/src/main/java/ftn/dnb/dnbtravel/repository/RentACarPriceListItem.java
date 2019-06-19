@@ -10,4 +10,6 @@ public interface RentACarPriceListItem extends JpaRepository<RACPriceListItem, L
 
     List <RACPriceListItem> findAll();
 
+    RACPriceListItem findOneById(Long id);
+
 }

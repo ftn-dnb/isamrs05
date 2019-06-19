@@ -1,15 +1,11 @@
 package ftn.dnb.dnbtravel.dto;
 
-import ftn.dnb.dnbtravel.model.Car;
-import ftn.dnb.dnbtravel.model.RACPriceList;
 import ftn.dnb.dnbtravel.model.RACPriceListItem;
-
-
 import java.util.Date;
 
 public class RACListItemDTO {
 
-
+    private Long id;
     private Date startDate;
     private Date endDate;
     private int pricePerDay;
@@ -33,6 +29,7 @@ public class RACListItemDTO {
         this.pricePerDay = item.getPricePerDay();
         this.car = new CarDTO(item.getCar());
         this.activeDiscount = item.getActiveDiscount();
+        this.id = item.getId();
     }
 
     public Date getStartDate() {
@@ -73,5 +70,13 @@ public class RACListItemDTO {
 
     public void setActiveDiscount(double activeDiscount) {
         this.activeDiscount = activeDiscount;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 }
