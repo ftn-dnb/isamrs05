@@ -138,7 +138,7 @@
                             <v-icon left>info</v-icon>
                             <span>Details</span>
                         </v-btn>
-                        <v-btn v-if="userLoggedIn" flat small router :to="{ name: 'FlightReservation', params: { flightId: flight.id} }">
+                        <v-btn v-if="userLoggedIn && canBuy(flight.startDateTime)" flat small router :to="{ name: 'FlightReservation', params: { flightId: flight.id} }">
                             <v-icon left>attach_money</v-icon>
                             <span>Buy</span>
                         </v-btn>
@@ -200,6 +200,12 @@ export default {
 
         formattedDate(date) {
             return date ? format(date, 'Do MMM YYYY') : '';
+        },
+
+        canBuy(startDateTime) {
+            let now = new Date();
+            let flightDate = new Date(startDateTime);
+            return flightDate.getTime() >= now.getTime();
         },
     },
 
