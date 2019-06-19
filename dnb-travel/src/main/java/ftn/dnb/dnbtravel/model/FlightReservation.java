@@ -44,6 +44,9 @@ public class FlightReservation {
     @ManyToOne
     private User user;
 
+    @Version
+    private Long version;
+
 
     public FlightReservation() { super(); }
 
@@ -150,6 +153,14 @@ public class FlightReservation {
 
     public void setFastReservation(boolean fastReservation) {
         this.fastReservation = fastReservation;
+    }
+
+    public Long getVersion() {
+        return version;
+    }
+
+    public void setVersion(Long version) {
+        this.version = version;
     }
 
     @Override

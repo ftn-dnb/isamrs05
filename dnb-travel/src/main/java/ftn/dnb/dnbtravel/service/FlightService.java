@@ -130,7 +130,7 @@ public class FlightService {
         return true;
     }
 
-    @Transactional(readOnly = false)
+    @Transactional(readOnly = false, propagation = Propagation.REQUIRES_NEW)
     public FlightDTO reserveFastTicket(Long flightId, FlightFastReservationDataDTO reservationInfo) {
         Flight flight = flightRepository.findOneById(flightId);
         User user = userRepository.findOneByUsername(reservationInfo.getUsername());
