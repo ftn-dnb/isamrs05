@@ -1,7 +1,10 @@
 package ftn.dnb.dnbtravel.dto;
 
+import ftn.dnb.dnbtravel.model.AdditionalService;
 import ftn.dnb.dnbtravel.model.HotelPriceListItem;
+import net.bytebuddy.implementation.bytecode.Addition;
 
+import java.util.ArrayList;
 import java.util.Date;
 
 public class HotelPriceListItemDTO {
@@ -15,10 +18,12 @@ public class HotelPriceListItemDTO {
     //private int roomNumber;
     private Long hotelPriceListID;
     private RoomDTO room;
+    private ArrayList<AdditionalServiceDTO> additionalServices;
 
     public HotelPriceListItemDTO() {
         super();
     }
+
     public HotelPriceListItemDTO(HotelPriceListItem hotelPriceListItem) {
         this.id = hotelPriceListItem.getId();
         this.activeDiscount = hotelPriceListItem.getActiveDiscount();
@@ -29,9 +34,14 @@ public class HotelPriceListItemDTO {
         this.hotelPriceListID = hotelPriceListItem.getHotelPriceList().getId();
         //this.roomNumber = hotelPriceListItem.getRoom().getRoomNumber();
         this.room = new RoomDTO(hotelPriceListItem.getRoom());
+        ArrayList<AdditionalService>services  = new ArrayList<>(hotelPriceListItem.getAdditionalServices());
+        this.additionalServices = new ArrayList<>();
+        for (AdditionalService service : services) {
+            this.additionalServices.add(new AdditionalServiceDTO(service));
+        }
     }
 
-    public HotelPriceListItemDTO(double activeDiscount, Date startDate, Date endDate, int pricePerDay, Long hotelPriceListID, RoomDTO room) {
+    public HotelPriceListItemDTO(double activeDiscount, Date startDate, Date endDate, int pricePerDay, Long hotelPriceListID, RoomDTO room, ArrayList<AdditionalServiceDTO> additionalServiceDTOS) {
         this.activeDiscount = activeDiscount;
         this.startDate = startDate;
         this.endDate = endDate;
@@ -40,6 +50,7 @@ public class HotelPriceListItemDTO {
         this.hotelPriceListID = hotelPriceListID;
         //this.roomNumber = roomNumber;
         this.room = room;
+        this.additionalServices = additionalServiceDTOS;
     }
 
     public Long getId() {
@@ -96,6 +107,14 @@ public class HotelPriceListItemDTO {
 
     public void setRoom(RoomDTO room) {
         this.room = room;
+    }
+
+    public ArrayList<AdditionalServiceDTO> getAdditionalServices() {
+        return additionalServices;
+    }
+
+    public void setAdditionalServices(ArrayList<AdditionalServiceDTO> additionalServices) {
+        this.additionalServices = additionalServices;
     }
 }
 

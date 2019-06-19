@@ -1,7 +1,10 @@
 package ftn.dnb.dnbtravel.dto;
 
+import ftn.dnb.dnbtravel.model.AdditionalService;
 import ftn.dnb.dnbtravel.model.Address;
 import ftn.dnb.dnbtravel.model.Hotel;
+
+import java.util.ArrayList;
 
 public class HotelDTO {
 
@@ -12,12 +15,13 @@ public class HotelDTO {
     private Address address;
     private UserDTO administrator;
     private Long currentPriceListID;
+    private ArrayList<AdditionalService> additionalServices;
 
     public HotelDTO() {
         super();
     }
 
-    public HotelDTO(Long id, String name, String description, double rating, Address address, UserDTO administrator, Long currentPriceListID) {
+    public HotelDTO(Long id, String name, String description, double rating, Address address, UserDTO administrator, Long currentPriceListID, ArrayList<AdditionalService> additionalServices) {
         this.id = id;
         this.name = name;
         this.description = description;
@@ -25,6 +29,7 @@ public class HotelDTO {
         this.address = address;
         this.administrator = administrator;
         this.currentPriceListID = currentPriceListID;
+        this.additionalServices = additionalServices;
     }
 
     public HotelDTO(Hotel hotel) {
@@ -35,6 +40,7 @@ public class HotelDTO {
         this.address = hotel.getAddress();
         this.administrator = new UserDTO(hotel.getAdministrator());
         this.currentPriceListID = hotel.getCurrentPriceList().getId();
+        this.additionalServices = new ArrayList<AdditionalService>(hotel.getAdditionalServices());
     }
 
     public Long getId() {
@@ -91,5 +97,13 @@ public class HotelDTO {
 
     public void setCurrentPriceListID(Long currentPriceListID) {
         this.currentPriceListID = currentPriceListID;
+    }
+
+    public ArrayList<AdditionalService> getAdditionalServices() {
+        return additionalServices;
+    }
+
+    public void setAdditionalServices(ArrayList<AdditionalService> additionalServices) {
+        this.additionalServices = additionalServices;
     }
 }

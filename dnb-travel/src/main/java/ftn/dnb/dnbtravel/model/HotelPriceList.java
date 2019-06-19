@@ -16,7 +16,7 @@ public class HotelPriceList {
     @Column(name = "description", nullable = false)
     private String description;
 
-    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @OneToMany(fetch = FetchType.LAZY, orphanRemoval = true, cascade = CascadeType.ALL)
     private Set<HotelPriceListItem> hotelPriceListItems;
 
     @JsonIgnore

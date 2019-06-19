@@ -57,22 +57,6 @@
                 <v-flex>MAPA</v-flex>
             </v-layout>
             <v-layout v-if="flight_res != null" align-center justify-center>
-                <v-combobox max-width="100" label="Choose additional service"
-                                            v-model="serviceToAdd"
-                                            :items="hotel.additionalServices"
-                                            item-text="serviceName"
-                                            return-object>
-                                            </v-combobox>
-                                            <v-btn @click="addServiceToReservation">
-                                                <v-icon>add</v-icon>
-                                                <span>Add service</span>
-                                            </v-btn>
-                                            <v-btn @click="clearForm">
-                                                <v-icon>clear</v-icon>
-                                                <span>Clear</span>
-                                            </v-btn>
-            </v-layout>
-            <v-layout v-if="flight_res != null" align-center justify-center>
                 <v-btn small @click="make_reservation">
                     <v-icon left>hotel</v-icon>
                     <span>Make Reservation</span>
@@ -110,7 +94,7 @@
 <script>
 import axios from'axios';
 export default {
-    name: 'HotelDetailedView',
+    name: 'HotelDetailedViewFast',
     props: {
         hotelID: null,
         flight_res: null,
@@ -145,7 +129,6 @@ export default {
                 overnight_stays: null,
                 items: [],
                 users: [],
-                additionalServices: []
             },
             serviceToAdd: {
                 hotel_id: null,
@@ -170,7 +153,7 @@ export default {
                 this.priceList.hotelPriceListItems = response.data;
                 this.priceList_normal = [];
                 this.priceList.hotelPriceListItems.forEach(element => {
-                    if (element.activeDiscount == 0) {
+                    if (element.activeDiscount != 0) {
                         this.priceList_normal.push(element);
                     }
                 });
@@ -194,30 +177,12 @@ export default {
                 this.priceList = response.data;
                 this.priceList_normal = [];
                 this.priceList.hotelPriceListItems.forEach(element => {
-                    if (element.activeDiscount == 0) {
+                    if (element.activeDiscount != 0) {
                         this.priceList_normal.push(element);
                     }
                 });
             })
             .catch(error => this.$toasted.error('Errpr while getting price list.', {duration: 5000}));
-        },
-
-        addServiceToReservation() {
-            var serviceNames = [];
-            this.hotelReservation.additionalServices.forEach(element => {
-                serviceNames.push(element.serviceName);
-            });
-            if (serviceNames.includes(this.serviceToAdd.serviceName)) {
-                this.$toasted.error('Service already selected.', {duration:2000});
-                return;
-            }
-            this.hotelReservation.additionalServices.push(this.serviceToAdd);
-            this.$toasted.success('Service successfully selected.', {duration:2000});
-        },
-
-        clearForm() {
-            this.hotelReservation.additionalServices = [];
-            this.$toasted.success('Additional services cleared from reservation.', {duration:2000});
         },
 
         make_reservation() {
@@ -230,7 +195,11 @@ export default {
                 }
             });
             if (reserved.length == 0) {
-                alert('Nije odabrana ni jedna stavka.');
+                this.$toasted.error('No rooms are chosen.', {duration:2000});
+                return;
+            }
+            if (reserved.length > 1) {
+                this.$toasted.error('Only one room must be chosen.', {duration:2000});
                 return;
             }
             var beds_reserved = 0;
@@ -255,7 +224,7 @@ export default {
             this.hotelReservation.items = reserved;
             this.hotelReservation.users = this.users;
 
-            axios.post('http://localhost:8080/api/hotels/addHotelReservation', this.hotelReservation, header)
+            axios.post('http://localhost:8080/api/hotels/addFastHotelReservation', this.hotelReservation, header)
             .then(response => console.log(response.data))
             .catch(error => console.log(error));
 
@@ -274,7 +243,7 @@ export default {
             .then(response => {
                 this.priceList = response.data;
                 this.priceList.hotelPriceListItems.forEach(element => {
-                    if (element.activeDiscount == 0) {
+                    if (element.activeDiscount != 0) {
                         this.priceList_normal.push(element);
                         this.chosen_map[element.id] = false;
                     }

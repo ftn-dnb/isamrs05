@@ -87,6 +87,8 @@ export default {
 			{icon: 'add_circle', text: 'Set active price list', route: '/set-active-price-list-rac'},
 			{icon: 'add_circle', text: 'Add branch office', route: '/add-branch-office'},
 			{icon: 'add_circle', text: 'Set main branch office', route: '/set-main-branch-office'},
+			{icon: 'delete', text: 'Delete branch office', route: '/delete-branch-office'},
+			{icon: 'edit', text: 'Edit branch office', route: '/edit-branch-office'},
 			],
 
 			userDrawer: [
