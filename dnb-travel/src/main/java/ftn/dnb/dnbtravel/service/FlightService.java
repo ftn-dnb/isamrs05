@@ -160,8 +160,8 @@ public class FlightService {
         reservation.setUser(user);
 
         user.getReservations().add(reservation);
-        //flightRepository.save(flight);
-        //userRepository.save(user);
+        flightRepository.save(flight);
+        userRepository.save(user);
 
         return new FlightDTO(flight);
     }
