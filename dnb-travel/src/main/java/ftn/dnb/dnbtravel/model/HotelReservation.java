@@ -28,15 +28,21 @@ public class HotelReservation {
     @ManyToOne(cascade = CascadeType.ALL)
     private User user;
 
+    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @JoinTable(joinColumns = @JoinColumn(name = "hotel_reservation_id", referencedColumnName = "id"),
+            inverseJoinColumns = @JoinColumn(name = "additional_service_id", referencedColumnName = "id"))
+    private Set<AdditionalService> additionalServices;
+
     public HotelReservation() { super(); }
 
-    public HotelReservation(Long id, Date beginDate, Date endDate, double rating, HotelPriceListItem hotelPriceListItem, User user) {
+    public HotelReservation(Long id, Date beginDate, Date endDate, double rating, HotelPriceListItem hotelPriceListItem, User user, Set<AdditionalService> additionalServices) {
         this.id = id;
         this.beginDate = beginDate;
         this.endDate = endDate;
         this.rating = rating;
         this.hotelPriceListItem = hotelPriceListItem;
         this.user = user;
+        this.additionalServices = additionalServices;
     }
 
     public Long getId() {
@@ -85,5 +91,16 @@ public class HotelReservation {
 
     public void setUser(User user) {
         this.user = user;
+    }
+
+    public Set<AdditionalService> getAdditionalServices() {
+        if (this.additionalServices == null) {
+            this.additionalServices = new HashSet<>();
+        }
+        return additionalServices;
+    }
+
+    public void setAdditionalServices(Set<AdditionalService> additionalServices) {
+        this.additionalServices = additionalServices;
     }
 }

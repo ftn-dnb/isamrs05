@@ -1,14 +1,8 @@
 package ftn.dnb.dnbtravel.service;
 
-import ftn.dnb.dnbtravel.dto.HotelPriceListDTO;
-import ftn.dnb.dnbtravel.dto.HotelPriceListItemDTO;
-import ftn.dnb.dnbtravel.dto.ItemFilterDTO;
-import ftn.dnb.dnbtravel.dto.RoomDTO;
+import ftn.dnb.dnbtravel.dto.*;
 import ftn.dnb.dnbtravel.model.*;
-import ftn.dnb.dnbtravel.repository.HotelPriceListItemRepository;
-import ftn.dnb.dnbtravel.repository.HotelPriceListRepository;
-import ftn.dnb.dnbtravel.repository.HotelRepository;
-import ftn.dnb.dnbtravel.repository.RoomRepository;
+import ftn.dnb.dnbtravel.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -31,6 +25,9 @@ public class RoomService {
 
     @Autowired
     private HotelPriceListRepository priceListRepository;
+
+    @Autowired
+    private AdditionalServiceRepository additionalServiceRepository;
 
     public List<RoomDTO> findRoomsByHotelID(Long id) {
         ArrayList<Room> rooms = new ArrayList<Room>(roomRepository.findAllByHotelID(id));
@@ -65,14 +62,19 @@ public class RoomService {
         Room refRoom = roomRepository.findOneById(hotelPriceListItemDTO.getRoom().getId());
         HotelPriceListItem item = new HotelPriceListItem(hotelPriceListItemDTO);
 
+        for (AdditionalServiceDTO serviceDTO : hotelPriceListItemDTO.getAdditionalServices()) {
+            AdditionalService service = additionalServiceRepository.getOne(serviceDTO.getId());
+            item.getAdditionalServices().add(service);
+        }
+
         refPriceList.getHotelPriceListItems().add(item);
         refRoom.getHotelPriceListItems().add(item);
 
         item.setHotelPriceList(refPriceList);
         item.setRoom(refRoom);
-        //priceListItemRepository.save(item);
+        priceListItemRepository.save(item);
         //priceListRepository.save(refPriceList);
-        roomRepository.save(refRoom);
+        //roomRepository.save(refRoom);
         return new HotelPriceListItemDTO(item);
     }
 
@@ -114,14 +116,27 @@ public class RoomService {
 
         }
 
-
-
-
-
         ArrayList<HotelPriceListItemDTO> filteredDTO = new ArrayList<>();
         for(HotelPriceListItem item : filtered) {
             filteredDTO.add(new HotelPriceListItemDTO(item));
         }
         return filteredDTO;
+    }
+
+    public HotelPriceListDTO deletePriceListItem(Long item_id) {
+        HotelPriceListItem item = priceListItemRepository.findOneById(item_id);
+        HotelPriceList list = item.getHotelPriceList();
+        Set<HotelReservation> reservations = list.getHotel().getHotelReservations();
+        for (HotelReservation reservation : reservations) {
+            if (reservation.getHotelPriceListItem().getId() == item_id) {
+                return null;
+            }
+        }
+        Room room = item.getRoom();
+        list.getHotelPriceListItems().remove(item);
+        room.getHotelPriceListItems().remove(item);
+        priceListRepository.save(list);
+        roomRepository.save(room);
+        return new HotelPriceListDTO(list);
     }
 }

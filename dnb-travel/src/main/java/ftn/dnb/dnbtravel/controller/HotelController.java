@@ -1,10 +1,8 @@
 package ftn.dnb.dnbtravel.controller;
 
 import com.sun.mail.iap.Response;
-import ftn.dnb.dnbtravel.dto.HotelDTO;
-import ftn.dnb.dnbtravel.dto.HotelFilterDTO;
-import ftn.dnb.dnbtravel.dto.HotelReservationDTO;
-import ftn.dnb.dnbtravel.dto.RoomDTO;
+import ftn.dnb.dnbtravel.dto.*;
+import ftn.dnb.dnbtravel.model.AdditionalService;
 import ftn.dnb.dnbtravel.model.Address;
 import ftn.dnb.dnbtravel.model.Hotel;
 import ftn.dnb.dnbtravel.model.HotelReservation;
@@ -95,5 +93,24 @@ public class HotelController {
     public ResponseEntity<ArrayList<Long>> addHotelReservation(@RequestBody HotelReservationDTO hotelReservationDTO) {
         ArrayList<Long> id_list = hotelService.addHotelReservation(hotelReservationDTO);
         return new ResponseEntity<>(id_list, HttpStatus.OK);
+    }
+
+    @RequestMapping(value = "/addFastHotelReservation", method = RequestMethod.POST, consumes = "application/json")
+    public ResponseEntity<ArrayList<Long>> addFastHotelReservation(@RequestBody HotelReservationDTO hotelReservationDTO) {
+        ArrayList<Long> id_list = hotelService.addFastHotelReservation(hotelReservationDTO);
+        return new ResponseEntity<>(id_list, HttpStatus.OK);
+    }
+
+    @RequestMapping(value = "/addAdditionalService", method = RequestMethod.POST, consumes = "application/json")
+    public ResponseEntity<HotelDTO> addAdditionalService(@RequestBody AdditionalServiceDTO additionalServiceDTO) {
+        HotelDTO hotelDTO = hotelService.addAdditionalService(additionalServiceDTO);
+        return new ResponseEntity<>(hotelDTO, HttpStatus.OK);
+    }
+
+    @DeleteMapping(path = "deleteService/{service_id}/{hotel_id}")
+    public ResponseEntity<HotelDTO> deleteService(@PathVariable("service_id") Long service_id,
+                                              @PathVariable("hotel_id") Long hotel_id) {
+        HotelDTO hotelDTO  = hotelService.deleteService(service_id, hotel_id);
+        return new ResponseEntity<>(hotelDTO, HttpStatus.OK);
     }
 }

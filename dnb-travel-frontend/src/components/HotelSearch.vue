@@ -52,7 +52,11 @@
                     <v-card-actions>
                         <v-btn flat small router :to="{ name: 'HotelDetailedView', params: { hotelID: hotel.id, flight_res: flight, users: users} }">
                             <v-icon left>info</v-icon>
-                            <span>View Hotel Profile</span>
+                            <span>Hotel Profile</span>
+                        </v-btn>
+                        <v-btn flat small router :to="{ name: 'HotelDetailedViewFast', params: { hotelID: hotel.id, flight_res: flight, users: users} }">
+                            <v-icon left>flash_on</v-icon>
+                            <span>Fast</span>
                         </v-btn>
                     </v-card-actions>
                 </v-card>

@@ -11,15 +11,17 @@ public class HotelReservationDTO {
     private int overnight_stays;
     private ArrayList<HotelPriceListItemDTO> items;
     private ArrayList<UserDTO> users;
+    private ArrayList<AdditionalServiceDTO> additionalServices;
 
     HotelReservationDTO() { super(); }
 
-    public HotelReservationDTO(Long hotel_id, Date date_arrival, int overnight_stays, ArrayList<HotelPriceListItemDTO> items, ArrayList<UserDTO> users) {
+    public HotelReservationDTO(Long hotel_id, Date date_arrival, int overnight_stays, ArrayList<HotelPriceListItemDTO> items, ArrayList<UserDTO> users, ArrayList<AdditionalServiceDTO> additionalServices) {
         this.hotel_id = hotel_id;
         this.date_arrival = date_arrival;
         this.overnight_stays = overnight_stays;
         this.items = items;
         this.users = users;
+        this.additionalServices = additionalServices;
     }
 
     public Long getHotel_id() {
@@ -60,5 +62,13 @@ public class HotelReservationDTO {
 
     public void setUsers(ArrayList<UserDTO> users) {
         this.users = users;
+    }
+
+    public ArrayList<AdditionalServiceDTO> getAdditionalServices() {
+        return additionalServices;
+    }
+
+    public void setAdditionalServices(ArrayList<AdditionalServiceDTO> additionalServices) {
+        this.additionalServices = additionalServices;
     }
 }

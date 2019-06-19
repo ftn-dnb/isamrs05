@@ -37,6 +37,7 @@ import AdminPasswordChange from './components/AdminPasswordChange';
 import AddCarReservation from './components/AddCarReservation';
 import AddPriceListRAC from './components/AddPriceListRAC';
 import SetActivePriceListRAC from './components/SetActivePriceListRAC';
+import HotelDetailedViewFast from './components/HotelDetailedViewFast';
 import AddBranchOffice from './components/AddBranchOffice';
 import SetMainBranchOffice from './components/SetMainBranchOffice';
 import SearchRAC from './components/SearchRAC';
@@ -151,6 +152,12 @@ export default new Router({
         props: true,
         name: 'HotelDetailedView',
         component: HotelDetailedView
+    },
+    {
+        path: '/hotels_fast/:hotelID',
+        props: true,
+        name: 'HotelDetailedViewFast',
+        component: HotelDetailedViewFast
     },
     {
         path: '/airlines',

@@ -1,5 +1,6 @@
 package ftn.dnb.dnbtravel.controller;
 
+import com.sun.mail.iap.Response;
 import ftn.dnb.dnbtravel.dto.HotelPriceListDTO;
 import ftn.dnb.dnbtravel.dto.HotelPriceListItemDTO;
 import ftn.dnb.dnbtravel.dto.ItemFilterDTO;
@@ -10,6 +11,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.net.ssl.HttpsURLConnection;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -55,5 +57,16 @@ public class RoomController {
     public ResponseEntity<List<HotelPriceListItemDTO>> searchHotelPriceListItems(@RequestBody ItemFilterDTO filterDTO) {
         ArrayList<HotelPriceListItemDTO> filteredList = roomService.searchHotelPriceListItems(filterDTO);
         return new ResponseEntity<>(filteredList, HttpStatus.OK);
+    }
+
+    @DeleteMapping(path = "/deleteItem/{item_id}")
+    public ResponseEntity<HotelPriceListDTO> deletePriceListItem(@PathVariable("item_id") Long item_id) {
+        HotelPriceListDTO listDTO = roomService.deletePriceListItem(item_id);
+        if (listDTO != null) {
+            return new ResponseEntity<>(listDTO, HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(new HotelPriceListDTO(), HttpStatus.BAD_REQUEST);
+        }
+
     }
 }
