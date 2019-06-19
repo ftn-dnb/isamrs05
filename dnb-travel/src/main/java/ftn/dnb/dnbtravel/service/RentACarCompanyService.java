@@ -299,5 +299,42 @@ public class RentACarCompanyService {
         return new ResponseEntity<>("Reservation successfully added", HttpStatus.OK);
     }
 
+    public ResponseEntity<?> deleteCar(CarDTO carDTO){
+
+        Car realCar  = carRepository.findOneById(carDTO.getId());
+
+        List<RACPriceListItem> list = priceListItemRepository.findByCar(realCar);
+
+        if(list == null || list.size() == 0){
+            carRepository.delete(realCar);
+            //dovrsiti
+            return  new ResponseEntity<>("Car is deleted", HttpStatus.OK);
+        }
+        {
+            return  new ResponseEntity<>("Unable to delte car", HttpStatus.CONFLICT);
+        }
+
+
+    }
+
+    public ResponseEntity<?> editCar(CarDTO carDTO){
+
+        Car realCar  = carRepository.findOneById(carDTO.getId());
+
+        List<RACPriceListItem> list = priceListItemRepository.findByCar(realCar);
+
+        if(list == null || list.size() == 0){
+            realCar.setBrand(carDTO.getBrand());
+            //dovrsiti
+
+            return  new ResponseEntity<>("Car is edited", HttpStatus.OK);
+        }
+        {
+            return  new ResponseEntity<>("Unable to delte car", HttpStatus.CONFLICT);
+        }
+
+
+    }
+
 
 }
