@@ -36,7 +36,7 @@ public class RentACarCompany {
             inverseJoinColumns = @JoinColumn(name = "pricelist_id",referencedColumnName = "id"))
     private Set<RACPriceList> priceList = new HashSet<>();
 
-    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinTable(name = "rac_offices",
             joinColumns = @JoinColumn(name = "rac_id", referencedColumnName = "id"),
             inverseJoinColumns = @JoinColumn(name = "office_id", referencedColumnName = "id"))

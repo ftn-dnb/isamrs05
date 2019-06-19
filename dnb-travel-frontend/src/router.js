@@ -40,6 +40,8 @@ import SetActivePriceListRAC from './components/SetActivePriceListRAC';
 import AddBranchOffice from './components/AddBranchOffice';
 import SetMainBranchOffice from './components/SetMainBranchOffice';
 import SearchRAC from './components/SearchRAC';
+import DeleteBranchOffice from './components/DeleteBranchOffice';
+import EditBranchOffice from './components/EditBranchOffice';
 
 Vue.use(Router)
 
@@ -313,6 +315,18 @@ export default new Router({
         name: 'RACDetailedView',
         component: RACDetailedView
 
+    },
+
+    {
+        path: '/delete-branch-office',
+        name: 'DeleteBranchOffice',
+        component: DeleteBranchOffice
+    },
+
+    {
+        path: '/edit-branch-office',
+        name: 'EditBranchOffice',
+        component: EditBranchOffice
     },
 
   ]

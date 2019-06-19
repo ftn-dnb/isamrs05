@@ -126,4 +126,18 @@ public class RentACarCompanyController {
         ResponseEntity<?> response = rentACarCompanyService.reserveCar(reservation);
         return new ResponseEntity<>("asd",HttpStatus.OK);
     }
+
+    @PostMapping(path = "/changeBranchOffice", consumes = MediaType.APPLICATION_JSON_VALUE)
+    @PreAuthorize("hasRole('RAC_ADMIN')")
+    public ResponseEntity<?> editBranchOffice(@RequestBody BranchOfficeDTO office){
+        ResponseEntity response = rentACarCompanyService.changeBranchOffice(office);
+        return response;
+    }
+
+    @PostMapping(path = "/deleteBranchOffice", consumes = MediaType.APPLICATION_JSON_VALUE)
+    @PreAuthorize("hasRole('RAC_ADMIN')")
+    public ResponseEntity<?> deleteBranchOffice(@RequestBody BranchOfficeDTO office){
+        ResponseEntity response = rentACarCompanyService.deleteBranchOffice(office);
+        return response;
+    }
 }

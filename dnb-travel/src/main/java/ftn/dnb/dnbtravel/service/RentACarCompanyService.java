@@ -32,6 +32,9 @@ public class RentACarCompanyService {
     @Autowired
     private CarRepository carRepository;
 
+    @Autowired
+    private RACBranchOfficeRepository branchOfficeRepository;
+
     public List<RentACarCompanyDTO> getAllRentACarCompanies(){
         List<RentACarCompany> companies = racRepository.findAll();
         List<RentACarCompanyDTO> dtos = new ArrayList<>();
@@ -297,6 +300,68 @@ public class RentACarCompanyService {
         // dodavanje korisniku/kompaniji
         // odgovor
         return new ResponseEntity<>("Reservation successfully added", HttpStatus.OK);
+    }
+
+    public ResponseEntity<?> changeBranchOffice(BranchOfficeDTO officeDTO){
+
+        if(officeDTO.getAddress() == null || officeDTO.getName() == null){
+            return new ResponseEntity("Corupted data", HttpStatus.CONFLICT);
+        }
+
+        RentACarCompany company = racRepository.findOneById(officeDTO.getCompanyDTO().getId());
+
+        if(company == null){
+            return new ResponseEntity("Error finding branch company", HttpStatus.CONFLICT);
+        }
+
+        BranchOffice editOffice = branchOfficeRepository.findOneById(officeDTO.getId());
+
+        if(editOffice == null){ // nije pronasao taj office
+            return new ResponseEntity("Error finding branch office", HttpStatus.CONFLICT);
+        }
+
+
+        editOffice.setName(officeDTO.getName());
+        editOffice.setAddress(officeDTO.getAddress());
+
+        racRepository.save(company);
+
+        return new ResponseEntity<>("Successful edit", HttpStatus.OK);
+    }
+
+    public ResponseEntity<?> deleteBranchOffice(BranchOfficeDTO officeDTO){
+        if(officeDTO.getId() == null) {
+            return new ResponseEntity("Corupted data", HttpStatus.CONFLICT);
+        }
+
+        RentACarCompany company = racRepository.findOneById(officeDTO.getCompanyDTO().getId());
+
+        if(company == null){
+            return new ResponseEntity("Error finding branch company", HttpStatus.CONFLICT);
+        }
+
+        if(company.getOffices().size() <= 1 ){
+            return new ResponseEntity("This is the only office, unable to delete", HttpStatus.CONFLICT);
+        }
+
+        if(company.getMainOffice().getId() == officeDTO.getId()){
+            for(BranchOffice b : company.getOffices()){
+                if(b.getId() != officeDTO.getId()){
+                    company.setMainOffice(b);
+                    break;
+                }
+            }
+        }
+
+        BranchOffice office = branchOfficeRepository.findOneById(officeDTO.getId());
+
+        company.getOffices().remove(office);
+        racRepository.save(company);
+
+        office.setCompany(null);
+        branchOfficeRepository.save(office);
+
+        return new ResponseEntity<>("Branch office deleted", HttpStatus.OK);
     }
 
 
