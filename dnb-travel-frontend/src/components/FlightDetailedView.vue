@@ -78,7 +78,7 @@
             </template>
         </v-data-table>
 
-        <v-btn v-if="userLoggedIn" router :to="{ name: 'FlightReservation', params: { flightId: flight.id} }">
+        <v-btn v-if="userLoggedIn && canBuy(flight.startDateTime)" router :to="{ name: 'FlightReservation', params: { flightId: flight.id} }">
             <v-icon left>attach_money</v-icon>
             <span>Buy ticket</span>
         </v-btn>
@@ -177,6 +177,12 @@ export default{
     },
 
     methods: { 
+        canBuy(startDateTime) {
+            let now = new Date();
+            let flightDate = new Date(startDateTime);
+            return flightDate.getTime() >= now.getTime();
+        },
+
         getHoursDifference() {
             let startDateTime = Date.parse(this.flight.startDateTime);
             let endDateTime = Date.parse(this.flight.endDateTime);
