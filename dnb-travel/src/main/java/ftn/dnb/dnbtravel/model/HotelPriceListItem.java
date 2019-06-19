@@ -1,11 +1,14 @@
 package ftn.dnb.dnbtravel.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import ftn.dnb.dnbtravel.dto.AdditionalServiceDTO;
 import ftn.dnb.dnbtravel.dto.HotelPriceListDTO;
 import ftn.dnb.dnbtravel.dto.HotelPriceListItemDTO;
 
 import javax.persistence.*;
 import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 public class HotelPriceListItem {
@@ -34,17 +37,23 @@ public class HotelPriceListItem {
     @ManyToOne(cascade = CascadeType.ALL)
     private HotelPriceList hotelPriceList;
 
+    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @JoinTable(joinColumns = @JoinColumn(name = "hotel_price_list_item_id", referencedColumnName = "id"),
+               inverseJoinColumns = @JoinColumn(name = "additional_service_id", referencedColumnName = "id"))
+    private Set<AdditionalService> additionalServices;
+
     public HotelPriceListItem() {
         super();
     }
 
-    public HotelPriceListItem(double activeDiscount, Date startDate, Date endDate, int pricePerDay, Room room, HotelPriceList hotelPriceList) {
+    public HotelPriceListItem(double activeDiscount, Date startDate, Date endDate, int pricePerDay, Room room, HotelPriceList hotelPriceList, Set<AdditionalService> additionalServices) {
         this.activeDiscount = activeDiscount;
         this.startDate = startDate;
         this.endDate = endDate;
         this.pricePerDay = pricePerDay;
         this.room = room;
         this.hotelPriceList = hotelPriceList;
+        this.additionalServices = additionalServices;
     }
 
     public HotelPriceListItem(HotelPriceListItemDTO dto) {
@@ -52,7 +61,6 @@ public class HotelPriceListItem {
         this.startDate = dto.getStartDate();
         this.endDate = dto.getEndDate();
         this.pricePerDay = dto.getPricePerDay();
-
     }
 
     public Long getId() {
@@ -109,5 +117,16 @@ public class HotelPriceListItem {
 
     public void setHotelPriceList(HotelPriceList hotelPriceList) {
         this.hotelPriceList = hotelPriceList;
+    }
+
+    public Set<AdditionalService> getAdditionalServices() {
+        if (this.additionalServices == null) {
+            this.additionalServices = new HashSet<>();
+        }
+        return this.additionalServices;
+    }
+
+    public void setAdditionalServices(Set<AdditionalService> additionalServices) {
+        this.additionalServices = additionalServices;
     }
 }

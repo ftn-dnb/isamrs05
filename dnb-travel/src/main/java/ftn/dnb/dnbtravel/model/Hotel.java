@@ -41,11 +41,15 @@ public class Hotel {
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private Set<HotelReservation> hotelReservations;
 
+    @OneToMany(fetch = FetchType.LAZY, orphanRemoval = true, cascade = CascadeType.ALL)
+    private Set<AdditionalService> additionalServices;
+
     public Hotel() {
         super();
     }
 
-    public Hotel(String name, String description, double rating, Address address, Set<Room> rooms, Set<HotelPriceList> hotelPriceLists, User administrator, HotelPriceList currentPriceList, Set<HotelReservation> hotelReservations) {
+    public Hotel(String name, String description, double rating, Address address, Set<Room> rooms, Set<HotelPriceList> hotelPriceLists, User administrator,
+                 HotelPriceList currentPriceList, Set<HotelReservation> hotelReservations, Set<AdditionalService> additionalServices) {
         this.name = name;
         this.description = description;
         this.rating = rating;
@@ -55,6 +59,7 @@ public class Hotel {
         this.administrator = administrator;
         this.currentPriceList = currentPriceList;
         this.hotelReservations = hotelReservations;
+        this.additionalServices = additionalServices;
     }
 
     public Hotel(HotelDTO hotelDTO) {
@@ -149,5 +154,16 @@ public class Hotel {
 
     public void setHotelReservations(Set<HotelReservation> hotelReservations) {
         this.hotelReservations = hotelReservations;
+    }
+
+    public Set<AdditionalService> getAdditionalServices() {
+        if (this.additionalServices == null) {
+            this.additionalServices = new HashSet<>();
+        }
+        return additionalServices;
+    }
+
+    public void setAdditionalServices(Set<AdditionalService> additionalServices) {
+        this.additionalServices = additionalServices;
     }
 }

@@ -33,17 +33,21 @@ public class Room {
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private Set<HotelPriceListItem> hotelPriceListItems;
 
+    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private Set<AdditionalService> additionalServices;
+
     public Room() {
         super();
     }
 
-    public Room(int roomNumber, int floor, double rating, int capacity, Hotel hotel, Set<HotelPriceListItem> hotelPriceListItems) {
+    public Room(int roomNumber, int floor, double rating, int capacity, Hotel hotel, Set<HotelPriceListItem> hotelPriceListItems, Set<AdditionalService> additionalServices) {
         this.roomNumber = roomNumber;
         this.floor = floor;
         this.rating = rating;
         this.capacity = capacity;
         this.hotel = hotel;
         this.hotelPriceListItems = hotelPriceListItems;
+        this.additionalServices = additionalServices;
     }
 
     public Room(RoomDTO roomDTO) {
@@ -111,5 +115,16 @@ public class Room {
 
     public void setHotelPriceListItems(Set<HotelPriceListItem> hotelPriceListItems) {
         this.hotelPriceListItems = hotelPriceListItems;
+    }
+
+    public Set<AdditionalService> getAdditionalServices() {
+        if (this.additionalServices == null) {
+            this.additionalServices = new HashSet<>();
+        }
+        return additionalServices;
+    }
+
+    public void setAdditionalServices(Set<AdditionalService> additionalServices) {
+        this.additionalServices = additionalServices;
     }
 }
