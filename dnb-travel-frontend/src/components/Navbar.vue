@@ -90,6 +90,7 @@ export default {
 			{icon: 'delete', text: 'Delete branch office', route: '/delete-branch-office'},
 			{icon: 'edit', text: 'Edit branch office', route: '/edit-branch-office'},
 			{icon: 'assessment', text: 'Company income', route: '/rac-income'},
+			{icon: 'assessment', text: 'Reservation stats', route: '/rac-resetvation-stats'},
 			],
 
 			userDrawer: [
