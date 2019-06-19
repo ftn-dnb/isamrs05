@@ -35,6 +35,9 @@ public class Airline {
     @OneToOne(cascade = CascadeType.ALL)
     private User administrator;
 
+    @Version
+    private Long version;
+
     public Airline() {
         super();
     }
@@ -121,6 +124,14 @@ public class Airline {
 
     public void setAdministrator(User administrator) {
         this.administrator = administrator;
+    }
+
+    public Long getVersion() {
+        return version;
+    }
+
+    public void setVersion(Long version) {
+        this.version = version;
     }
 
     @Override
