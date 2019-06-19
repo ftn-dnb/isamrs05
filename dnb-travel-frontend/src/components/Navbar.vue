@@ -80,6 +80,8 @@ export default {
 			{icon: 'work_outline', text: 'Company settings', route: '/rent-a-car-settings'},
 			{icon: 'perm_identity', text: 'Profile settings', route: '/user-settings'},
 			{icon: 'add_circle', text: 'Add new vehicle', route: '/add-car'},
+			{icon: 'delete', text: 'Delete vehicle', route: '/delete-car'},
+			{icon: 'edit', text: 'Edit vehicle', route: '/edit-car'},
 			{icon: 'add_circle', text: 'Add new reservation', route: '/add-car-reservation'},
 			{icon: 'add_circle', text: 'Add new price list', route: '/add-price-list-rac'},
 			{icon: 'add_circle', text: 'Set active price list', route: '/set-active-price-list-rac'},

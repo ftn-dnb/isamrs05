@@ -302,6 +302,53 @@ public class RentACarCompanyService {
         return new ResponseEntity<>("Reservation successfully added", HttpStatus.OK);
     }
 
+    public ResponseEntity<?> deleteCar(CarDTO carDTO){
+
+        Car realCar  = carRepository.findOneById(carDTO.getId());
+
+        List<RACPriceListItem> list = priceListItemRepository.findByCar(realCar);
+
+        if(list == null || list.size() == 0){
+
+            RentACarCompany company = realCar.getCompany();
+            company.getCars().remove(realCar);
+            racRepository.save(company);
+
+
+            realCar.setCompany(null);
+            carRepository.save(realCar);
+
+            return  new ResponseEntity<>("Car is deleted", HttpStatus.OK);
+        }
+        {
+            return  new ResponseEntity<>("Unable to delte car", HttpStatus.CONFLICT);
+        }
+
+
+    }
+
+    public ResponseEntity<?> editCar(CarDTO carDTO){
+
+        Car realCar  = carRepository.findOneById(carDTO.getId());
+
+        List<RACPriceListItem> list = priceListItemRepository.findByCar(realCar);
+
+        if(list == null || list.size() == 0){
+            realCar.setBrand(carDTO.getBrand());
+            realCar.setManufYear(carDTO.getManufYear());
+            realCar.setName(carDTO.getName());
+            realCar.setSeatsNumber(carDTO.getSeatsNumber());
+            realCar.setType(carDTO.getType());
+
+            carRepository.save(realCar);
+
+            return  new ResponseEntity<>("Car is edited", HttpStatus.OK);
+        }
+        {
+            return  new ResponseEntity<>("Unable to edit car", HttpStatus.CONFLICT);
+        }
+
+
     public ResponseEntity<?> changeBranchOffice(BranchOfficeDTO officeDTO){
 
         if(officeDTO.getAddress() == null || officeDTO.getName() == null){
@@ -362,6 +409,7 @@ public class RentACarCompanyService {
         branchOfficeRepository.save(office);
 
         return new ResponseEntity<>("Branch office deleted", HttpStatus.OK);
+
     }
 
 

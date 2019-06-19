@@ -41,6 +41,8 @@ import HotelDetailedViewFast from './components/HotelDetailedViewFast';
 import AddBranchOffice from './components/AddBranchOffice';
 import SetMainBranchOffice from './components/SetMainBranchOffice';
 import SearchRAC from './components/SearchRAC';
+import DeleteCar from './components/DeleteCar';
+import EditCar from './components/EditCar';
 import DeleteBranchOffice from './components/DeleteBranchOffice';
 import EditBranchOffice from './components/EditBranchOffice';
 
@@ -324,6 +326,17 @@ export default new Router({
 
     },
 
+    {
+        path:'/delete-car',
+        name: 'DeleteCar',
+        component: DeleteCar
+    },
+
+    {
+        path: '/edit-car',
+        name: 'EditCar',
+        component: EditCar
+    },
     {
         path: '/delete-branch-office',
         name: 'DeleteBranchOffice',
