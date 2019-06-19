@@ -1,12 +1,12 @@
 <template>
     <div>
         
-        <v-combobox v-model="branchOfficeName" :items="this.office_lists_item" label="Select main office">
+        <v-combobox v-model="branchOfficeName" :items="this.office_lists_item" label="Select office you want to delete">
         </v-combobox>
 
-        <v-btn @click="setMainBranchOffice">
-            <v-icon left>done</v-icon>
-            <span>Set main branch office</span>
+        <v-btn @click="deleteBranchOffice">
+            <v-icon left>delete</v-icon>
+            <span>Delete branch office</span>
         </v-btn>
        
     </div>
@@ -17,7 +17,7 @@
 import axios from 'axios';
 
 export default {
-    name: 'SetMainBranchOffice',
+    name: 'DeleteBranchOffice',
     props: [],
     components: {},
     
@@ -45,7 +45,7 @@ export default {
     },
 
     methods: {
-        setMainBranchOffice(){
+        deleteBranchOffice(){
 
             const header = {headers: {"Authorization": `Bearer ${localStorage.getItem('user-token')}`}};
             this.user.username = localStorage.getItem('username');
@@ -60,11 +60,23 @@ export default {
             });
 
 
-            axios.post("http://localhost:8080/api/rentACarCompanies/setMainBranchOffice",this.branchOffice,header)
+            axios.post("http://localhost:8080/api/rentACarCompanies/deleteBranchOffice",this.branchOffice,header)
             .then(response => {
-                console.log(response.data);
+                if (response.data === '') {
+                    this.$toasted.error('Delete failed', {duration:5000});
+                    return;
+                } else {
+                    this.$toasted.success(response.data, {duration:5000});
+                    return;
+                }
             })
-            .catch(error => console.log('mucak'));
+            .catch(error =>{
+                    if(error.response.status === 409){
+                        console.log(error.response);
+                    this.$toasted.error(error.response.data, {duration:5000});
+                    return;
+                }
+               });
 
             },
     },
