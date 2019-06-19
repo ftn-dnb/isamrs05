@@ -124,7 +124,7 @@ public class RentACarCompanyController {
     @PreAuthorize("hasRole('USER')")
     public ResponseEntity<?> reserveCar(@RequestBody RACReservationRequestDTO reservation){
         ResponseEntity<?> response = rentACarCompanyService.reserveCar(reservation);
-        return new ResponseEntity<>("asd",HttpStatus.OK);
+        return response;
     }
 
     @PostMapping(path = "/deleteCar", consumes = MediaType.APPLICATION_JSON_VALUE)
@@ -136,8 +136,11 @@ public class RentACarCompanyController {
 
     @PostMapping(path = "/editCar", consumes = MediaType.APPLICATION_JSON_VALUE)
     @PreAuthorize("hasRole('RAC_ADMIN')")
-    public ResponseEntity<?> editCar(@RequestBody CarDTO car ){
+    public ResponseEntity<?> editCar(@RequestBody CarDTO car ) {
         ResponseEntity<?> response = rentACarCompanyService.editCar(car);
+        return response;
+    }
+
     @PostMapping(path = "/changeBranchOffice", consumes = MediaType.APPLICATION_JSON_VALUE)
     @PreAuthorize("hasRole('RAC_ADMIN')")
     public ResponseEntity<?> editBranchOffice(@RequestBody BranchOfficeDTO office){
@@ -151,4 +154,13 @@ public class RentACarCompanyController {
         ResponseEntity response = rentACarCompanyService.deleteBranchOffice(office);
         return response;
     }
+
+    @PostMapping(path = "/getIncome", consumes = MediaType.APPLICATION_JSON_VALUE)
+    @PreAuthorize("hasRole('RAC_ADMIN')")
+    public ResponseEntity<?> getIncome(@RequestBody RACIncomeSearchDataDTO incomeDTO){
+        RACStatsDTO stats = rentACarCompanyService.getIncome(incomeDTO);
+        return new ResponseEntity<>(stats,HttpStatus.OK);
+    }
+
+
 }

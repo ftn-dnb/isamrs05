@@ -89,6 +89,7 @@ export default {
 			{icon: 'add_circle', text: 'Set main branch office', route: '/set-main-branch-office'},
 			{icon: 'delete', text: 'Delete branch office', route: '/delete-branch-office'},
 			{icon: 'edit', text: 'Edit branch office', route: '/edit-branch-office'},
+			{icon: 'assessment', text: 'Company income', route: '/rac-income'},
 			],
 
 			userDrawer: [

@@ -45,6 +45,7 @@ import DeleteCar from './components/DeleteCar';
 import EditCar from './components/EditCar';
 import DeleteBranchOffice from './components/DeleteBranchOffice';
 import EditBranchOffice from './components/EditBranchOffice';
+import RACIncome from './components/RACIncome';
 
 Vue.use(Router)
 
@@ -347,6 +348,12 @@ export default new Router({
         path: '/edit-branch-office',
         name: 'EditBranchOffice',
         component: EditBranchOffice
+    },
+
+    {
+        path:'/rac-income',
+        nameL:'RACIncome',
+        component: RACIncome
     },
 
   ]

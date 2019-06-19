@@ -40,6 +40,7 @@
 <script>
 
 import axios from 'axios';
+import GChart from 'vue-google-charts';
 
 export default {
     name: 'SearchRAC',

@@ -3,15 +3,20 @@ package ftn.dnb.dnbtravel.service;
 import ftn.dnb.dnbtravel.dto.*;
 import ftn.dnb.dnbtravel.model.*;
 import ftn.dnb.dnbtravel.repository.*;
+import org.joda.time.Days;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.hateoas.Link;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 @Service
@@ -327,13 +332,13 @@ public class RentACarCompanyService {
 
     }
 
-    public ResponseEntity<?> editCar(CarDTO carDTO){
+    public ResponseEntity<?> editCar(CarDTO carDTO) {
 
-        Car realCar  = carRepository.findOneById(carDTO.getId());
+        Car realCar = carRepository.findOneById(carDTO.getId());
 
         List<RACPriceListItem> list = priceListItemRepository.findByCar(realCar);
 
-        if(list == null || list.size() == 0){
+        if (list == null || list.size() == 0) {
             realCar.setBrand(carDTO.getBrand());
             realCar.setManufYear(carDTO.getManufYear());
             realCar.setName(carDTO.getName());
@@ -342,12 +347,12 @@ public class RentACarCompanyService {
 
             carRepository.save(realCar);
 
-            return  new ResponseEntity<>("Car is edited", HttpStatus.OK);
+            return new ResponseEntity<>("Car is edited", HttpStatus.OK);
         }
         {
-            return  new ResponseEntity<>("Unable to edit car", HttpStatus.CONFLICT);
+            return new ResponseEntity<>("Unable to edit car", HttpStatus.CONFLICT);
         }
-
+    }
 
     public ResponseEntity<?> changeBranchOffice(BranchOfficeDTO officeDTO){
 
@@ -410,6 +415,34 @@ public class RentACarCompanyService {
 
         return new ResponseEntity<>("Branch office deleted", HttpStatus.OK);
 
+    }
+
+    public RACStatsDTO getIncome(RACIncomeSearchDataDTO filter){
+        RACStatsDTO stats = new RACStatsDTO();
+        LinkedHashMap<String,Float> income = new LinkedHashMap<>();
+        DateFormat formatter = new SimpleDateFormat("dd.MM.yyyy.");
+
+        RentACarCompany company = racRepository.findOneById(filter.getId());
+
+        for(RACReservation reservation: company.getRacReservations() ){
+           if(reservation.getEndDate().after(filter.getBeginDate()) && reservation.getEndDate().before(filter.getEndDate())){
+               String dataKey = formatter.format(reservation.getEndDate());
+
+               long diff = reservation.getEndDate().getTime() - reservation.getBeginDate().getTime();
+               diff = TimeUnit.DAYS.convert(diff,TimeUnit.MILLISECONDS);
+
+               float price = diff  * reservation.getItem().getPricePerDay();
+               if(income.containsKey(dataKey)){
+                    income.put(dataKey,income.get(dataKey) + price);
+               }
+               else{
+                   income.put(dataKey, price);
+               }
+            }
+        }
+
+        income.forEach((key, value) -> stats.getIncome().add(new IncomeDTO(key, value)));
+        return stats;
     }
 
 
