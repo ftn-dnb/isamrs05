@@ -6,7 +6,7 @@ import javax.persistence.*;
 public class Address {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column(name = "streetName", nullable = false)
@@ -23,6 +23,9 @@ public class Address {
 
     @Column(name = "postalCode", nullable = false)
     private String postalCode;
+
+    @Version
+    private Long version;
 
     public Address(){
         super();
@@ -83,5 +86,13 @@ public class Address {
 
     public void setPostalCode(String postalCode) {
         this.postalCode = postalCode;
+    }
+
+    public Long getVersion() {
+        return version;
+    }
+
+    public void setVersion(Long version) {
+        this.version = version;
     }
 }

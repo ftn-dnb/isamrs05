@@ -5,6 +5,8 @@ import ftn.dnb.dnbtravel.model.*;
 import ftn.dnb.dnbtravel.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -49,20 +51,20 @@ public class AirlineService {
         return new AirlineDTO(airline);
     }
 
+    @Transactional(readOnly = false, propagation = Propagation.REQUIRES_NEW)
     public AirlineDTO updateAirline(AirlineDTO airlineDto) {
-        addressRepository.save(airlineDto.getAddress());
-
         Airline airline = airlineRepository.findOneById(airlineDto.getId());
-        airline.setAddress(airlineDto.getAddress());
-        airline.setDescription(airlineDto.getDescription());
         airline.setName(airlineDto.getName());
+        airline.setDescription(airlineDto.getDescription());
+        airline.getAddress().setCity(airlineDto.getAddress().getCity());
+        airline.getAddress().setCountry(airlineDto.getAddress().getCountry());
+        airline.getAddress().setPostalCode(airlineDto.getAddress().getPostalCode());
+        airline.getAddress().setStreetName(airlineDto.getAddress().getStreetName());
+        airline.getAddress().setStreetNumber(airlineDto.getAddress().getStreetNumber());
 
-        Airline savedAirline = airlineRepository.save(airline);
+        airlineRepository.save(airline);
 
-        if (savedAirline == null)
-            return null;
-
-        return new AirlineDTO(savedAirline);
+        return new AirlineDTO(airline);
     }
 
     public FlightDTO addFlight(Long airlineId, FlightDTO flightToAdd) {

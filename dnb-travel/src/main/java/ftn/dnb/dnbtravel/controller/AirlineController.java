@@ -44,7 +44,7 @@ public class AirlineController {
     @PutMapping(path = "")
     public ResponseEntity<AirlineDTO> updateAirlineById(@RequestBody AirlineDTO airlineToEdit) {
         AirlineDTO airline = airlineService.updateAirline(airlineToEdit);
-        return new ResponseEntity<>(airline, (airline == null) ? HttpStatus.NOT_FOUND : HttpStatus.CREATED);
+        return new ResponseEntity<>(airline, (airline == null) ? HttpStatus.BAD_REQUEST : HttpStatus.CREATED);
     }
 
     @GetMapping(path = "/{id}/flights")

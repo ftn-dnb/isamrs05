@@ -34,6 +34,7 @@ public class FlightService {
         return dtos;
     }
 
+    @Transactional(propagation = Propagation.REQUIRES_NEW)
     public FlightDTO getFlightById(Long id) {
         Flight flight = flightRepository.findOneById(id);
 
@@ -63,6 +64,14 @@ public class FlightService {
         for (int i = 0; i < data.getUsers().size(); ++i) {
             FlightReservation reservation = new FlightReservation();
             reservation.setReservationDate(today);
+
+            SeatDTO seat = new SeatDTO();
+            seat.setX(data.getSeats().get(i).getX());
+            seat.setY(data.getSeats().get(i).getY());
+
+            if (!checkIfSeatIsFree(seat, flight))
+                return null;
+
             reservation.setSeatRow(data.getSeats().get(i).getX());
             reservation.setSeatColumn(data.getSeats().get(i).getY());
             reservation.setPrice(ticketPrice);
@@ -130,7 +139,7 @@ public class FlightService {
         return true;
     }
 
-    @Transactional(readOnly = false)
+    @Transactional(readOnly = false, propagation = Propagation.REQUIRES_NEW)
     public FlightDTO reserveFastTicket(Long flightId, FlightFastReservationDataDTO reservationInfo) {
         Flight flight = flightRepository.findOneById(flightId);
         User user = userRepository.findOneByUsername(reservationInfo.getUsername());
