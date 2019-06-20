@@ -48,6 +48,7 @@ import DeleteBranchOffice from './components/DeleteBranchOffice';
 import EditBranchOffice from './components/EditBranchOffice';
 import RACIncome from './components/RACIncome';
 import RACReservationStats from './components/RACReservationStats';
+import RACCarStats from './components/RACCarStats';
 
 Vue.use(Router)
 
@@ -366,6 +367,12 @@ export default new Router({
         path:'/rac-resetvation-stats',
         name:'RACReservationStats',
         component: RACReservationStats
+    },
+
+    {
+        path:'/car-stats',
+        name:'RACCarStats',
+        component: RACCarStats
     },
 
   ]
