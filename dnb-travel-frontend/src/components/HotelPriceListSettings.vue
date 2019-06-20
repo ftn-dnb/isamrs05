@@ -158,7 +158,7 @@
                                                 label="Service Name" 
                                                 v-model="additionalService.serviceName" min="0"
                                                 :rules="defaultRule"
-                                                prepend-icon="attach_money"
+                                                prepend-icon="description"
                                             ></v-text-field>
                                             
                                             <v-text-field type="number" 

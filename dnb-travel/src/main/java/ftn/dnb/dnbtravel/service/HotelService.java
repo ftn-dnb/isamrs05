@@ -100,6 +100,13 @@ public class HotelService {
             address = new Address(hotelDTO.getAddress());
         }
 
+        HotelPriceList priceList = new HotelPriceList();
+        priceList.setDescription("Primarni cenovnik");
+        priceList.setHotel(savedHotel);
+
+        savedHotel.setCurrentPriceList(priceList);
+        savedHotel.getHotelPriceLists().add(priceList);
+
         savedHotel.setAddress(address);
 
         User admin = userRepository.findByUsername(hotelDTO.getAdministrator().getUsername());

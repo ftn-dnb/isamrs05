@@ -16,6 +16,29 @@
                 <span>Add New Room</span>
             </v-btn>
         </v-form>
+
+        <h3 class="subheading grey--text">Additional Services Settings</h3>
+
+            <v-data-table :headers="roomHeaders"
+                :items="rooms">
+                <template v-slot:items="props">
+                    <td>{{ props.item.roomNumber }}</td>
+                    <td>{{ props.item.floor }}</td>
+                    <td>{{ props.item.capacity }}</td>
+                    <td>{{ props.item.rating }}</td>
+                    <td>
+                        <v-btn @click="removeRoom(props.item.id)">
+                            <v-icon>remove_circle</v-icon>
+                        </v-btn>
+                    </td>
+                    <td>
+                        <v-btn @click="modifyRoom(props.item.id)">
+                            <v-icon left>settings</v-icon>
+                            <span>Modify</span>
+                        </v-btn>
+                    </td>
+                </template>
+            </v-data-table>
     </div>
 </template>
 
@@ -29,6 +52,14 @@ export default {
 
     data() {
         return {
+            roomHeaders : [
+                {text: 'Room', value: 'roomNumber'},
+                {text: 'Floor', value: 'floor'},
+                {text: 'Capacity', value: 'capacity'},
+                {text: 'Rating', value: 'rating'},
+                {text: '', value: 'id'},
+                {text: '', value: 'id'},
+            ],
             inputRules: [
                 v => (v && v.length > 0) || 'Please fill out this field'
             ],
@@ -44,11 +75,46 @@ export default {
                 capacity: null,
                 hotelID: null
             },
+            hotel: {
+                rooms: []
+            },
             rooms: [],
-            room_numbers: []
+            room_numbers: [],
+            dialog: false
         }
     },
     methods: {
+        removeRoom(id) {
+            const header = { headers: {"Authorization" : `Bearer ${localStorage.getItem('user-token')}`} };
+            this.room.id = id;
+            this.room.hotelID = this.hotel.id;
+
+            axios.put('http://localhost:8080/api/rooms/delete' , this.room, header)
+            .then(response => {
+                this.rooms = response.data;
+                this.room_numbers = [];
+                this.rooms.forEach(element => {
+                    this.room_numbers.push(element.roomNumber.toString());
+                });
+                console.log(response.data);
+            })
+        },
+        modifyRoom(id) {
+            const header = { headers: {"Authorization" : `Bearer ${localStorage.getItem('user-token')}`} };
+            this.room.id = id;
+            this.room.hotelID = this.hotel.id;
+
+            axios.put('http://localhost:8080/api/rooms/', this.room, header)
+            .then(response => {
+                this.rooms = response.data;
+                this.room_numbers = [];
+                this.rooms.forEach(element => {
+                    this.room_numbers.push(element.roomNumber.toString());
+                });
+                console.log(response.data);
+            })
+            .catch(error => this.$toasted.error('Error while collecting rooms information.', {duration:3000}));
+        },
         room_add() {
             if (!this.$refs.roomAddForm.validate()) {
                 return;
@@ -59,15 +125,12 @@ export default {
 
             axios.post('http://localhost:8080/api/rooms/add', this.room, header)
             .then(response => {
-                if (response.data === '') {
-                    this.$toasted.error('Error while registering room.', {duration:5000});
-                } else {
-                    this.$toasted.success('Room successfully registered.', {duration:5000});
-                    this.rooms.push(response.data);
-                    this.room_numbers.push(response.data.roomNumber.toString());
-                    //console.log(this.room_numbers);
-                    //console.log(this.room_numbers.includes(response.data.roomNumber));
-                }
+                this.$toasted.success('Room successfully registered.', {duration:5000});
+                this.rooms.push(response.data);
+                this.room_numbers.push(response.data.roomNumber.toString());
+                //console.log(this.room_numbers);
+                //console.log(this.room_numbers.includes(response.data.roomNumber));
+                
             })
             .catch(error => this.$toasted.error('Error while registering room.', {duration:5000}));
             
@@ -92,7 +155,8 @@ export default {
         const username = localStorage.getItem('username');
         axios.post('http://localhost:8080/api/hotels/findHotelByAdmin', username, header)
         .then(response => { 
-            this.room.hotelID = response.data;
+            this.room.hotelID = response.data.id;
+            this.hotel = response.data;
             //refreshRooms();
         })
         .catch(error => this.$toasted.error('Admin ' + username + ' has no hotels assigned.', {duration:5000}));

@@ -47,6 +47,18 @@ public class RoomController {
         return new ResponseEntity<>(savedPriceListItem, HttpStatus.OK);
     }
 
+    @PutMapping(value = "")
+    public ResponseEntity<List<RoomDTO>> updateRoom(@RequestBody RoomDTO roomEdit) {
+        List<RoomDTO> roomDTOS = roomService.updateRoom(roomEdit);
+        return new ResponseEntity<>(roomDTOS, HttpStatus.OK);
+    }
+
+    @PutMapping(value = "/delete")
+    public ResponseEntity<List<RoomDTO>> removeRoom(@RequestBody RoomDTO roomDelete) {
+        List<RoomDTO> roomDTO = roomService.removeRoom(roomDelete);
+        return new ResponseEntity<>(roomDTO, HttpStatus.OK);
+    }
+
     @GetMapping(path = "/priceList/{id}")
     public ResponseEntity<HotelPriceListDTO> getHotelPriceList(@PathVariable("id") Long id) {
         HotelPriceListDTO hotelPriceListDTO = roomService.getHotelPriceList(id);
