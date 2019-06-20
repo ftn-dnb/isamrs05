@@ -4,13 +4,31 @@
         <br />
 
         <h1 class="heading text-md-center">{{airline.name}}</h1>
-        <h2 class="subheading text-md-center">{{airline.address.streetName}} {{airline.address.streetNumber}} {{airline.address.city}}, {{airline.address.country}}</h2>
+        <h2 class="subheading text-md-center">{{airline.address.name}} {{airline.address.street_number}} {{airline.address.locality}}, {{airline.address.country}}</h2>
 
         <h3 class="subheading grey--text text-md-center">
             {{airline.description}}
         </h3>
 
         <br />
+        <v-layout align-center justify-center row fill-height>
+            <GmapMap
+                :center="center"
+                :zoom="7"
+                map-type-id="terrain"
+                style="width: 500px; height: 300px"
+                >
+                <GmapMarker
+                    :key="index"
+                    v-for="(m, index) in markers"
+                    :position="m.position"
+                    :clickable="true"
+                    :draggable="true"
+                     @click="center=m.position"
+                />
+            </GmapMap>
+        </v-layout>
+        
 
         <v-layout row wrap>
             <v-flex xs12 sm6 md4 lg3 v-for="option in adminOptions" :key="option.route">
@@ -51,12 +69,13 @@ export default{
                 id: null,
                 name: null,
                 address: {
-                    id: null,
-                    streetName: null,
-                    streetNumber: null,
-                    city: null,
+                    place_id: null,
                     country: null,
-                    postalCode: null
+                    locality: null,
+                    name: null,
+                    postal_code: null,
+                    latitude: null,
+                    longitude: null,
                 },
                 description: null,
                 destinations: [],
@@ -75,7 +94,9 @@ export default{
 				{ icon: 'assessment', text: 'Statistics', description:'See company statistics', route: '/airline-statistics' },
 				{ icon: 'work_outline', text: 'Company settings', description:'Change company information', route: '/airline-settings' },
 				{ icon: 'perm_identity', text: 'Profile settings', description:'Change your profile settings', route: '/user-settings' },
-			],
+            ],
+            center: {},
+            markers: []
         };
     },
 
@@ -90,7 +111,21 @@ export default{
         const header = {headers: {"Authorization": `Bearer ${localStorage.getItem('user-token')}`}};
 
         axios.post(`http://localhost:8080/api/airlines/company/${username}`, {}, header)
-        .then(response => this.airline = response.data)
+        .then(response => {
+            this.airline = response.data;
+            this.center = {
+                lat: this.airline.address.latitude,
+                lng: this.airline.address.longitude
+            },
+            this.markers = [
+                {
+                    position: {
+                        lat: this.airline.address.latitude,
+                        lng: this.airline.address.longitude
+                    }
+                }
+            ]
+        })
         .catch(error => this.$toasted.error('Error while loading airline company', {duration:5000}));
 
         axios.get(`http://localhost:8080/api/users/info/${username}`, header)

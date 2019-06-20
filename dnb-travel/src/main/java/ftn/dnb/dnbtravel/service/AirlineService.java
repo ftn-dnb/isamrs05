@@ -56,11 +56,13 @@ public class AirlineService {
         Airline airline = airlineRepository.findOneById(airlineDto.getId());
         airline.setName(airlineDto.getName());
         airline.setDescription(airlineDto.getDescription());
-        airline.getAddress().setCity(airlineDto.getAddress().getCity());
-        airline.getAddress().setCountry(airlineDto.getAddress().getCountry());
-        airline.getAddress().setPostalCode(airlineDto.getAddress().getPostalCode());
-        airline.getAddress().setStreetName(airlineDto.getAddress().getStreetName());
-        airline.getAddress().setStreetNumber(airlineDto.getAddress().getStreetNumber());
+
+        Address address = addressRepository.findOneByPlaceId(airlineDto.getAddress().getPlace_id());
+        if (address == null) {
+            address = new Address(airlineDto.getAddress());
+        }
+
+        airline.setAddress(address);
 
         airlineRepository.save(airline);
 
@@ -261,6 +263,14 @@ public class AirlineService {
         if (savedAirline == null) {
             return null;
         }
+
+        Address address = addressRepository.findOneByPlaceId(airlineDTO.getAddress().getPlace_id());
+        if (address == null) {
+            address = new Address(airlineDTO.getAddress());
+        }
+
+        savedAirline.setAddress(address);
+
         User admin = userRepository.findByUsername(airlineDTO.getAdministrator().getUsername());
         savedAirline.setAdministrator(admin);
         airlineRepository.save(savedAirline);

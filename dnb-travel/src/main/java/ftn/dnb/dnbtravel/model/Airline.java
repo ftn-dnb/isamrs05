@@ -57,7 +57,6 @@ public class Airline {
     public Airline(AirlineDTO airlineDTO) {
         this.id = airlineDTO.getId();
         this.name = airlineDTO.getName();
-        this.address = airlineDTO.getAddress();
         this.description = airlineDTO.getDescription();
         this.rating = airlineDTO.getRating();
     }

@@ -1,5 +1,7 @@
 package ftn.dnb.dnbtravel.model;
 
+import ftn.dnb.dnbtravel.dto.AddressDTO;
+
 import javax.persistence.*;
 
 @Entity
@@ -8,6 +10,9 @@ public class Address {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @Column(name = "place_id", nullable = false)
+    private String place_id;
 
     @Column(name = "streetName", nullable = false)
     private String streetName;
@@ -24,6 +29,12 @@ public class Address {
     @Column(name = "postalCode", nullable = false)
     private String postalCode;
 
+    @Column(name = "latitude", nullable = false)
+    private double latitude;
+
+    @Column(name = "longitude", nullable = false)
+    private double longitude;
+
     @Version
     private Long version;
 
@@ -31,13 +42,29 @@ public class Address {
         super();
     }
 
-    public Address(Long id, String streetName, String streetNumber, String city, String country, String postalCode) {
+    public Address(Long id, String place_id,  String streetName, String streetNumber, String city, String country, String postalCode, double latitude, double longitude) {
         this.id = id;
+        this.place_id = place_id;
         this.streetName = streetName;
         this.streetNumber = streetNumber;
         this.city = city;
         this.country = country;
         this.postalCode = postalCode;
+        this.latitude = latitude;
+        this.longitude = longitude;
+        this.streetNumber = "";
+    }
+
+
+    public Address(AddressDTO addressDTO) {
+        this.place_id = addressDTO.getPlace_id();
+        this.country = addressDTO.getCountry();
+        this.city = addressDTO.getLocality();
+        this.streetName = addressDTO.getName();
+        this.postalCode = addressDTO.getPostal_code();
+        this.latitude = addressDTO.getLatitude();
+        this.longitude = addressDTO.getLongitude();
+        this.streetNumber = "";
     }
 
     public Long getId() {
@@ -94,5 +121,29 @@ public class Address {
 
     public void setVersion(Long version) {
         this.version = version;
+    }
+
+    public double getLatitude() {
+        return latitude;
+    }
+
+    public void setLatitude(double latitude) {
+        this.latitude = latitude;
+    }
+
+    public double getLongitude() {
+        return longitude;
+    }
+
+    public void setLongitude(double longitude) {
+        this.longitude = longitude;
+    }
+
+    public String getPlace_id() {
+        return place_id;
+    }
+
+    public void setPlace_id(String place_id) {
+        this.place_id = place_id;
     }
 }

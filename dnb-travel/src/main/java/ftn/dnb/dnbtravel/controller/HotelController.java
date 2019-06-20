@@ -41,6 +41,12 @@ public class HotelController {
         return new ResponseEntity<HotelDTO>(hotelDTO, HttpStatus.OK);
     }
 
+    @PutMapping(value = "")
+    public ResponseEntity<HotelDTO> updateHotel(@RequestBody HotelDTO hotelToEdit) {
+        HotelDTO hotelDTO = hotelService.updateHotel(hotelToEdit);
+        return new ResponseEntity<>(hotelDTO, HttpStatus.OK);
+    }
+
     @RequestMapping(value = "/addresses", method = RequestMethod.GET)
     public List<Address> getAllAddressses() {
         return hotelService.getAddresses();

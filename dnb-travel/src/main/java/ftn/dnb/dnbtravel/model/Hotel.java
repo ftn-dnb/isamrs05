@@ -67,7 +67,6 @@ public class Hotel {
         this.name = hotelDTO.getName();
         this.description = hotelDTO.getDescription();
         this.rating = hotelDTO.getRating();
-        this.address = hotelDTO.getAddress();
     }
 
     public Long getId() {
@@ -138,6 +137,9 @@ public class Hotel {
     }
 
     public HotelPriceList getCurrentPriceList() {
+        if (this.currentPriceList == null) {
+            this.currentPriceList = new HotelPriceList();
+        }
         return currentPriceList;
     }
 

@@ -1,12 +1,8 @@
 package ftn.dnb.dnbtravel.service;
 
 import ftn.dnb.dnbtravel.dto.UserDTO;
-import ftn.dnb.dnbtravel.model.Authority;
-import ftn.dnb.dnbtravel.model.Friendship;
-import ftn.dnb.dnbtravel.model.FriendshipStatus;
-import ftn.dnb.dnbtravel.model.User;
-import ftn.dnb.dnbtravel.repository.AuthorityRepository;
-import ftn.dnb.dnbtravel.repository.UserRepository;
+import ftn.dnb.dnbtravel.model.*;
+import ftn.dnb.dnbtravel.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -33,6 +29,15 @@ public class UserService {
     @Autowired
     private EmailService emailService;
 
+    @Autowired
+    private HotelRepository hotelRepository;
+
+    @Autowired
+    private AirlineRepository airlineRepository;
+
+    @Autowired
+    private RentACarCompanyRepository rentACarCompanyRepository;
+
 
     public List<UserDTO> getAllUsers() {
         List<User> users = userRepository.findAll();
@@ -52,26 +57,59 @@ public class UserService {
 
     public List<UserDTO> findAllHotelAdmins() {
         ArrayList<UserDTO> userList = new ArrayList<>();
-        for (User user : new ArrayList<>(userRepository.findAllHotelAdmins())) {
+        ArrayList<UserDTO> userList1 = new ArrayList<>();
+        for (User user : userRepository.findAllHotelAdmins()) {
             userList.add(new UserDTO(user));
         }
-        return userList;
+
+        for (UserDTO user : userList) {
+            userList1.add(user);
+            for (Hotel hotel : hotelRepository.findAll()) {
+                if (hotel.getAdministrator().getUsername().equals(user.getUsername())) {
+                    userList1.remove(user);
+                    break;
+                }
+            }
+        }
+        return userList1;
     }
 
     public List<UserDTO> findAllRACAdmins() {
         ArrayList<UserDTO> userList = new ArrayList<>();
-        for (User user : new ArrayList<>(userRepository.findAllRACAdmins())) {
+        ArrayList<UserDTO> userList1 = new ArrayList<>();
+        for (User user : userRepository.findAllRACAdmins()) {
             userList.add(new UserDTO(user));
         }
-        return userList;
+
+        for (UserDTO user : userList) {
+            userList1.add(user);
+            for (RentACarCompany rac : rentACarCompanyRepository.findAll()) {
+                if (rac.getAdministrator().getUsername().equals(user.getUsername())) {
+                    userList1.remove(user);
+                    break;
+                }
+            }
+        }
+        return userList1;
     }
 
     public List<UserDTO> findAllAirlineAdmins() {
         ArrayList<UserDTO> userList = new ArrayList<>();
-        for (User user : new ArrayList<>(userRepository.findAllAirlineAdmins())) {
+        ArrayList<UserDTO> userList1 = new ArrayList<>();
+        for (User user : userRepository.findAllAirlineAdmins()) {
             userList.add(new UserDTO(user));
         }
-        return userList;
+
+        for (UserDTO user : userList) {
+            userList1.add(user);
+            for (Airline airline : airlineRepository.findAll()) {
+                if (airline.getAdministrator().getUsername().equals(user.getUsername())) {
+                    userList1.remove(user);
+                    break;
+                }
+            }
+        }
+        return userList1;
     }
 
 

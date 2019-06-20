@@ -13,7 +13,7 @@ public class AirlineDTO {
 
     private long id;
     private String name;
-    private Address address;
+    private AddressDTO address;
     private String description;
     private float rating;
     private List<DestinationDTO> destinations;
@@ -23,7 +23,7 @@ public class AirlineDTO {
     public AirlineDTO() {
     }
 
-    public AirlineDTO(long id, String name, Address address, String description, List<Destination> destinations,
+    public AirlineDTO(long id, String name, AddressDTO address, String description, List<Destination> destinations,
                       List<Flight> flights, float rating, UserDTO administrator) {
         this.id = id;
         this.name = name;
@@ -36,7 +36,7 @@ public class AirlineDTO {
     public AirlineDTO(Airline airline) {
         this.id = airline.getId();
         this.name = airline.getName();
-        this.address = airline.getAddress();
+        this.address = new AddressDTO(airline.getAddress());
         this.description = airline.getDescription();
         this.destinations = new ArrayList<>();
         this.flights = new ArrayList<>();
@@ -63,11 +63,11 @@ public class AirlineDTO {
         this.name = name;
     }
 
-    public Address getAddress() {
+    public AddressDTO getAddress() {
         return address;
     }
 
-    public void setAddress(Address address) {
+    public void setAddress(AddressDTO address) {
         this.address = address;
     }
 

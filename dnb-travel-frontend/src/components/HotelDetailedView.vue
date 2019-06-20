@@ -5,8 +5,8 @@
             {{hotel.name}}<v-rating v-model="hotel.rating" readonly></v-rating>
             </h1>
             <br>
-            <h2 class="subheading grey--text text-darken-3 text-md-center">{{hotel.address.streetName}}
-                 {{hotel.address.streetNumber}}, {{hotel.address.postalCode}} {{hotel.address.city}}, {{hotel.address.country}}
+            <h2 class="subheading grey--text text-darken-3 text-md-center">{{hotel.address.name}}
+                 {{hotel.address.street_number}}, {{hotel.address.postal_code}} {{hotel.address.locality}}, {{hotel.address.country}}
             </h2>
         </v-container>
         <v-container grid-list-md text-xs-center>
@@ -54,7 +54,23 @@
                         <span>Clear</span>
                     </v-btn>
                 </v-flex>
-                <v-flex>MAPA</v-flex>
+                <v-flex>
+                    <GmapMap
+                        :center="center"
+                        :zoom="7"
+                        map-type-id="terrain"
+                        style="width: 500px; height: 300px"
+                    >
+                        <GmapMarker
+                            :key="index"
+                            v-for="(m, index) in markers"
+                            :position="m.position"
+                            :clickable="true"
+                            :draggable="true"
+                            @click="center=m.position"
+                        />
+                    </GmapMap>
+                </v-flex>
             </v-layout>
             <v-layout v-if="flight_res != null" align-center justify-center>
                 <v-combobox max-width="100" label="Choose additional service"
@@ -153,6 +169,8 @@ export default {
                 serviceName: null,
                 servicePrice: null,
             },
+            center: {},
+            markers: []
         }
     },
 
@@ -230,7 +248,7 @@ export default {
                 }
             });
             if (reserved.length == 0) {
-                alert('Nije odabrana ni jedna stavka.');
+                this.$toasted.error('Nije odabrana ni jedna stavka.', {duration:2000});
                 return;
             }
             var beds_reserved = 0;
@@ -238,15 +256,15 @@ export default {
                 beds_reserved = beds_reserved + element.room.capacity;
             });
             if (beds_reserved > this.users.length) {
-                alert('Vise kreveta nego korisnika.')
+                this.$toasted.error('Vise kreveta nego korisnika.', {duration:2000});
                 return;
             }
             if (beds_reserved < this.users.length) {
-                alert('Nedovoljno izabranih kreveta.')
+                this.$toasted.error('Nedovoljno izabranih kreveta.', {duration:2000});
                 return;
             }
             if (new Date(this.itemFilter.date_arrival) < new Date(this.flight_res.endDateTime)) {
-                alert('Datum je prije aktuelnog dolaska.')
+                this.$toasted.error('Datum je prije aktuelnog dolaska.', {duration:2000});
                 return;
             }
             this.hotelReservation.hotel_id = this.itemFilter.hotel_id;
@@ -275,6 +293,18 @@ export default {
         axios.get(`http://localhost:8080/api/hotels/${this.hotelID}`, header)
         .then(response => {
             this.hotel = response.data;
+            this.center = {
+                lat: this.hotel.address.latitude,
+                lng: this.hotel.address.longitude
+            },
+            this.markers = [
+                {
+                    position: {
+                        lat: this.hotel.address.latitude,
+                        lng: this.hotel.address.longitude
+                    }
+                }
+            ]
             axios.get('http://localhost:8080/api/rooms/priceList/' + this.hotel.currentPriceListID, header)
             .then(response => {
                 this.priceList = response.data;
