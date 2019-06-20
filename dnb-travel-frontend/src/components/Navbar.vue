@@ -100,7 +100,8 @@ export default {
 			{ icon: 'hotel', text: 'Hotel Search', route: '/hotels'},
 			{ icon: 'people', text:'Friends', route:'/friends'},
 			{ icon: 'perm_identity', text: 'Profile settings', route: '/user-settings'},
-			{ icon: 'delete', text: 'Cancel car reservation', route: '/cancel-car'}
+			{ icon: 'delete', text: 'Cancel car reservation', route: '/cancel-car'},
+			{ icon: 'hotel', text: 'List hotel reservations', route: '/list-hotel-reservation'},
 			],
 
 			defaultUser: [

@@ -4,16 +4,15 @@ import ftn.dnb.dnbtravel.dto.*;
 import ftn.dnb.dnbtravel.model.*;
 import ftn.dnb.dnbtravel.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.ZoneId;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.LinkedHashMap;
-import java.util.List;
+import java.util.*;
 
 @Service
 public class HotelService {
@@ -365,5 +364,57 @@ public class HotelService {
         stats.forEach((key, value) -> statsList.add(new ReservationStatsDTO(key, value)));
 
         return statsList;
+    }
+
+    public List<OneHotelReservationDTO> getAllUserReservations(UserDTO userDTO){
+        User user = userRepository.findOneByUsername(userDTO.getUsername());
+        List<OneHotelReservationDTO> list = new LinkedList<>();
+
+        for(HotelReservation res: user.getHotelReservations()){
+
+            OneHotelReservationDTO fake_res = new OneHotelReservationDTO();
+            fake_res.setReservationId(res.getId());
+            fake_res.setItmeId(res.getHotelPriceListItem().getId());
+            fake_res.setBeginDate(res.getBeginDate());
+            fake_res.setEndDate(res.getEndDate());
+
+            list.add(fake_res);
+        }
+
+        return list;
+    }
+
+    public ResponseEntity<?> deleteReservation(DeleteHotelReservationDTO data){
+        HotelReservation reservation = hotelReservationRepository.findOneById(data.getReservationId());
+        User user = userRepository.findByUsername(data.getUsername());
+        HotelPriceListItem item = hotelPriceListItemRepository.findOneById(data.getItemId());
+        Hotel h = item.getRoom().getHotel();
+
+
+        if(reservation == null || user == null || item == null || h == null){
+            return new ResponseEntity<>("Error", HttpStatus.OK);
+        }
+
+        for(HotelReservation res: h.getHotelReservations()){
+            if(res.getId() == reservation.getId()){
+                h.getHotelReservations().remove(res);
+                hotelRepository.save(h);
+                break;
+            }
+        }
+
+        for(HotelReservation res: user.getHotelReservations()){
+            if(res.getId()==reservation.getId()){
+                user.getHotelReservations().remove(res);
+                userRepository.save(user);
+            }
+        }
+
+        reservation.setUser(null);
+        reservation.setHotelPriceListItem(null);
+
+        hotelReservationRepository.save(reservation);
+
+        return new ResponseEntity<>("Deleted", HttpStatus.OK);
     }
 }
