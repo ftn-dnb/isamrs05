@@ -13,7 +13,7 @@ public class HotelDTO {
     private String name;
     private String description;
     private double rating;
-    private Address address;
+    private AddressDTO address;
     private UserDTO administrator;
     private Long currentPriceListID;
     private ArrayList<RoomDTO> rooms;
@@ -23,7 +23,7 @@ public class HotelDTO {
         super();
     }
 
-    public HotelDTO(Long id, String name, String description, double rating, Address address, UserDTO administrator, Long currentPriceListID, ArrayList<AdditionalService> additionalServices, ArrayList<RoomDTO> rooms) {
+    public HotelDTO(Long id, String name, String description, double rating, AddressDTO address, UserDTO administrator, Long currentPriceListID, ArrayList<AdditionalService> additionalServices, ArrayList<RoomDTO> rooms) {
         this.id = id;
         this.name = name;
         this.description = description;
@@ -40,7 +40,7 @@ public class HotelDTO {
         this.name = hotel.getName();
         this.description = hotel.getDescription();
         this.rating = hotel.getRating();
-        this.address = hotel.getAddress();
+        this.address = new AddressDTO(hotel.getAddress());
         this.administrator = new UserDTO(hotel.getAdministrator());
         this.currentPriceListID = hotel.getCurrentPriceList().getId();
         this.additionalServices = new ArrayList<AdditionalService>(hotel.getAdditionalServices());
@@ -82,11 +82,11 @@ public class HotelDTO {
         this.rating = rating;
     }
 
-    public Address getAddress() {
+    public AddressDTO getAddress() {
         return address;
     }
 
-    public void setAddress(Address address) {
+    public void setAddress(AddressDTO address) {
         this.address = address;
     }
 

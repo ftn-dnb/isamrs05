@@ -48,6 +48,7 @@ import DeleteBranchOffice from './components/DeleteBranchOffice';
 import EditBranchOffice from './components/EditBranchOffice';
 import RACIncome from './components/RACIncome';
 import RACReservationStats from './components/RACReservationStats';
+import HotelSettings from './components/HotelSettings';
 import CancelCarReservation from './components/CancelCarReservation';
 import RACCarStats from './components/RACCarStats';
 import RACFast from './components/RACFast';
@@ -235,6 +236,11 @@ export default new Router({
         path: '/hotel-statistics',
         name: 'HotelStats',
         component: HotelStats
+    },
+    {
+        path: '/hotel-settings',
+        name: 'HotelSettings',
+        component: HotelSettings
     },
     {
         path: '/registration',

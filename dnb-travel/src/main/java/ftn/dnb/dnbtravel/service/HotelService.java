@@ -57,6 +57,23 @@ public class HotelService {
         return dtos;
     }
 
+    public HotelDTO updateHotel(HotelDTO hotelDTO) {
+        Hotel hotel = hotelRepository.findOneById(hotelDTO.getId());
+        hotel.setName(hotelDTO.getName());
+        hotel.setDescription(hotelDTO.getDescription());
+
+        Address address = addressRepository.findOneByPlaceId(hotelDTO.getAddress().getPlace_id());
+        if (address == null) {
+            address = new Address(hotelDTO.getAddress());
+        }
+
+        hotel.setAddress(address);
+
+        hotelRepository.save(hotel);
+
+        return new HotelDTO(hotel);
+    }
+
     public ArrayList<HotelDTO> hotelSearch(HotelFilterDTO filter) {
         ArrayList<HotelDTO> hotels = new ArrayList<>();
         for (Hotel hotel : hotelRepository.findAll()) {
@@ -77,6 +94,14 @@ public class HotelService {
         if (savedHotel == null) {
             return null;
         }
+        //ArrayList<Address> addressList = new ArrayList<>(addressRepository.findAll());
+        Address address = addressRepository.findOneByPlaceId(hotelDTO.getAddress().getPlace_id());
+        if (address == null) {
+            address = new Address(hotelDTO.getAddress());
+        }
+
+        savedHotel.setAddress(address);
+
         User admin = userRepository.findByUsername(hotelDTO.getAdministrator().getUsername());
         savedHotel.setAdministrator(admin);
         hotelRepository.save(savedHotel);

@@ -7,6 +7,19 @@ import Toasted from 'vue-toasted';
 import Datetime from 'vue-datetime'
 import 'vue-datetime/dist/vue-datetime.css'
 import VueGoogleCharts from 'vue-google-charts'
+import * as VueGoogleMaps from 'vue2-google-maps'
+import VuetifyGoogleAutocomplete from 'vuetify-google-autocomplete';
+ 
+Vue.use(VuetifyGoogleAutocomplete, {
+  apiKey: 'AIzaSyBA0eblab9krEoWhf7MB1-5dzlQeEhq08Q',
+});
+
+Vue.use(VueGoogleMaps, {
+  load: {
+    key: 'AIzaSyBA0eblab9krEoWhf7MB1-5dzlQeEhq08Q',
+    libraries: 'places',
+  },
+});
 
 Vue.config.productionTip = false
 Vue.use(VueKonva)

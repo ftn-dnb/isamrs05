@@ -85,11 +85,16 @@ export default {
             searchFilter: {
                 address: null,
                 rating: null,
-            }
+            },
+            address_autocomplete: ''
         }
     },
 
     methods: {
+        getAddressData(addressData, placeResultData, id) {
+            this.address_autocomplete = addressData;
+            console.log(this.address_autocomplete);
+        },
         searchHotels() {
             const header = { headers: {"Authorization" : `Bearer ${localStorage.getItem('user-token')}`} };
 
@@ -120,6 +125,7 @@ export default {
     },
 
     mounted() {
+
         const header = { headers: {"Authorization" : `Bearer ${localStorage.getItem('user-token')}`} };
 
         axios.get('http://localhost:8080/api/hotels/all', header)

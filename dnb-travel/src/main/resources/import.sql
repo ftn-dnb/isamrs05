@@ -91,9 +91,9 @@ INSERT INTO `airplane` VALUES(25, 'Airbus 876', 6, 11);
 
 
 -- Addresses
-INSERT INTO `address` VALUES(31, 'New York', 'US', 1234, '1st street', 22, 0);
-INSERT INTO `address` VALUES(32, 'Belgrade', 'Serbia', 11000, 'Bulevar', 213, 0);
-INSERT INTO `address` VALUES(33, 'Athens', 'Greece', 5433, 'Alfa', 24, 0);
+INSERT INTO `address` (`id`, `city`, `country`, `latitude`, `longitude`, `place_id`, `postal_code`, `street_name`, `street_number`, `version`) VALUES(31, 'New York', 'United States', 40.80185099999999, -73.95913630000001, 'EiBNYW5oYXR0YW4gQXZlLCBOZXcgWW9yaywgTlksIFVTQSIuKiwKFAoSCeFgF8MX9sKJEZuPHiQcXDQyEhQKEgk7CD_TpU_CiRFi_nfhBo8LyA', '', 'Manhattan Avenue', '', 0);
+INSERT INTO `address` (`id`, `city`, `country`, `latitude`, `longitude`, `place_id`, `postal_code`, `street_name`, `street_number`, `version`) VALUES(32, 'Beograd', 'Serbia', 44.816088, 20.459962399999995, 'Eh5UcmcgcmVwdWJsaWtlLCBCZW9ncmFkLCBTZXJiaWEiLiosChQKEglhMnBcsnpaRxE2sJF4Elu2mRIUChIJvT-116N6WkcR5H4X8lxkuB0', '', 'Trg republike', '', 0);
+INSERT INTO `address` (`id`, `city`, `country`, `latitude`, `longitude`, `place_id`, `postal_code`, `street_name`, `street_number`, `version`) VALUES(33, 'Athina', 'Greece', 37.9801543, 23.709399200000007, 'Eh9HcmV2ZW5vbiwgQXRoaW5hIDExOCA1NSwgR3JlZWNlIi4qLAoUChIJ5yWwLNy8oRQRZ99li_MsYR0SFAoSCfFDcAYfvaEUEd2NZnZFNTYn', '118 55', 'Grevenon', '', 0);
 
 
 -- Airlines
@@ -193,7 +193,7 @@ INSERT INTO `flight_reservations` VALUES (59, 78);
 -- Hotels
 INSERT INTO `hotel` (`id`, `name`, `description`, `rating`, `address_id`, `administrator_id`) VALUES (1, 'Hotel Plaza', 'Ovo je jedan jako dobar hotel sa prijatnim osobljem', 4.0, 32, 6)
 INSERT INTO `hotel` (`id`, `name`, `description`, `rating`, `address_id`, `administrator_id`) VALUES (2, 'Hotel Continental', 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.', 5.0, 33, 8)
-INSERT INTO `hotel` (`id`, `name`, `description`, `rating`, `address_id`) VALUES (3, 'Hotel Bosna', 'Ovo je jedan jako dobar hotel sa prijatnim osobljem', 3.0, 32)
+INSERT INTO `hotel` (`id`, `name`, `description`, `rating`, `address_id`, `administrator_id`) VALUES (3, 'Hotel Bosna', 'Ovo je jedan jako dobar hotel sa prijatnim osobljem', 3.0, 32, 16)
 
 -- Rooms
 INSERT INTO `room` (`id`, `room_number`, `floor`, `rating`, `capacity`, `hotel_id`) VALUES (1, 21, 2, 4.0, 3, 1);
@@ -253,22 +253,3 @@ INSERT INTO `room_hotel_price_list_items` (`room_id`, `hotel_price_list_items_id
 INSERT INTO `room_hotel_price_list_items` (`room_id`, `hotel_price_list_items_id`) VALUES (5, 4)
 INSERT INTO `room_hotel_price_list_items` (`room_id`, `hotel_price_list_items_id`) VALUES (6, 5)
 INSERT INTO `room_hotel_price_list_items` (`room_id`, `hotel_price_list_items_id`) VALUES (7, 6)
-
-INSERT INTO `rac` (`id`,`name`,`description`,rating) VALUES (1,'Pegaz','acab',1.0);
-INSERT INTO `rac` (`id`,`name`,`description`,rating) VALUES (2,'Pegaz2','acab',1.5);
-
-INSERT INTO `cars` (`id`,`name`,`brand`,`manuf_year`,`seats_number`,`rating`,`type`,`company_id`) VALUES (1,'stojdza','zastava',2059,5,5,0,1);
-INSERT INTO `cars` (`id`,`name`,`brand`,`manuf_year`,`seats_number`,`rating`,`type`,`company_id`) VALUES (2,'jugic','zastava',2059,5,5,0,2);
-
-INSERT INTO `cars` (`id`,`name`,`brand`,`manuf_year`,`seats_number`,`rating`,`type`,`company_id`) VALUES (3,'vozilo','mercedes',2059,2,5,3,1);
-INSERT INTO `cars` (`id`,`name`,`brand`,`manuf_year`,`seats_number`,`rating`,`type`,`company_id`) VALUES (4,'kombi','mercedes',2059,10,5,2,2);
-
-INSERT  INTO `racpricelistitem` (`id`,`active_discount`,`start_date`,`end_date`,`price_day`,`car_id`) VALUES (1,0,'2017-10-01 21:58:58','2017-10-10 21:58:58',100,1);
-INSERT  INTO `racpricelistitem` (`id`,`active_discount`,`start_date`,`end_date`,`price_day`,`car_id`) VALUES (2,0.3,'2017-10-11 21:58:58','2017-10-21 21:58:58',50,1);
-INSERT  INTO `racpricelistitem` (`id`,`active_discount`,`start_date`,`end_date`,`price_day`,`car_id`) VALUES (3,0.1,'2017-10-01 21:58:58','2017-10-10 21:58:58',100,2);
-INSERT  INTO `racpricelistitem` (`id`,`active_discount`,`start_date`,`end_date`,`price_day`,`car_id`) VALUES (4,0.2,'2017-10-11 21:58:58','2017-10-21 21:58:58',50,2);
-
-
-INSERT  INTO `racpricelistitem` (`id`,`active_discount`,`start_date`,`end_date`,`price_day`,`car_id`) VALUES (5,0,'2017-10-01 21:58:58','2017-10-10 21:58:58',100,3);
-INSERT  INTO `racpricelistitem` (`id`,`active_discount`,`start_date`,`end_date`,`price_day`,`car_id`) VALUES (6,0,'2017-10-01 21:58:58','2017-10-10 21:58:58',100,4);
-
