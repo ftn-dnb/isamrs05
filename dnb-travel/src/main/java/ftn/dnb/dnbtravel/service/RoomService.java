@@ -57,6 +57,46 @@ public class RoomService {
         return dtoList;
     }
 
+    public List<RoomDTO> updateRoom(RoomDTO roomDTO) {
+        Room room = roomRepository.findOneById(roomDTO.getId());
+
+        Hotel hotel = hotelRepository.findOneById(roomDTO.getHotelID());
+        boolean flag = true;
+        for (HotelReservation reservation : hotel.getHotelReservations()) {
+            if (reservation.getEndDate().after(new Date())) {
+                flag = false;
+                break;
+            }
+        }
+        if (flag) {
+            room.setCapacity(roomDTO.getCapacity());
+            room.setFloor(roomDTO.getFloor());
+            room.setRoomNumber(roomDTO.getRoomNumber());
+            roomRepository.save(room);
+        }
+
+        HotelDTO hotelDTO = new HotelDTO(hotel);
+        return hotelDTO.getRooms();
+    }
+
+    public List<RoomDTO> removeRoom(RoomDTO roomDTO) {
+        Room room = roomRepository.findOneById(roomDTO.getId());
+        Hotel hotel = hotelRepository.findOneById(roomDTO.getHotelID());
+        boolean flag = true;
+        for (HotelReservation reservation : hotel.getHotelReservations()) {
+            if (reservation.getEndDate().after(new Date())) {
+                flag = false;
+                break;
+            }
+        }
+        if (flag) {
+            hotel.getRooms().remove(room);
+            roomRepository.save(room);
+        }
+        HotelDTO hotelDTO = new HotelDTO(hotel);
+        return hotelDTO.getRooms();
+    }
+
     public HotelPriceListItemDTO addPriceListItem(HotelPriceListItemDTO hotelPriceListItemDTO) {
         HotelPriceList refPriceList = priceListRepository.findOneById(hotelPriceListItemDTO.getHotelPriceListID());
         Room refRoom = roomRepository.findOneById(hotelPriceListItemDTO.getRoom().getId());

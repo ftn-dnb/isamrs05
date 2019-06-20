@@ -105,6 +105,9 @@ public class Hotel {
     }
 
     public Set<HotelPriceList> getHotelPriceLists() {
+        if (this.hotelPriceLists == null) {
+            this.hotelPriceLists = new HashSet<>();
+        }
         return hotelPriceLists;
     }
 
