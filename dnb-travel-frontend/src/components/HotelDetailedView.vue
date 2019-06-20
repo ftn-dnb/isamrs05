@@ -256,7 +256,12 @@ export default {
             this.hotelReservation.users = this.users;
 
             axios.post('http://localhost:8080/api/hotels/addHotelReservation', this.hotelReservation, header)
-            .then(response => console.log(response.data))
+            .then(response => {
+                this.clearSearch();
+                this.priceList_normal.forEach(element => {
+                    this.chosen_map[element.id] = false;
+                })
+            })
             .catch(error => console.log(error));
 
         }

@@ -6,8 +6,13 @@ import ftn.dnb.dnbtravel.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.LinkedHashMap;
 import java.util.List;
 
 @Service
@@ -185,4 +190,155 @@ public class HotelService {
         return new HotelDTO(hotel);
     }
 
+    public ArrayList<IncomeDTO> getIncomeStatsHotel(HotelStatsFilterDTO filter) {
+        Hotel hotel = hotelRepository.findOneById(filter.getHotel_id());
+
+        if (hotel == null) {
+            return null;
+        }
+
+        LinkedHashMap<String, Double> income;
+
+        if (filter.getDateTo() == null) {
+            filter.setDateTo(new Date());
+        }
+
+        if (filter.getDateFrom() == null)
+            income = this.filterReservationsToDate(hotel, filter.getDateTo());
+        else
+            income = this.filterReservationsFromDate(hotel, filter.getDateFrom(), filter.getDateTo());
+
+        ArrayList<IncomeDTO> incomeStats = new ArrayList<>();
+        income.forEach((key, value) -> incomeStats.add(new IncomeDTO(key, value.floatValue())));
+
+        return incomeStats;
+    }
+
+    private LinkedHashMap filterReservationsToDate(Hotel hotel, Date to) {
+        LinkedHashMap<String, Double> income = new LinkedHashMap<>();
+
+        DateFormat formatter = new SimpleDateFormat("dd.MM.yyyy.");
+
+        for (HotelReservation reservation : hotel.getHotelReservations()) {
+            if (reservation.getBeginDate().before(to)) {
+                String dateKey = formatter.format(reservation.getBeginDate());
+                if (income.containsKey(dateKey))
+                    income.put(dateKey, income.get(dateKey) + reservation.getPrice());
+                else
+                    income.put(dateKey, reservation.getPrice());
+            }
+        }
+
+        return income;
+    }
+
+    private LinkedHashMap filterReservationsFromDate(Hotel hotel, Date from, Date to) {
+        LinkedHashMap<String, Double> income = new LinkedHashMap<>();
+        DateFormat formatter = new SimpleDateFormat("dd.MM.yyyy.");
+
+        for (HotelReservation reservation : hotel.getHotelReservations()) {
+            if (reservation.getBeginDate().after(from) && reservation.getBeginDate().before(to)) {
+                String dateKey = formatter.format(reservation.getBeginDate());
+                if (income.containsKey(dateKey))
+                    income.put(dateKey, income.get(dateKey) + reservation.getPrice());
+                else
+                    income.put(dateKey, reservation.getPrice());
+            }
+        }
+
+        return income;
+    }
+
+    public List<ReservationStatsDTO> getReservationStatsHotel(HotelStatsFilterDTO filter) {
+        Hotel hotel = hotelRepository.findOneById(filter.getHotel_id());
+
+        if (filter.getDateReservations() == null)
+            filter.setDateReservations(new Date());
+
+        switch (filter.getReservationsCriteria()) {
+            case "Day":
+                return getReservationStatsDay(hotel, filter.getDateReservations());
+            case "Week":
+                return getReservationStatsWeek(hotel, filter.getDateReservations());
+            case "Month":
+                return getReservationStatsMonth(hotel, filter.getDateReservations());
+            default:
+                return getReservationStatsWeek(hotel, filter.getDateReservations());
+        }
+    }
+
+    private List<ReservationStatsDTO> getReservationStatsDay(Hotel hotel, Date date) {
+        List<ReservationStatsDTO> stats = new ArrayList<>();
+        DateFormat formatter = new SimpleDateFormat("dd.MM.yyyy.");
+
+        stats.add(new ReservationStatsDTO(formatter.format(date), 0));
+
+        LocalDate startDate = date.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+
+        for (HotelReservation reservation : hotel.getHotelReservations()) {
+            LocalDate resDate = reservation.getBeginDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+
+            if (startDate.isEqual(resDate)) {
+                stats.get(0).setNumber(stats.get(0).getNumber() + 1);
+            }
+        }
+
+        return stats;
+    }
+
+    private List<ReservationStatsDTO> getReservationStatsWeek(Hotel hotel, Date date) {
+        LinkedHashMap<String, Integer> stats= new LinkedHashMap<>();
+        List<ReservationStatsDTO> statsList = new ArrayList<>();
+        DateFormat formatter = new SimpleDateFormat("dd.MM.yyyy.");
+
+        LocalDate startDate = date.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+        LocalDate endDate = date.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+
+        startDate = startDate.minusDays(startDate.getDayOfWeek().getValue());
+        endDate = endDate.plusDays(7 - endDate.getDayOfWeek().getValue());
+
+        for (HotelReservation reservation : hotel.getHotelReservations()) {
+            LocalDate reservationDate = reservation.getBeginDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+
+            if (reservationDate.isAfter(startDate) && reservationDate.isBefore(endDate)) {
+                String key = formatter.format(reservation.getBeginDate());
+
+                if (stats.containsKey(key))
+                    stats.put(key, stats.get(key) + 1);
+                else
+                    stats.put(key, 1);
+            }
+        }
+
+        stats.forEach((key, value) -> statsList.add(new ReservationStatsDTO(key, value)));
+
+        return statsList;
+    }
+
+    private List<ReservationStatsDTO> getReservationStatsMonth(Hotel hotel, Date date) {
+        LinkedHashMap<String, Integer> stats= new LinkedHashMap<>();
+        List<ReservationStatsDTO> statsList = new ArrayList<>();
+        DateFormat formatter = new SimpleDateFormat("dd.MM.yyyy.");
+
+        LocalDate filterDate = date.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+        int monthFilterDate = filterDate.getMonthValue();
+
+
+        for (HotelReservation reservation : hotel.getHotelReservations()) {
+            LocalDate reservationDate = reservation.getBeginDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+
+            if (reservationDate.getMonthValue() == monthFilterDate) {
+                String key = formatter.format(reservation.getBeginDate());
+
+                if (stats.containsKey(key))
+                    stats.put(key, stats.get(key) + 1);
+                else
+                    stats.put(key, 1);
+            }
+        }
+
+        stats.forEach((key, value) -> statsList.add(new ReservationStatsDTO(key, value)));
+
+        return statsList;
+    }
 }
