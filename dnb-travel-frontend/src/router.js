@@ -49,7 +49,7 @@ import EditBranchOffice from './components/EditBranchOffice';
 import RACIncome from './components/RACIncome';
 import RACReservationStats from './components/RACReservationStats';
 import RACCarStats from './components/RACCarStats';
-
+import CancelCarReservation from './components/CancelCarReservation';
 Vue.use(Router)
 
 export default new Router({
@@ -373,6 +373,12 @@ export default new Router({
         path:'/car-stats',
         name:'RACCarStats',
         component: RACCarStats
+    },
+
+    {
+        path:'/cancel-car',
+        name:'CancelCarReservation',
+        component: CancelCarReservation
     },
 
   ]

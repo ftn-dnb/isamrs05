@@ -3,6 +3,7 @@ package ftn.dnb.dnbtravel.controller;
 import ftn.dnb.dnbtravel.dto.*;
 import ftn.dnb.dnbtravel.service.RentACarCompanyService;
 import ftn.dnb.dnbtravel.service.UserService;
+import org.apache.coyote.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.*;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -167,5 +168,12 @@ public class RentACarCompanyController {
     public ResponseEntity<?> getReservationStats(@RequestBody RACReservationStatsDTO filterDTO){
         List<ReservationStatsDTO> stats = rentACarCompanyService.getStatsForCompanyReservation(filterDTO);
         return new ResponseEntity<>(stats,HttpStatus.OK);
+    }
+
+    @PostMapping(path ="/getUserReservationsCar", consumes = MediaType.APPLICATION_JSON_VALUE)
+    @PreAuthorize("hasRole('USER')")
+    public ResponseEntity<?> getUserReservationsCar(UserDTO userDTO){
+        List<RacReservationDTO> list = rentACarCompanyService.getCarReservationsUser(userDTO);
+        return new ResponseEntity<>(list,HttpStatus.OK);
     }
 }

@@ -528,6 +528,56 @@ public class RentACarCompanyService {
         return statsList;
     }
 
+    public ResponseEntity<?> cancelCarReservation(CancelReservationCarDTO request) {
+        User user = userRepository.findOneById(request.getId());
+        RentACarCompany company = racRepository.findOneById(request.getCompanyId());
+
+        if (user == null || company == null) {
+            return new ResponseEntity<>("Cancelation error", HttpStatus.CONFLICT);
+        }
+
+        for (RACReservation reservation : user.getRacReservations()) {
+            if (reservation.getId() == request.getReservationId()) {
+                user.getRacReservations().remove(reservation);
+                userRepository.save(user);
+                break;
+            }
+        }
+
+        for (RACReservation reservation : company.getRacReservations()) {
+            if (reservation.getId() == request.getReservationId()) {
+                company.getRacReservations().remove(reservation);
+                racRepository.save(company);
+                break;
+
+            }
+
+
+        }
+
+        return new ResponseEntity<>("Cancelation ok", HttpStatus.OK);
+    }
+
+    public List<RacReservationDTO> getCarReservationsUser(UserDTO user){
+        User real_user = userRepository.findByUsername(user.getUsername());
+        List<RacReservationDTO> list = new LinkedList<>();
+
+
+        for(RACReservation reservation: real_user.getRacReservations()){
+            RacReservationDTO fakeR = new RacReservationDTO();
+
+            fakeR.setBegin(reservation.getBeginDate());
+            fakeR.setEnd(reservation.getEndDate());
+            fakeR.setId(reservation.getId());
+            fakeR.setItem_id(reservation.getItem().getId());
+            fakeR.setCompany_id(reservation.getItem().getCar().getCompany().getId());
+
+            list.add(fakeR);
+        }
+
+        return list;
+    }
+
 
 
 
