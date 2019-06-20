@@ -1,7 +1,8 @@
 # DNB Travel - Tim 05
 [![Quality gate](https://sonarcloud.io/api/project_badges/quality_gate?project=ftn-dnb_isamrs05)](https://sonarcloud.io/dashboard?id=ftn-dnb_isamrs05)
 
-https://dnb-travel.firebaseapp.com/#/
+Frontend: https://dnb-travel.firebaseapp.com/#/
+Backend: https://dnb-travel.herokuapp.com/
 
 Projekat iz predmeta internet softverske arhitekture i metodologije razvoja softvera.
 
