@@ -91,6 +91,7 @@ export default {
 			{icon: 'edit', text: 'Edit branch office', route: '/edit-branch-office'},
 			{icon: 'assessment', text: 'Company income', route: '/rac-income'},
 			{icon: 'assessment', text: 'Reservation stats', route: '/rac-resetvation-stats'},
+			{icon: 'assessment', text: 'Car stats & company rating', route: '/car-stats'},
 			],
 
 			userDrawer: [
