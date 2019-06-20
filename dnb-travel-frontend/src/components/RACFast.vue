@@ -108,7 +108,7 @@ import axios from 'axios';
 import format from 'date-fns/format';
 
 export default {
-  name: 'RACDetailedView',
+  name: 'RACFast',
   props: {
     racID:null,
     users:null,
@@ -159,9 +159,8 @@ export default {
     searchCars(){
 
         this.carSearch.id = this.racID;
-        
         console.log(this.carSearch);
-        axios.post("http://localhost:8080/api/rentACarCompanies/carSearch",this.carSearch)
+        axios.post("http://localhost:8080/api/rentACarCompanies/carSearchFast",this.carSearch)
         .then(response =>{
             if(response.data ===''){
                 this.$toasted.info('There is no cars with current parameters', {duration:5000});

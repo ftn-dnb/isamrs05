@@ -25,11 +25,17 @@
                         </div>
                     </v-card-text>
                     <v-card-actions>
-                            <v-btn flat small router :to="{ name: 'RACDetailedView', params: { racID: company.id} }">
+                        <v-btn flat small router :to="{ name: 'RACDetailedView', params: { racID: company.id} }" >
                             <v-icon left>info</v-icon>
-                            <span>View company profile</span>
+                            <span>Company</span>
+                        </v-btn>
+                        <v-btn flat small router :to="{ name: 'RACFast', params: { racID: company.id} }" >
+                            <v-icon left>flash_on</v-icon>
+                            <span>Fast</span>
                         </v-btn>
                     </v-card-actions>
+
+
                 </v-card>
             </v-flex>
         </v-layout>
