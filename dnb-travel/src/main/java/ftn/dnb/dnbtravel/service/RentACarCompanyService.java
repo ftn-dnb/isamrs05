@@ -94,8 +94,16 @@ public class RentACarCompanyService {
         RentACarCompany company = racRepository.findOneById(id);
             if(company.getCurrentPriceList() != null){
                 for(RACPriceListItem real_item: company.getCurrentPriceList().getItems()){
-                    RACReservation reservation_exists = reservationRepository.findByItem(real_item);
-                    if(real_item.getActiveDiscount() == 0 && reservation_exists == null) {
+                    List<RACReservation> reservationList = reservationRepository.findByItem(real_item);
+                    if(reservationList.size()> 0){
+                        for(RACReservation r: reservationList){
+                            if(r.getUser()== null && real_item.getActiveDiscount() == 0){
+                                items.add(real_item);
+                            }
+                        }
+                    }
+
+                    else if (real_item.getActiveDiscount() == 0) {
                         items.add(real_item);
                     }
                 }
@@ -531,6 +539,66 @@ public class RentACarCompanyService {
 
         stats.forEach((key, value) -> statsList.add(new ReservationStatsDTO(key, value)));
         return statsList;
+    }
+
+    public List<RacReservationDTO> getCarReservationsUser(UserDTO user){
+        User real_user = userRepository.findByUsername(user.getUsername());
+        List<RacReservationDTO> list = new LinkedList<>();
+
+
+        for(RACReservation reservation: real_user.getRacReservations()){
+            RacReservationDTO fakeR = new RacReservationDTO();
+
+            fakeR.setBegin(reservation.getBeginDate());
+            fakeR.setEnd(reservation.getEndDate());
+            fakeR.setId(reservation.getId());
+            fakeR.setItem_id(reservation.getItem().getId());
+            fakeR.setCompany_id(reservation.getItem().getCar().getCompany().getId());
+            fakeR.setUser_id(real_user.getId());
+
+            list.add(fakeR);
+        }
+
+        return list;
+    }
+
+    public ResponseEntity<?> cancelCarReservation(CancelReservationCarDTO request) {
+        User user = userRepository.findOneById(request.getId());
+        RentACarCompany company = racRepository.findOneById(request.getCompanyId());
+
+
+
+        if (user == null || company == null) {
+            return new ResponseEntity<>("Cancelation error", HttpStatus.CONFLICT);
+        }
+
+        for (RACReservation reservation : user.getRacReservations()) {
+            if (reservation.getId() == request.getReservationId()) {
+                user.getRacReservations().remove(reservation);
+                userRepository.save(user);
+                break;
+            }
+        }
+
+        for (RACReservation reservation : company.getRacReservations()) {
+            if (reservation.getId() == request.getReservationId()) {
+                company.getRacReservations().remove(reservation);
+                racRepository.save(company);
+                break;
+
+            }
+
+
+        }
+
+        RACReservation reservation_exists = reservationRepository.findOneById(request.getReservationId());
+        if(reservation_exists != null){
+            reservation_exists.setUser(null);
+            reservation_exists.setItem(null);
+            reservationRepository.save(reservation_exists);
+        }
+
+        return new ResponseEntity<>("Cancelation ok", HttpStatus.OK);
     }
 
 
