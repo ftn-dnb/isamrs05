@@ -91,11 +91,11 @@ public class FlightService {
                 reservation.setUser(user);
                 user.getReservations().add(reservation);
                 flight.getReservations().add(reservation);
-                flightRepository.save(flight);
-                userRepository.save(user);
+                //flightRepository.save(flight);
+                //userRepository.save(user);
             } else {
                 flight.getReservations().add(reservation);
-                flightRepository.save(flight);
+                //flightRepository.save(flight);
             }
 
         }
