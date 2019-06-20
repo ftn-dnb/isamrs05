@@ -2,9 +2,11 @@ package ftn.dnb.dnbtravel.model;
 
 import javax.annotation.processing.Generated;
 import javax.persistence.*;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.concurrent.TimeUnit;
 
 @Entity
 public class HotelReservation {
@@ -43,6 +45,24 @@ public class HotelReservation {
         this.hotelPriceListItem = hotelPriceListItem;
         this.user = user;
         this.additionalServices = additionalServices;
+    }
+
+    public double getPrice() {
+        double price = 0;
+
+        long diffInMillies = Math.abs(this.endDate.getTime() - this.getBeginDate().getTime());
+        long diff = TimeUnit.DAYS.convert(diffInMillies, TimeUnit.MILLISECONDS);
+
+        price += this.hotelPriceListItem.getPricePerDay() * diff;
+
+        for (AdditionalService service : this.additionalServices) {
+            price += service.getServicePrice();
+        }
+
+        price *= (1 - this.hotelPriceListItem.getActiveDiscount()/100);
+
+        return price;
+
     }
 
     public Long getId() {

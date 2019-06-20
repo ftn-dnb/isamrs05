@@ -91,6 +91,7 @@ export default {
 			{icon: 'edit', text: 'Edit branch office', route: '/edit-branch-office'},
 			{icon: 'assessment', text: 'Company income', route: '/rac-income'},
 			{icon: 'assessment', text: 'Reservation stats', route: '/rac-resetvation-stats'},
+			{icon: 'assessment', text: 'Car stats & company rating', route: '/car-stats'},
 			],
 
 			userDrawer: [
@@ -117,7 +118,8 @@ export default {
 
 			hotelAdminDrawer: [
 				{icon: 'add_circle', text: 'Add Room', route: '/add-room'},
-				{icon: 'work_outline', text: 'Price List Settings', route: '/hotel-price-list-settings'}
+				{icon: 'work_outline', text: 'Price List Settings', route: '/hotel-price-list-settings'},
+				{icon: 'assessment', text: 'Statistics', route: '/hotel-statistics'}
 			],
 
 		}
