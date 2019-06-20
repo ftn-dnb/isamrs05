@@ -44,7 +44,9 @@ public class RentACarCompanyService {
         for (RentACarCompany c: companies) {
             BranchOffice b = c.getMainOffice();
             RentACarCompanyDTO dto = new RentACarCompanyDTO(c);
-            dtos.add(dto);
+            if(dto.getAddress()!= null) {
+                dtos.add(dto);
+            }
         }
 
         return dtos;
@@ -92,7 +94,10 @@ public class RentACarCompanyService {
         RentACarCompany company = racRepository.findOneById(id);
             if(company.getCurrentPriceList() != null){
                 for(RACPriceListItem real_item: company.getCurrentPriceList().getItems()){
-                    items.add(real_item);
+                    RACReservation reservation_exists = reservationRepository.findByItem(real_item);
+                    if(real_item.getActiveDiscount() == 0 && reservation_exists == null) {
+                        items.add(real_item);
+                    }
                 }
             }
         List<RACListItemDTO> dtos = new ArrayList<>();
@@ -106,12 +111,12 @@ public class RentACarCompanyService {
         //start date
         if (filter.getStartDate() != null) {
             filter.getStartDate().setHours(0);
-            list = list.stream().filter(f -> f.getStartDate().after(filter.getStartDate())).collect(Collectors.toList());
+            list = list.stream().filter(f -> f.getStartDate().before(filter.getStartDate())).collect(Collectors.toList());
         }
         //end date
         if(filter.getEndDate() != null) {
             filter.getEndDate().setHours(0);
-            list = list.stream().filter(f -> f.getEndDate().before(filter.getEndDate())).collect(Collectors.toList());
+            list = list.stream().filter(f -> f.getEndDate().after(filter.getEndDate())).collect(Collectors.toList());
         }
         //price per day max price
         if(filter.getPricePerDay() != null)

@@ -260,6 +260,7 @@ export default {
                 this.clearSearch();
                 this.priceList_normal.forEach(element => {
                     this.chosen_map[element.id] = false;
+                    this.$router.push({name: "SearchRAC", params: {flight: this.flight, users: reservations.users}});
                 })
             })
             .catch(error => console.log(error));

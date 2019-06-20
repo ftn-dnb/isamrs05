@@ -11,8 +11,8 @@
        
         <v-layout row wrap>
             <v-flex xs12 sm6 md4 lg3 v-for="company in this.company_list" :key="company.id">
-                <v-card flat class="text-xs-center ma-3">
-                    <v-card-text>
+                <v-card flat class="text-xs-center ma-3" v-if="company.address != null">
+                    <v-card-text >
                         <div class="subheading">
                             {{company.name}}, {{company.address.city}}
                         </div>
@@ -44,7 +44,11 @@ import GChart from 'vue-google-charts';
 
 export default {
     name: 'SearchRAC',
-    props: [],
+    props: {
+    racID:null,
+    users:null,
+    flight:null,
+    }, 
     components: {},
     
     data() {
@@ -96,7 +100,18 @@ export default {
         .then(response =>{
 
             this.company_list = response.data;
+
             console.log(this.company_list);
+            /*this.company_list.forEach(element=>{
+                if(element.address == null){
+                    var index = this.company_list.indexOf(element);
+                    if(index > -1) {
+                        this.company_list.splice(index,1);
+                        console.log("op");
+                    }
+                }
+            })*/
+
 
             if(this.company_list.length != 0){ this.city_name = this.company_list[0].mainOffice.address.city;}
             this.company_list.forEach(element => {
