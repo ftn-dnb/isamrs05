@@ -57,4 +57,18 @@ public class FlightController {
         FlightDTO flight = flightService.reserveFastTicket(flightId, info);
         return new ResponseEntity<>(flight, (flight == null) ? HttpStatus.BAD_REQUEST : HttpStatus.OK);
     }
+
+    @PostMapping(path = "/cancelReservation")
+    @PreAuthorize("hasRole('USER')")
+    public ResponseEntity<?> cancelReservation(@RequestBody CancelFlightDTO data){
+        ResponseEntity<?> response = flightService.cancelFlight(data);
+        return response;
+    }
+
+    @PostMapping(path = "/listAllReservations")
+    @PreAuthorize("hasRole('USER')")
+    public ResponseEntity<?> listReservations(@RequestBody UserDTO user){
+        ResponseEntity<?> response = flightService.getAllReservations(user);
+        return response;
+    }
 }
