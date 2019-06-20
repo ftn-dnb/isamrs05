@@ -96,6 +96,7 @@ export default {
 
 			userDrawer: [
 			{ icon: 'flight_takeoff', text: 'Flights search', route: '/flights'},
+			{ icon: 'flight_takeoff', text: 'Airlines', route: '/airlines'},
 			{ icon: 'directions_car', text: 'Car search', route: '/search-rac'},
 			{ icon: 'hotel', text: 'Hotel Search', route: '/hotels'},
 			{ icon: 'people', text:'Friends', route:'/friends'},
@@ -107,9 +108,9 @@ export default {
 
 			defaultUser: [
 			{icon: 'flight_takeoff', text: 'Flights search', route:'/flights'},
+			{ icon: 'flight_takeoff', text: 'Airlines', route: '/airlines'},
 			{icon: 'directions_car', text: 'Car search', route: '/search-rac'},
 			{icon: 'hotel', text: 'Hotel Search', route: '/hotels'}
-
       		],
 
 			sysAdminDrawer: [

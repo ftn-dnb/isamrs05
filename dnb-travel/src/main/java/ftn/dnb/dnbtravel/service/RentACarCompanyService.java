@@ -7,6 +7,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -326,7 +328,20 @@ public class RentACarCompanyService {
             return  new ResponseEntity<>("Unable to add office",HttpStatus.CONFLICT);
         }
 
-        BranchOffice newOffice = new BranchOffice(office.getName(),office.getAddress(),company);
+        Address address = new Address();
+
+        address.setCity(office.getAddress().getCity());
+        address.setCountry(office.getAddress().getCountry());
+        address.setPostalCode(office.getAddress().getPostalCode());
+        address.setStreetName(office.getAddress().getStreetNumber());
+        address.setStreetNumber(office.getAddress().getStreetNumber());
+
+        address.setLatitude(1);
+        address.setLongitude(1);
+        address.setPlace_id("123"); // nisam implementirao Davidove mape
+
+
+        BranchOffice newOffice = new BranchOffice(office.getName(),address,company);
 
         company.getOffices().add(newOffice);
 
@@ -369,6 +384,7 @@ public class RentACarCompanyService {
         RACPriceListItem item = priceListItemRepository.findOneById(requestDTO.getItemID());
         User user = userRepository.findOneByUsername(requestDTO.getUser());
         RentACarCompany company = racRepository.findOneById(requestDTO.getCompanyID());
+
 
         RACReservation realReservation = new RACReservation();
 
