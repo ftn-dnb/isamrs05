@@ -186,4 +186,10 @@ public class RentACarCompanyController {
         ResponseEntity<?> response = rentACarCompanyService.cancelCarReservation(data);
         return new ResponseEntity<>(response,HttpStatus.OK);
     }
+
+    @PostMapping(path = "/carSearchFast")
+    public ResponseEntity<?> searchCarsFast(@RequestBody CarFilterDTO filter){
+        List<RACListItemDTO> items = rentACarCompanyService.searchCarFast(filter);
+        return new ResponseEntity<>(items,HttpStatus.OK);
+    }
 }
