@@ -7,6 +7,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -56,6 +58,7 @@ public class HotelService {
         return dtos;
     }
 
+    @Transactional(propagation = Propagation.REQUIRES_NEW, readOnly = false)
     public HotelDTO updateHotel(HotelDTO hotelDTO) {
         Hotel hotel = hotelRepository.findOneById(hotelDTO.getId());
         hotel.setName(hotelDTO.getName());
@@ -131,6 +134,7 @@ public class HotelService {
         hotelRepository.save(hotel);
         return currentPriceList.getId();
     }
+
 
     public ArrayList<Long> addFastHotelReservation(HotelReservationDTO hotelReservationDTO) {
         int capacity_counter = 1, item_counter = 0;
