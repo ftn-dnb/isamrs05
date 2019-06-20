@@ -90,7 +90,7 @@
                         <v-icon>attach_money</v-icon>
                         {{item.pricePerDay}}
                     </div>
-                    <v-btn @click="reserveCar(item)">
+                    <v-btn  @click="reserveCar(item)">
                         <v-icon left>done</v-icon>
                         <span>Reserve</span>
                     </v-btn>
@@ -111,6 +111,8 @@ export default {
   name: 'RACDetailedView',
   props: {
     racID:null,
+    users:null,
+    flight:null,
   },
   components: {},
 

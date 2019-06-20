@@ -1,6 +1,5 @@
 <template>
     <div>
-        Neki pocetni tekst
     </div>
 </template>
 

@@ -1,13 +1,5 @@
 <template>
-    <div>
-        <ul>
-            <li><a href="#" @click="showComponent('FlightList')">Flight list</a></li>
-            <li><a href="#" @click="showComponent('Friends')">Friends</a></li>
-            <li><a href="#" @click="showComponent('UserSettings')">Profile settings</a></li>
-        </ul>
 
-        <component :is="currentComponent"></component>
-    </div>
 </template>
 
 <script>
