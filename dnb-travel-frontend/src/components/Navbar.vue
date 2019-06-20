@@ -117,7 +117,8 @@ export default {
 
 			hotelAdminDrawer: [
 				{icon: 'add_circle', text: 'Add Room', route: '/add-room'},
-				{icon: 'work_outline', text: 'Price List Settings', route: '/hotel-price-list-settings'}
+				{icon: 'work_outline', text: 'Price List Settings', route: '/hotel-price-list-settings'},
+				{icon: 'assessment', text: 'Statistics', route: '/hotel-statistics'}
 			],
 
 		}

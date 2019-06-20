@@ -41,6 +41,7 @@ import HotelDetailedViewFast from './components/HotelDetailedViewFast';
 import AddBranchOffice from './components/AddBranchOffice';
 import SetMainBranchOffice from './components/SetMainBranchOffice';
 import SearchRAC from './components/SearchRAC';
+import HotelStats from './components/HotelStats';
 import DeleteCar from './components/DeleteCar';
 import EditCar from './components/EditCar';
 import DeleteBranchOffice from './components/DeleteBranchOffice';
@@ -226,6 +227,11 @@ export default new Router({
         path: '/hotel-price-list-settings',
         name: 'HotelPriceListSettings',
         component: HotelPriceListSettings
+    },
+    {
+        path: '/hotel-statistics',
+        name: 'HotelStats',
+        component: HotelStats
     },
     {
         path: '/registration',

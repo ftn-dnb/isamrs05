@@ -11,6 +11,7 @@ import ftn.dnb.dnbtravel.service.RoomService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.lang.reflect.Array;
@@ -112,5 +113,17 @@ public class HotelController {
                                               @PathVariable("hotel_id") Long hotel_id) {
         HotelDTO hotelDTO  = hotelService.deleteService(service_id, hotel_id);
         return new ResponseEntity<>(hotelDTO, HttpStatus.OK);
+    }
+
+    @PostMapping(path = "/stats")
+    public ResponseEntity<List<IncomeDTO>> getIncomeStatsHotel(@RequestBody HotelStatsFilterDTO filter) {
+        ArrayList<IncomeDTO> incomeList = hotelService.getIncomeStatsHotel(filter);
+        return new ResponseEntity<>(incomeList, (incomeList == null) ? HttpStatus.BAD_REQUEST : HttpStatus.OK);
+    }
+
+    @PostMapping(path = "/reservation_stats")
+    public ResponseEntity<List<ReservationStatsDTO>> getReservationStatsHotel(@RequestBody HotelStatsFilterDTO filter) {
+        List<ReservationStatsDTO> stats = hotelService.getReservationStatsHotel(filter);
+        return new ResponseEntity<>(stats, (stats == null) ? HttpStatus.BAD_REQUEST : HttpStatus.OK);
     }
 }
