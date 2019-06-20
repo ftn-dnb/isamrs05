@@ -101,6 +101,7 @@ export default {
 			{ icon: 'people', text:'Friends', route:'/friends'},
 			{ icon: 'perm_identity', text: 'Profile settings', route: '/user-settings'},
 			{ icon: 'delete', text: 'Cancel car reservation', route: '/cancel-car'},
+			{ icon: 'hotel', text: 'List hotel reservations', route: '/list-hotel-reservation'},
 			{ icon: 'flight_takeoff', text: 'List my flights', route: '/list-fligt-reservations'},
 			],
 

@@ -132,4 +132,16 @@ public class HotelController {
         List<ReservationStatsDTO> stats = hotelService.getReservationStatsHotel(filter);
         return new ResponseEntity<>(stats, (stats == null) ? HttpStatus.BAD_REQUEST : HttpStatus.OK);
     }
+
+    @PostMapping(path ="/getUserReservations")
+    public ResponseEntity<?> getAllReservations(@RequestBody UserDTO user){
+        List<OneHotelReservationDTO> list = hotelService.getAllUserReservations(user);
+        return new ResponseEntity<>(list,HttpStatus.OK);
+    }
+
+    @PostMapping(path ="/deleteUserReservation")
+    public ResponseEntity<?> cancelReservation(@RequestBody DeleteHotelReservationDTO data){
+        ResponseEntity<?> response = hotelService.deleteReservation(data);
+        return response;
+    }
 }
