@@ -1,6 +1,7 @@
 package ftn.dnb.dnbtravel.controller;
 
 import ftn.dnb.dnbtravel.dto.*;
+import ftn.dnb.dnbtravel.model.User;
 import ftn.dnb.dnbtravel.service.RentACarCompanyService;
 import ftn.dnb.dnbtravel.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -167,5 +168,22 @@ public class RentACarCompanyController {
     public ResponseEntity<?> getReservationStats(@RequestBody RACReservationStatsDTO filterDTO){
         List<ReservationStatsDTO> stats = rentACarCompanyService.getStatsForCompanyReservation(filterDTO);
         return new ResponseEntity<>(stats,HttpStatus.OK);
+    }
+
+    @PostMapping(path ="/getUserReservationsCar",consumes = MediaType.APPLICATION_JSON_VALUE)
+    @PreAuthorize("hasRole('USER')")
+    public ResponseEntity<?> getUserReservationsCar(@RequestBody  UserUsernameDTO userDTO){
+        UserDTO user = new UserDTO();
+        user.setUsername(userDTO.getUsername());
+        List<RacReservationDTO> list = rentACarCompanyService.getCarReservationsUser(user);
+        return new ResponseEntity<>(list,HttpStatus.OK);
+    }
+
+    @PostMapping(path ="/cancelCarReservation",consumes = MediaType.APPLICATION_JSON_VALUE)
+    @PreAuthorize("hasRole('USER')")
+    public ResponseEntity<?> cancelCarReservation(@RequestBody  CancelReservationCarDTO data){
+
+        ResponseEntity<?> response = rentACarCompanyService.cancelCarReservation(data);
+        return new ResponseEntity<>(response,HttpStatus.OK);
     }
 }
