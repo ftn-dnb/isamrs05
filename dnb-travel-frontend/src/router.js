@@ -49,6 +49,9 @@ import EditBranchOffice from './components/EditBranchOffice';
 import RACIncome from './components/RACIncome';
 import RACReservationStats from './components/RACReservationStats';
 import HotelSettings from './components/HotelSettings';
+import CancelCarReservation from './components/CancelCarReservation';
+import RACCarStats from './components/RACCarStats';
+import RACFast from './components/RACFast';
 
 Vue.use(Router)
 
@@ -372,6 +375,24 @@ export default new Router({
         path:'/rac-resetvation-stats',
         name:'RACReservationStats',
         component: RACReservationStats
+    },
+
+    {
+        path:'/cancel-car',
+        name:'CancelCarReservation',
+        component: CancelCarReservation
+    },
+    {
+        path:'/car-stats',
+        name:'RACCarStats',
+        component: RACCarStats
+    },
+
+    {
+        path:'rac-fast/:racID',
+        name:'RACFast',
+        props: true,
+        component: RACFast
     },
 
   ]

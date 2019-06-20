@@ -44,7 +44,9 @@ public class RentACarCompanyService {
         for (RentACarCompany c: companies) {
             BranchOffice b = c.getMainOffice();
             RentACarCompanyDTO dto = new RentACarCompanyDTO(c);
-            dtos.add(dto);
+            if(dto.getAddress()!= null) {
+                dtos.add(dto);
+            }
         }
 
         return dtos;
@@ -92,7 +94,18 @@ public class RentACarCompanyService {
         RentACarCompany company = racRepository.findOneById(id);
             if(company.getCurrentPriceList() != null){
                 for(RACPriceListItem real_item: company.getCurrentPriceList().getItems()){
-                    items.add(real_item);
+                    List<RACReservation> reservationList = reservationRepository.findByItem(real_item);
+                    if(reservationList.size()> 0){
+                        for(RACReservation r: reservationList){
+                            if(r.getUser()== null && real_item.getActiveDiscount() == 0){
+                                items.add(real_item);
+                            }
+                        }
+                    }
+
+                    else if (real_item.getActiveDiscount() == 0) {
+                        items.add(real_item);
+                    }
                 }
             }
         List<RACListItemDTO> dtos = new ArrayList<>();
@@ -106,12 +119,12 @@ public class RentACarCompanyService {
         //start date
         if (filter.getStartDate() != null) {
             filter.getStartDate().setHours(0);
-            list = list.stream().filter(f -> f.getStartDate().after(filter.getStartDate())).collect(Collectors.toList());
+            list = list.stream().filter(f -> f.getStartDate().before(filter.getStartDate())).collect(Collectors.toList());
         }
         //end date
         if(filter.getEndDate() != null) {
             filter.getEndDate().setHours(0);
-            list = list.stream().filter(f -> f.getEndDate().before(filter.getEndDate())).collect(Collectors.toList());
+            list = list.stream().filter(f -> f.getEndDate().after(filter.getEndDate())).collect(Collectors.toList());
         }
         //price per day max price
         if(filter.getPricePerDay() != null)
@@ -147,6 +160,80 @@ public class RentACarCompanyService {
 
         return list;
     }
+
+    public List<RACListItemDTO> getAllItemsFast(Long id){
+
+        List<RACPriceListItem> items = new LinkedList<>();
+        RentACarCompany company = racRepository.findOneById(id);
+        if(company.getCurrentPriceList() != null){
+            for(RACPriceListItem real_item: company.getCurrentPriceList().getItems()){
+                List<RACReservation> reservationList = reservationRepository.findByItem(real_item);
+                if(reservationList.size()> 0){
+                    for(RACReservation r: reservationList){
+                        if(r.getUser()== null && real_item.getActiveDiscount() > 0){
+                            items.add(real_item);
+                        }
+                    }
+                }
+
+                else if (real_item.getActiveDiscount() > 0) {
+                    items.add(real_item);
+                }
+            }
+        }
+        List<RACListItemDTO> dtos = new ArrayList<>();
+        items.stream().forEach(item -> dtos.add(new RACListItemDTO(item)));
+        return dtos;
+    }
+
+    public List<RACListItemDTO> searchCarFast(CarFilterDTO filter){
+        List<RACListItemDTO> list = this.getAllItemsFast(filter.getId());
+
+        //start date
+        if (filter.getStartDate() != null) {
+            filter.getStartDate().setHours(0);
+            list = list.stream().filter(f -> f.getStartDate().before(filter.getStartDate())).collect(Collectors.toList());
+        }
+        //end date
+        if(filter.getEndDate() != null) {
+            filter.getEndDate().setHours(0);
+            list = list.stream().filter(f -> f.getEndDate().after(filter.getEndDate())).collect(Collectors.toList());
+        }
+        //price per day max price
+        if(filter.getPricePerDay() != null)
+            list = list.stream().filter(f->{
+                if(f.getPricePerDay() <= filter.getPricePerDay())
+                    return true;
+                return false;
+            }).collect(Collectors.toList());
+
+        //seats number
+        if(filter.getSeatsNumber() != null)
+            list = list.stream().filter(f->{
+                if(f.getCar().getSeatsNumber() >= filter.getSeatsNumber())
+                    return true;
+                return false;
+            }).collect(Collectors.toList());
+
+        //type
+        if(filter.getType() != null)
+            list = list.stream().filter(f->{
+                if(f.getCar().getType() == filter.getType())
+                    return true;
+                return false;
+            }).collect(Collectors.toList());
+
+        //brand
+        if(filter.getBrand() != null)
+            list = list.stream().filter(f->{
+                if(f.getCar().getBrand().toLowerCase().equals(filter.getBrand().toLowerCase()))
+                    return true;
+                return false;
+            }).collect(Collectors.toList());
+
+        return list;
+    }
+
 
     public RentACarCompanyDTO getRentACarCompanyByAdministrator(String username){
 
@@ -526,6 +613,66 @@ public class RentACarCompanyService {
 
         stats.forEach((key, value) -> statsList.add(new ReservationStatsDTO(key, value)));
         return statsList;
+    }
+
+    public List<RacReservationDTO> getCarReservationsUser(UserDTO user){
+        User real_user = userRepository.findByUsername(user.getUsername());
+        List<RacReservationDTO> list = new LinkedList<>();
+
+
+        for(RACReservation reservation: real_user.getRacReservations()){
+            RacReservationDTO fakeR = new RacReservationDTO();
+
+            fakeR.setBegin(reservation.getBeginDate());
+            fakeR.setEnd(reservation.getEndDate());
+            fakeR.setId(reservation.getId());
+            fakeR.setItem_id(reservation.getItem().getId());
+            fakeR.setCompany_id(reservation.getItem().getCar().getCompany().getId());
+            fakeR.setUser_id(real_user.getId());
+
+            list.add(fakeR);
+        }
+
+        return list;
+    }
+
+    public ResponseEntity<?> cancelCarReservation(CancelReservationCarDTO request) {
+        User user = userRepository.findOneById(request.getId());
+        RentACarCompany company = racRepository.findOneById(request.getCompanyId());
+
+
+
+        if (user == null || company == null) {
+            return new ResponseEntity<>("Cancelation error", HttpStatus.CONFLICT);
+        }
+
+        for (RACReservation reservation : user.getRacReservations()) {
+            if (reservation.getId() == request.getReservationId()) {
+                user.getRacReservations().remove(reservation);
+                userRepository.save(user);
+                break;
+            }
+        }
+
+        for (RACReservation reservation : company.getRacReservations()) {
+            if (reservation.getId() == request.getReservationId()) {
+                company.getRacReservations().remove(reservation);
+                racRepository.save(company);
+                break;
+
+            }
+
+
+        }
+
+        RACReservation reservation_exists = reservationRepository.findOneById(request.getReservationId());
+        if(reservation_exists != null){
+            reservation_exists.setUser(null);
+            reservation_exists.setItem(null);
+            reservationRepository.save(reservation_exists);
+        }
+
+        return new ResponseEntity<>("Cancelation ok", HttpStatus.OK);
     }
 
 

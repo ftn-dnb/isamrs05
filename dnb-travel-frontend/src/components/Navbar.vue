@@ -91,6 +91,7 @@ export default {
 			{icon: 'edit', text: 'Edit branch office', route: '/edit-branch-office'},
 			{icon: 'assessment', text: 'Company income', route: '/rac-income'},
 			{icon: 'assessment', text: 'Reservation stats', route: '/rac-resetvation-stats'},
+			{icon: 'assessment', text: 'Car stats & company rating', route: '/car-stats'},
 			],
 
 			userDrawer: [
@@ -99,12 +100,14 @@ export default {
 			{ icon: 'hotel', text: 'Hotel Search', route: '/hotels'},
 			{ icon: 'people', text:'Friends', route:'/friends'},
 			{ icon: 'perm_identity', text: 'Profile settings', route: '/user-settings'},
+			{ icon: 'delete', text: 'Cancel car reservation', route: '/cancel-car'}
 			],
 
 			defaultUser: [
 			{icon: 'flight_takeoff', text: 'Flights search', route:'/flights'},
 			{icon: 'directions_car', text: 'Car search', route: '/search-rac'},
 			{icon: 'hotel', text: 'Hotel Search', route: '/hotels'}
+
       		],
 
 			sysAdminDrawer: [
