@@ -124,6 +124,48 @@ public class RentACarCompanyController {
     @PreAuthorize("hasRole('USER')")
     public ResponseEntity<?> reserveCar(@RequestBody RACReservationRequestDTO reservation){
         ResponseEntity<?> response = rentACarCompanyService.reserveCar(reservation);
-        return new ResponseEntity<>("asd",HttpStatus.OK);
+        return response;
+    }
+
+    @PostMapping(path = "/deleteCar", consumes = MediaType.APPLICATION_JSON_VALUE)
+    @PreAuthorize("hasRole('RAC_ADMIN')")
+    public ResponseEntity<?> deleteCar(@RequestBody CarDTO car ){
+        ResponseEntity<?> response = rentACarCompanyService.deleteCar(car);
+        return response;
+    }
+
+    @PostMapping(path = "/editCar", consumes = MediaType.APPLICATION_JSON_VALUE)
+    @PreAuthorize("hasRole('RAC_ADMIN')")
+    public ResponseEntity<?> editCar(@RequestBody CarDTO car ) {
+        ResponseEntity<?> response = rentACarCompanyService.editCar(car);
+        return response;
+    }
+
+    @PostMapping(path = "/changeBranchOffice", consumes = MediaType.APPLICATION_JSON_VALUE)
+    @PreAuthorize("hasRole('RAC_ADMIN')")
+    public ResponseEntity<?> editBranchOffice(@RequestBody BranchOfficeDTO office){
+        ResponseEntity response = rentACarCompanyService.changeBranchOffice(office);
+        return response;
+    }
+
+    @PostMapping(path = "/deleteBranchOffice", consumes = MediaType.APPLICATION_JSON_VALUE)
+    @PreAuthorize("hasRole('RAC_ADMIN')")
+    public ResponseEntity<?> deleteBranchOffice(@RequestBody BranchOfficeDTO office){
+        ResponseEntity response = rentACarCompanyService.deleteBranchOffice(office);
+        return response;
+    }
+
+    @PostMapping(path = "/getIncome", consumes = MediaType.APPLICATION_JSON_VALUE)
+    @PreAuthorize("hasRole('RAC_ADMIN')")
+    public ResponseEntity<?> getIncome(@RequestBody RACIncomeSearchDataDTO incomeDTO){
+        RACStatsDTO stats = rentACarCompanyService.getIncome(incomeDTO);
+        return new ResponseEntity<>(stats,HttpStatus.OK);
+    }
+
+    @PostMapping(path ="/getReservationStats", consumes = MediaType.APPLICATION_JSON_VALUE)
+    @PreAuthorize("hasRole('RAC_ADMIN')")
+    public ResponseEntity<?> getReservationStats(@RequestBody RACReservationStatsDTO filterDTO){
+        List<ReservationStatsDTO> stats = rentACarCompanyService.getStatsForCompanyReservation(filterDTO);
+        return new ResponseEntity<>(stats,HttpStatus.OK);
     }
 }

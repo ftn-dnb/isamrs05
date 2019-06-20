@@ -80,11 +80,17 @@ export default {
 			{icon: 'work_outline', text: 'Company settings', route: '/rent-a-car-settings'},
 			{icon: 'perm_identity', text: 'Profile settings', route: '/user-settings'},
 			{icon: 'add_circle', text: 'Add new vehicle', route: '/add-car'},
+			{icon: 'delete', text: 'Delete vehicle', route: '/delete-car'},
+			{icon: 'edit', text: 'Edit vehicle', route: '/edit-car'},
 			{icon: 'add_circle', text: 'Add new reservation', route: '/add-car-reservation'},
 			{icon: 'add_circle', text: 'Add new price list', route: '/add-price-list-rac'},
 			{icon: 'add_circle', text: 'Set active price list', route: '/set-active-price-list-rac'},
 			{icon: 'add_circle', text: 'Add branch office', route: '/add-branch-office'},
 			{icon: 'add_circle', text: 'Set main branch office', route: '/set-main-branch-office'},
+			{icon: 'delete', text: 'Delete branch office', route: '/delete-branch-office'},
+			{icon: 'edit', text: 'Edit branch office', route: '/edit-branch-office'},
+			{icon: 'assessment', text: 'Company income', route: '/rac-income'},
+			{icon: 'assessment', text: 'Reservation stats', route: '/rac-resetvation-stats'},
 			],
 
 			userDrawer: [

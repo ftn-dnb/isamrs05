@@ -91,15 +91,15 @@ INSERT INTO `airplane` VALUES(25, 'Airbus 876', 6, 11);
 
 
 -- Addresses
-INSERT INTO `address` VALUES(31, 'New York', 'US', 1234, '1st street', 22);
-INSERT INTO `address` VALUES(32, 'Belgrade', 'Serbia', 11000, 'Bulevar', 213);
-INSERT INTO `address` VALUES(33, 'Athens', 'Greece', 5433, 'Alfa', 24);
+INSERT INTO `address` VALUES(31, 'New York', 'US', 1234, '1st street', 22, 0);
+INSERT INTO `address` VALUES(32, 'Belgrade', 'Serbia', 11000, 'Bulevar', 213, 0);
+INSERT INTO `address` VALUES(33, 'Athens', 'Greece', 5433, 'Alfa', 24, 0);
 
 
 -- Airlines
-INSERT INTO `airline` VALUES(22, 'Best airline company in US', 'United', 4, 31, 5);
-INSERT INTO `airline` VALUES(23, 'Najbolja aviokompanija', 'AirSerbia', 3, 32, 9);
-INSERT INTO `airline` VALUES(24, 'Best company in Greece', 'AirGreece', 5, 33, 10);
+INSERT INTO `airline` VALUES(22, 'Best airline company in US', 'United', 4, 0, 31, 5);
+INSERT INTO `airline` VALUES(23, 'Najbolja aviokompanija', 'AirSerbia', 3, 0, 32, 9);
+INSERT INTO `airline` VALUES(24, 'Best company in Greece', 'AirGreece', 5, 0, 33, 10);
 
 
 -- Destinations where airlines work
@@ -160,14 +160,14 @@ INSERT INTO `flight_prices` VALUES (59, 70);
 
 
 -- Flight reservation
-INSERT INTO `flight_reservation` VALUES (71, true, false, 'Marko', 'Markovic', '12345', 1000, 0, '2019-01-01 00:00:00', 5, 6, 2);
-INSERT INTO `flight_reservation` VALUES (72, true, false, 'Marko', 'Markovic', '12345', 1000, 0, '2019-01-04 01:00:00', 6, 7, 2);
-INSERT INTO `flight_reservation` VALUES (73, true, false, 'Marko', 'Markovic', '12345', 1000, 0, '2019-02-01 00:00:00', 5, 7, 2);
-INSERT INTO `flight_reservation` VALUES (74, true, false, 'Pera', 'Peric', '65432', 1400, 0, '2019-03-01 01:00:00', 6, 5, 3);
-INSERT INTO `flight_reservation` VALUES (75, true, false, 'Pera', 'Peric', '65432', 1600, 0, '2019-03-01 00:00:00', 5, 5, 3);
-INSERT INTO `flight_reservation` VALUES (76, true, false, 'Pera', 'Peric', '65432', 1500, 0, '2019-05-02 01:00:00', 1, 1, 3);
-INSERT INTO `flight_reservation` VALUES (77, true, false, 'Filip', 'Filipovic', '63222', 1800, 0, '2019-05-02 01:00:00', 1, 1, 11);
-INSERT INTO `flight_reservation` VALUES (78, true, false, 'Filip', 'Filipovic', '63222', 1800, 0, '2019-05-03 01:00:00', 1, 2, 11);
+INSERT INTO `flight_reservation` VALUES (71, true, false, 'Marko', 'Markovic', '12345', 1000, 0, '2019-01-01 00:00:00', 5, 6, 0, 2);
+INSERT INTO `flight_reservation` VALUES (72, true, false, 'Marko', 'Markovic', '12345', 1000, 0, '2019-01-04 01:00:00', 6, 7, 0, 2);
+INSERT INTO `flight_reservation` VALUES (73, true, false, 'Marko', 'Markovic', '12345', 1000, 0, '2019-02-01 00:00:00', 5, 7, 0, 2);
+INSERT INTO `flight_reservation` VALUES (74, true, false, 'Pera', 'Peric', '65432', 1400, 0, '2019-03-01 01:00:00', 6, 5, 0, 3);
+INSERT INTO `flight_reservation` VALUES (75, true, false, 'Pera', 'Peric', '65432', 1600, 0, '2019-03-01 00:00:00', 5, 5, 0, 3);
+INSERT INTO `flight_reservation` VALUES (76, true, false, 'Pera', 'Peric', '65432', 1500, 0, '2019-05-02 01:00:00', 1, 1, 0, 3);
+INSERT INTO `flight_reservation` VALUES (77, true, false, 'Filip', 'Filipovic', '63222', 1800, 0, '2019-05-02 01:00:00', 1, 1, 0, 11);
+INSERT INTO `flight_reservation` VALUES (78, true, false, 'Filip', 'Filipovic', '63222', 1800, 0, '2019-05-03 01:00:00', 1, 2, 0, 11);
 
 -- Users and flight reservations
 INSERT INTO `users_reservations` VALUES (2, 71);
@@ -189,7 +189,6 @@ INSERT INTO `flight_reservations` VALUES (53, 75);
 INSERT INTO `flight_reservations` VALUES (53, 76);
 INSERT INTO `flight_reservations` VALUES (59, 77);
 INSERT INTO `flight_reservations` VALUES (59, 78);
-
 
 -- Hotels
 INSERT INTO `hotel` (`id`, `name`, `description`, `rating`, `address_id`, `administrator_id`) VALUES (1, 'Hotel Plaza', 'Ovo je jedan jako dobar hotel sa prijatnim osobljem', 4.0, 32, 6)

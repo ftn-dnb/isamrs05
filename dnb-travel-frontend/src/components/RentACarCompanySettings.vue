@@ -52,6 +52,8 @@ export default{
        	const header = {headers: {"Authorization": `Bearer ${localStorage.getItem('user-token')}`}};
         this.user.username = localStorage.getItem('username');
 
+        console.log(this.user);
+
         axios.post("http://localhost:8080/api/rentACarCompanies/company",this.user,header)
         .then(response => {
         	this.rentACarCompany = response.data;

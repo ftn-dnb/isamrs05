@@ -1,6 +1,7 @@
 package ftn.dnb.dnbtravel.repository;
 
 
+import ftn.dnb.dnbtravel.model.Car;
 import ftn.dnb.dnbtravel.model.RACPriceListItem;
 import org.springframework.data.jpa.repository.JpaRepository;
 
@@ -11,5 +12,8 @@ public interface RentACarPriceListItem extends JpaRepository<RACPriceListItem, L
     List <RACPriceListItem> findAll();
 
     RACPriceListItem findOneById(Long id);
+
+    List <RACPriceListItem> findByCar(Car car);
+
 
 }

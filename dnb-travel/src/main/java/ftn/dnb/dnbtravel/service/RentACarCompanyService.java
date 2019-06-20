@@ -8,10 +8,12 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.List;
+import java.time.LocalDate;
+import java.time.ZoneId;
+import java.util.*;
+import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 @Service
@@ -31,6 +33,9 @@ public class RentACarCompanyService {
 
     @Autowired
     private CarRepository carRepository;
+
+    @Autowired
+    private RACBranchOfficeRepository branchOfficeRepository;
 
     public List<RentACarCompanyDTO> getAllRentACarCompanies(){
         List<RentACarCompany> companies = racRepository.findAll();
@@ -298,6 +303,232 @@ public class RentACarCompanyService {
         // odgovor
         return new ResponseEntity<>("Reservation successfully added", HttpStatus.OK);
     }
+
+    public ResponseEntity<?> deleteCar(CarDTO carDTO){
+
+        Car realCar  = carRepository.findOneById(carDTO.getId());
+
+        List<RACPriceListItem> list = priceListItemRepository.findByCar(realCar);
+
+        if(list == null || list.size() == 0){
+
+            RentACarCompany company = realCar.getCompany();
+            company.getCars().remove(realCar);
+            racRepository.save(company);
+
+
+            realCar.setCompany(null);
+            carRepository.save(realCar);
+
+            return  new ResponseEntity<>("Car is deleted", HttpStatus.OK);
+        }
+        {
+            return  new ResponseEntity<>("Unable to delte car", HttpStatus.CONFLICT);
+        }
+
+
+    }
+
+    public ResponseEntity<?> editCar(CarDTO carDTO) {
+
+        Car realCar = carRepository.findOneById(carDTO.getId());
+
+        List<RACPriceListItem> list = priceListItemRepository.findByCar(realCar);
+
+        if (list == null || list.size() == 0) {
+            realCar.setBrand(carDTO.getBrand());
+            realCar.setManufYear(carDTO.getManufYear());
+            realCar.setName(carDTO.getName());
+            realCar.setSeatsNumber(carDTO.getSeatsNumber());
+            realCar.setType(carDTO.getType());
+
+            carRepository.save(realCar);
+
+            return new ResponseEntity<>("Car is edited", HttpStatus.OK);
+        }
+        {
+            return new ResponseEntity<>("Unable to edit car", HttpStatus.CONFLICT);
+        }
+    }
+
+    public ResponseEntity<?> changeBranchOffice(BranchOfficeDTO officeDTO){
+
+        if(officeDTO.getAddress() == null || officeDTO.getName() == null){
+            return new ResponseEntity("Corupted data", HttpStatus.CONFLICT);
+        }
+
+        RentACarCompany company = racRepository.findOneById(officeDTO.getCompanyDTO().getId());
+
+        if(company == null){
+            return new ResponseEntity("Error finding branch company", HttpStatus.CONFLICT);
+        }
+
+        BranchOffice editOffice = branchOfficeRepository.findOneById(officeDTO.getId());
+
+        if(editOffice == null){ // nije pronasao taj office
+            return new ResponseEntity("Error finding branch office", HttpStatus.CONFLICT);
+        }
+
+
+        editOffice.setName(officeDTO.getName());
+        editOffice.setAddress(officeDTO.getAddress());
+
+        racRepository.save(company);
+
+        return new ResponseEntity<>("Successful edit", HttpStatus.OK);
+    }
+
+    public ResponseEntity<?> deleteBranchOffice(BranchOfficeDTO officeDTO){
+        if(officeDTO.getId() == null) {
+            return new ResponseEntity("Corupted data", HttpStatus.CONFLICT);
+        }
+
+        RentACarCompany company = racRepository.findOneById(officeDTO.getCompanyDTO().getId());
+
+        if(company == null){
+            return new ResponseEntity("Error finding branch company", HttpStatus.CONFLICT);
+        }
+
+        if(company.getOffices().size() <= 1 ){
+            return new ResponseEntity("This is the only office, unable to delete", HttpStatus.CONFLICT);
+        }
+
+        if(company.getMainOffice().getId() == officeDTO.getId()){
+            for(BranchOffice b : company.getOffices()){
+                if(b.getId() != officeDTO.getId()){
+                    company.setMainOffice(b);
+                    break;
+                }
+            }
+        }
+
+        BranchOffice office = branchOfficeRepository.findOneById(officeDTO.getId());
+
+        company.getOffices().remove(office);
+        racRepository.save(company);
+
+        office.setCompany(null);
+        branchOfficeRepository.save(office);
+
+        return new ResponseEntity<>("Branch office deleted", HttpStatus.OK);
+
+    }
+
+    public RACStatsDTO getIncome(RACIncomeSearchDataDTO filter){
+        RACStatsDTO stats = new RACStatsDTO();
+        LinkedHashMap<String,Float> income = new LinkedHashMap<>();
+        DateFormat formatter = new SimpleDateFormat("dd.MM.yyyy.");
+
+        RentACarCompany company = racRepository.findOneById(filter.getId());
+
+        for(RACReservation reservation: company.getRacReservations() ){
+           if(reservation.getEndDate().after(filter.getBeginDate()) && reservation.getEndDate().before(filter.getEndDate())){
+               String dataKey = formatter.format(reservation.getEndDate());
+
+               long diff = reservation.getEndDate().getTime() - reservation.getBeginDate().getTime();
+               diff = TimeUnit.DAYS.convert(diff,TimeUnit.MILLISECONDS);
+
+               float price = diff  * reservation.getItem().getPricePerDay();
+               if(income.containsKey(dataKey)){
+                    income.put(dataKey,income.get(dataKey) + price);
+               }
+               else{
+                   income.put(dataKey, price);
+               }
+            }
+        }
+
+        income.forEach((key, value) -> stats.getIncome().add(new IncomeDTO(key, value)));
+        return stats;
+    }
+
+    public List<ReservationStatsDTO> getStatsForCompanyReservation(RACReservationStatsDTO filter){
+        RentACarCompany company = racRepository.findOneById(filter.getId());
+
+        switch (filter.getReservationCriteria()){
+            case "Day":
+                return getReservationStatsDay(company, filter.getDateReservation());
+            case "Week":
+                return getReservationStatsWeek(company, filter.getDateReservation());
+            case "Month":
+                return getReservationStatsMonth(company, filter.getDateReservation());
+            default:
+                return getReservationStatsWeek(company, filter.getDateReservation());
+        }
+    }
+
+    private List<ReservationStatsDTO> getReservationStatsDay(RentACarCompany company, Date date){
+        List<ReservationStatsDTO> stats = new ArrayList<>();
+        DateFormat formatter = new SimpleDateFormat("dd.MM.yyyy.");
+
+        stats.add(new ReservationStatsDTO(formatter.format(date), 0));
+
+        LocalDate startDate = date.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+
+        for(RACReservation reservation: company.getRacReservations()){
+            LocalDate resDate = reservation.getBeginDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+
+            if(startDate.isEqual(resDate)){
+                stats.get(0).setNumber(stats.get(0).getNumber()+1);
+            }
+        }
+        return stats;
+    }
+
+    private List<ReservationStatsDTO> getReservationStatsWeek(RentACarCompany company, Date date){
+        List<ReservationStatsDTO> statsList = new ArrayList<>();
+        LinkedHashMap<String,Integer>  stats = new LinkedHashMap<>();
+        DateFormat formatter = new SimpleDateFormat("dd.MM.yyyy.");
+
+
+        LocalDate startDate = date.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+        LocalDate endDate = date.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+
+        startDate = startDate.minusDays(startDate.getDayOfWeek().getValue());
+        endDate = endDate.plusDays(7 - endDate.getDayOfWeek().getValue());
+
+        for(RACReservation reservation: company.getRacReservations()){
+            LocalDate reservationDate = reservation.getBeginDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+            if (reservationDate.isAfter(startDate) && reservationDate.isBefore(endDate)) {
+                String key = formatter.format(reservation.getBeginDate());
+                if (stats.containsKey(key))
+                    stats.put(key, stats.get(key) + 1);
+                else
+                    stats.put(key, 1);
+            }
+        }
+
+        stats.forEach((key, value) -> statsList.add(new ReservationStatsDTO(key, value)));
+        return statsList;
+
+    }
+
+    private List<ReservationStatsDTO> getReservationStatsMonth(RentACarCompany company, Date date){
+        List<ReservationStatsDTO> statsList = new ArrayList<>();
+        LinkedHashMap<String,Integer>  stats = new LinkedHashMap<>();
+        DateFormat formatter = new SimpleDateFormat("dd.MM.yyyy.");
+
+        LocalDate filterDate = date.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+        int monthFilterDate = filterDate.getMonthValue();
+
+        for(RACReservation reservation : company.getRacReservations()){
+            LocalDate reservationDate = reservation.getBeginDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+
+            if (reservationDate.getMonthValue() == monthFilterDate) {
+                String key = formatter.format(reservation.getBeginDate());
+
+                if (stats.containsKey(key))
+                    stats.put(key, stats.get(key) + 1);
+                else
+                    stats.put(key, 1);
+            }
+        }
+
+        stats.forEach((key, value) -> statsList.add(new ReservationStatsDTO(key, value)));
+        return statsList;
+    }
+
+
 
 
 }

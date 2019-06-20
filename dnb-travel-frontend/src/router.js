@@ -42,6 +42,12 @@ import AddBranchOffice from './components/AddBranchOffice';
 import SetMainBranchOffice from './components/SetMainBranchOffice';
 import SearchRAC from './components/SearchRAC';
 import HotelStats from './components/HotelStats';
+import DeleteCar from './components/DeleteCar';
+import EditCar from './components/EditCar';
+import DeleteBranchOffice from './components/DeleteBranchOffice';
+import EditBranchOffice from './components/EditBranchOffice';
+import RACIncome from './components/RACIncome';
+import RACReservationStats from './components/RACReservationStats';
 
 Vue.use(Router)
 
@@ -326,6 +332,40 @@ export default new Router({
         name: 'RACDetailedView',
         component: RACDetailedView
 
+    },
+
+    {
+        path:'/delete-car',
+        name: 'DeleteCar',
+        component: DeleteCar
+    },
+
+    {
+        path: '/edit-car',
+        name: 'EditCar',
+        component: EditCar
+    },
+    {
+        path: '/delete-branch-office',
+        name: 'DeleteBranchOffice',
+        component: DeleteBranchOffice
+    },
+
+    {
+        path: '/edit-branch-office',
+        name: 'EditBranchOffice',
+        component: EditBranchOffice
+    },
+
+    {
+        path:'/rac-income',
+        name:'RACIncome',
+        component: RACIncome
+    },
+    {
+        path:'/rac-resetvation-stats',
+        name:'RACReservationStats',
+        component: RACReservationStats
     },
 
   ]
