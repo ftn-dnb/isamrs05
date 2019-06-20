@@ -1,19 +1,24 @@
 package ftn.dnb.dnbtravel.service;
 
+import com.sun.mail.iap.Response;
 import ftn.dnb.dnbtravel.dto.*;
 import ftn.dnb.dnbtravel.model.AirlinePriceListItem;
 import ftn.dnb.dnbtravel.model.Flight;
 import ftn.dnb.dnbtravel.model.FlightReservation;
 import ftn.dnb.dnbtravel.model.User;
 import ftn.dnb.dnbtravel.repository.FlightRepository;
+import ftn.dnb.dnbtravel.repository.FlightReservationService;
 import ftn.dnb.dnbtravel.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -26,6 +31,9 @@ public class FlightService {
 
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private FlightReservationService flightReservationService;
 
     public List<FlightDTO> getAllFlights() {
         List<Flight> flights = flightRepository.findAll();
@@ -215,6 +223,53 @@ public class FlightService {
 
 
         return flights;
+    }
+
+    @Transactional(readOnly = false)
+    public ResponseEntity<?> cancelFlight(CancelFlightDTO request){
+        Flight flight = flightRepository.findOneById(request.getFlightId());
+        User user = userRepository.findByUsername(request.getUsername());
+        FlightReservation reservation = flightReservationService.findOneById(request.getReservationId());
+
+
+        if(flight==null || user==null || reservation == null){
+            return new ResponseEntity<>("Cant delete", HttpStatus.CONFLICT);
+        }
+
+        for(FlightReservation res : user.getReservations()){
+            if (res.getId() == reservation.getId()){
+                user.getReservations().remove(res);
+                userRepository.save(user);
+                break;
+            }
+        }
+
+        for(FlightReservation f : flight.getReservations()){
+            if(f.getId() == reservation.getId()){
+                flight.getReservations().remove(f);
+                flightRepository.save(flight);
+                break;
+
+            }
+        }
+
+        reservation.setUser(null);
+        flightReservationService.save(reservation);
+
+        return new ResponseEntity<>("Deleted", HttpStatus.OK);
+    }
+
+    public ResponseEntity<?> getAllReservations(UserDTO data){
+        List<FlightReservationDTO> list = new LinkedList<>();
+        User user = userRepository.findOneByUsername(data.getUsername());
+
+        for(FlightReservation f: user.getReservations()){
+            FlightReservationDTO fake = new FlightReservationDTO(f);
+            list.add(fake);
+        }
+
+
+        return new ResponseEntity<>(list,HttpStatus.OK);
     }
 
 }

@@ -100,7 +100,8 @@ export default {
 			{ icon: 'hotel', text: 'Hotel Search', route: '/hotels'},
 			{ icon: 'people', text:'Friends', route:'/friends'},
 			{ icon: 'perm_identity', text: 'Profile settings', route: '/user-settings'},
-			{ icon: 'delete', text: 'Cancel car reservation', route: '/cancel-car'}
+			{ icon: 'delete', text: 'Cancel car reservation', route: '/cancel-car'},
+			{ icon: 'flight_takeoff', text: 'List my flights', route: '/list-fligt-reservations'},
 			],
 
 			defaultUser: [
@@ -121,8 +122,7 @@ export default {
 			hotelAdminDrawer: [
 				{icon: 'add_circle', text: 'Add Room', route: '/add-room'},
 				{icon: 'work_outline', text: 'Price List Settings', route: '/hotel-price-list-settings'},
-				{icon: 'assessment', text: 'Statistics', route: '/hotel-statistics'},
-				{icon: 'settings', text: 'Settings', route: '/hotel-settings'}
+				{icon: 'assessment', text: 'Statistics', route: '/hotel-statistics'}
 			],
 
 		}

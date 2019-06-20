@@ -52,6 +52,7 @@ import HotelSettings from './components/HotelSettings';
 import CancelCarReservation from './components/CancelCarReservation';
 import RACCarStats from './components/RACCarStats';
 import RACFast from './components/RACFast';
+import ListFlightReservations from './components/ListFlightReservations';
 
 Vue.use(Router)
 
@@ -393,6 +394,12 @@ export default new Router({
         name:'RACFast',
         props: true,
         component: RACFast
+    },
+
+    {
+        path:'/list-fligt-reservations',
+        name:'ListFlightReservations',
+        component: ListFlightReservations
     },
 
   ]
